@@ -49,7 +49,8 @@ public class 斗神塔  {
 		try {
 			MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "斗神塔"));
 			Document doc = MyUtil.clickTextUrl(mainDoc,"企鹅动态");
-			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("。"));
+			System.out.println(doc.text());
+			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("2:"));
 			if(result.contains("斗神塔"))
 				message.put("掉落情况", "上一次掉落："+result);
 			else {

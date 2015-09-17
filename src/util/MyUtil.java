@@ -83,4 +83,39 @@ public class MyUtil {
 	public static boolean isHref(Document doc, String text) {
 		return doc.getElementsContainingOwnText(text).get(0).hasAttr("href");
 	}
+	
+	/**
+	 * 延缓当前线程达到计时器的作用，时间到则返回true
+	 * @param minutes
+	 * @param seconds
+	 * @return
+	 */
+	public static boolean timing(int minutes, int seconds) {
+		//转成毫秒
+		int paramLong = (minutes << 4) * 3750 + (seconds <<3) * 125;
+		try {
+			Thread.sleep(paramLong);
+			return true;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
+	/**
+	 * 延缓当前线程达到计时器的作用，时间到则返回true
+	 * @param seconds
+	 * @return
+	 */
+	public static boolean timing(int seconds) {
+		//转成毫秒
+		int paramLong = (seconds <<3) * 125;
+		try {
+			Thread.sleep(paramLong);
+			return true;
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
 }
