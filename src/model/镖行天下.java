@@ -4,7 +4,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.swing.JLabel;
+
 import org.jsoup.nodes.Document;
+
+import core.Main;
 
 import util.MyUtil;
 
@@ -41,8 +45,9 @@ public class 镖行天下{
 				MyUtil.clickURL(MyUtil.getTextUrl(doc1, "刷新押镖"));
 			if(MyUtil.clickURL(MyUtil.getTextUrl(doc1, "启程护送")).text().contains("今天没有护送次数了"))
 				message.put("护送状态", "今天没有护送次数了!");
-			else
+			else {
 				message.put("护送状态", "押镖已上路！");
+			}
 			
 		} catch (IOException e) {
 			e.printStackTrace();
