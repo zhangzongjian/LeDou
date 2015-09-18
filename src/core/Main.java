@@ -28,7 +28,6 @@ public class Main {
 	public static void main(String[] args) {
 		Main main = new Main();
 		main.CreateJFrame("一键乐斗小工具");
-		main.showTime();
 	}
 
 	public static JFrame jFrame = new JFrame("一键乐斗小工具");
@@ -70,21 +69,6 @@ public class Main {
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 350); // 设置窗体大小
 		jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-	}
-	
-	public void showTime() {
-		int i = 0;
-		showTime = new JLabel("1234" + 1);
-		jPanel.add(showTime, BorderLayout.SOUTH);
-		while (true) {
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			showTime.setText(String.valueOf(i++));
-		}
 	}
 }
 

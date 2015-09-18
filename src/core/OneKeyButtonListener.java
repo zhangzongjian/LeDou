@@ -5,6 +5,8 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.swing.JLabel;
+
 import model.乐斗boss;
 import model.任务;
 import model.副本;
@@ -32,17 +34,17 @@ public class OneKeyButtonListener implements ActionListener {
 		String mainURL = Main.input.getText();
 		ArrayList<String> list = new ArrayList<String>();
 		list.add("镖行天下");
-		list.add("答题");
-		list.add("副本");
-		list.add("竞技场");
-		list.add("斗神塔");
-		list.add("矿洞");
-		list.add("任务");
-		list.add("乐斗boss");
-		list.add("历练");
-		list.add("领取每日奖励");
-		list.add("十二宫");
-		list.add("许愿");
+//		list.add("答题");
+//		list.add("副本");
+//		list.add("竞技场");
+//		list.add("斗神塔");
+//		list.add("矿洞");
+//		list.add("任务");
+//		list.add("乐斗boss");
+//		list.add("历练");
+//		list.add("领取每日奖励");
+//		list.add("十二宫");
+//		list.add("许愿");
 		try {
 			final Document mainDoc = MyUtil.clickURL(mainURL);
 			if (list.contains("镖行天下")) {
@@ -50,12 +52,23 @@ public class OneKeyButtonListener implements ActionListener {
 					public void run() {
 						镖行天下 m = new 镖行天下(mainDoc);
 						m.劫镖();
-						for (int i = 0; i < 3; i++) {
-							if (MyUtil.timing(3)) {
-								System.out.println("护送押镖");
-								Main.textArea.append("护送押镖\n");
-								// m.护送押镖();
+						Main.showTime = new JLabel();
+						Main.jPanel.add(Main.showTime);
+						//计时多次送镖
+						int lastTime;
+						int num = m.getNum();
+						System.out.println(num);
+						for (int i = 0; i < num; i++) {
+							lastTime = m.getLastTime();
+							while(lastTime-- > 0) {
+								try {
+									Main.showTime.setText("护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									e.printStackTrace();
+								}
 							}
+							m.护送押镖();
 						}
 						Main.textArea.append("【镖行天下】\n");
 						for (Object o : m.getMessage().values()) {
