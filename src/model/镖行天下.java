@@ -1,14 +1,10 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import javax.swing.JLabel;
-
 import org.jsoup.nodes.Document;
-
-import core.Main;
 
 import util.MyUtil;
 
@@ -19,7 +15,7 @@ public class 镖行天下{
 	public 镖行天下(Document mainDoc){
 		this.mainDoc = mainDoc;
 	}
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 	public Map<String, Object> getMessage(){
 		return message; 
 	}
@@ -41,8 +37,9 @@ public class 镖行天下{
 			}
 			Document doc1 = MyUtil.clickURL(MyUtil.getTextUrl(doc, "护送押镖"));
 			int flushNum = Integer.parseInt(doc1.text().charAt(doc1.text().indexOf("免费刷新次数：")+7)+"");
-			if(flushNum > 0)
+			if(flushNum > 0) {
 				MyUtil.clickURL(MyUtil.getTextUrl(doc1, "刷新押镖"));
+			}
 			if(MyUtil.clickURL(MyUtil.getTextUrl(doc1, "启程护送")).text().contains("今天没有护送次数了"))
 				message.put("护送状态", "今天没有护送次数了!");
 			else {
@@ -71,15 +68,10 @@ public class 镖行天下{
 			String result = "";
 			while(num > 0) {
 				Document doc1 = MyUtil.clickURL(MyUtil.getTextUrl(doc, "刷新"));
-				String temp = MyUtil.clickURL(MyUtil.getTextUrl(doc1, "拦截")).text();
-				//有问题
-				if(temp.contains("恭喜你")) {
-					result = temp.substring(temp.indexOf("恭喜你"),temp.indexOf("恭喜你")+23);
-					message.put("劫镖奖励"+num, "劫镖奖励："+result);
-				}
-				else //有问题
-					message.put("劫镖奖励"+num, "劫镖奖励：打不过呀！");
-				num = Integer.parseInt(doc1.text().charAt(doc1.text().indexOf("剩余拦截次数")+7)+"");
+				Document doc2 = MyUtil.clickURL(MyUtil.getTextUrl(doc1, "拦截"));
+				result = MyUtil.substring(doc2.text(), "威望商店", 4, "护送");
+				message.put("劫镖奖励"+num, "劫镖奖励："+result);
+				num = Integer.parseInt(doc2.text().charAt(doc2.text().indexOf("剩余拦截次数")+7)+"");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -116,4 +108,6 @@ public class 镖行天下{
 		}
 		return 0;
 	}
+	
+	
 }

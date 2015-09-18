@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import javax.swing.JLabel;
-
 import model.乐斗boss;
 import model.任务;
 import model.副本;
@@ -27,24 +25,23 @@ import util.MyUtil;
 //一键乐斗按钮响应
 public class OneKeyButtonListener implements ActionListener {
 
-	@SuppressWarnings("static-access")
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		long startTime = System.currentTimeMillis();
 		String mainURL = Main.input.getText();
 		ArrayList<String> list = new ArrayList<String>();
-		list.add("镖行天下");
-//		list.add("答题");
-//		list.add("副本");
-//		list.add("竞技场");
-//		list.add("斗神塔");
-//		list.add("矿洞");
-//		list.add("任务");
-//		list.add("乐斗boss");
-//		list.add("历练");
-//		list.add("领取每日奖励");
-//		list.add("十二宫");
-//		list.add("许愿");
+//		list.add("镖行天下");  //无异常
+//		list.add("答题");   //无异常
+//		list.add("副本");  //无异常
+//		list.add("竞技场");  //无异常
+//		list.add("斗神塔"); //无异常
+//		list.add("矿洞");  //无异常
+//		list.add("任务");  //无异常
+//		list.add("乐斗boss"); //无异常
+//		list.add("历练"); //无异常
+//		list.add("领取每日奖励");  //无异常
+//		list.add("十二宫"); //无异常
+//		list.add("许愿"); //无异常
 		try {
 			final Document mainDoc = MyUtil.clickURL(mainURL);
 			if (list.contains("镖行天下")) {
@@ -52,13 +49,15 @@ public class OneKeyButtonListener implements ActionListener {
 					public void run() {
 						镖行天下 m = new 镖行天下(mainDoc);
 						m.劫镖();
-						Main.showTime = new JLabel();
-						Main.jPanel.add(Main.showTime);
 						//计时多次送镖
 						int lastTime;
 						int num = m.getNum();
-						System.out.println(num);
 						for (int i = 0; i < num; i++) {
+							m.护送押镖();
+							Main.textArea.append("【镖行天下】\n");
+							for (Object o : m.getMessage().values()) {
+								Main.textArea.append("    " + o.toString() + "\n");
+							}
 							lastTime = m.getLastTime();
 							while(lastTime-- > 0) {
 								try {
@@ -68,7 +67,6 @@ public class OneKeyButtonListener implements ActionListener {
 									e.printStackTrace();
 								}
 							}
-							m.护送押镖();
 						}
 						Main.textArea.append("【镖行天下】\n");
 						for (Object o : m.getMessage().values()) {
@@ -88,8 +86,8 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			if (list.contains("斗神塔")) {
 				斗神塔 m = new 斗神塔(mainDoc);
-				m.查看掉落情况();
 				m.挑战();
+				m.查看掉落情况();
 				Main.textArea.append("【斗神塔】\n");
 				for (Object o : m.getMessage().values()) {
 					Main.textArea.append("    " + o.toString() + "\n");
@@ -143,23 +141,16 @@ public class OneKeyButtonListener implements ActionListener {
 					Main.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("任务")) {
-				任务 m = new 任务(mainDoc);
-				m.finish();
-				Main.textArea.append("【任务】\n");
-				for (Object o : m.getMessage().values()) {
-					Main.textArea.append("    " + o.toString() + "\n");
-				}
-			}
 			if (list.contains("十二宫")) {
 				十二宫 m = new 十二宫(mainDoc);
-				m.挑战(); // 没问题
-				m.扫荡(); // 待测试
+				//m.挑战();
+				m.扫荡();
 				Main.textArea.append("【十二宫】\n");
 				for (Object o : m.getMessage().values()) {
 					Main.textArea.append("    " + o.toString() + "\n");
 				}
 			}
+			//许愿必须得放在好友乐斗之后执行
 			if (list.contains("许愿")) {
 				许愿 m = new 许愿(mainDoc);
 				m.xuYuan();
@@ -168,11 +159,20 @@ public class OneKeyButtonListener implements ActionListener {
 					Main.textArea.append("    " + o.toString() + "\n");
 				}
 			}
+			//完成任务要放到最后执行
+			if (list.contains("任务")) {
+				任务 m = new 任务(mainDoc);
+				m.finish();
+				Main.textArea.append("【任务】\n");
+				for (Object o : m.getMessage().values()) {
+					Main.textArea.append("    " + o.toString() + "\n");
+				}
+			}
 
 			long endTime = System.currentTimeMillis();
 			Main.textArea.append("(耗时：" + (endTime - startTime) / 1000.0
 					+ "秒)\n");
-		} catch (IOException e) {
+		} catch (IOException e) { //连接超时处理
 			e.printStackTrace();
 		}
 	}

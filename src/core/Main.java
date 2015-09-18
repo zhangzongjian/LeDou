@@ -2,11 +2,6 @@ package core;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.awt.List;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
-import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -16,12 +11,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
-
-import model.*;
-
-import org.jsoup.nodes.Document;
-
-import util.MyUtil;
 
 public class Main {
 
@@ -36,7 +25,7 @@ public class Main {
 	public static JTextArea textArea;
 	public static JTextField input;
 	public static JLabel tag;
-	public static JLabel showTime;
+	public static JLabel showTime; //显示押镖剩余时间
 	public static JScrollPane textArea1;
 	public static JButton oneKeyButton;
 	public static JButton clearButton;
@@ -45,6 +34,7 @@ public class Main {
 		jFrame.setLocation(0, 200); // 窗口起始位置
 		// 标签
 		tag = new JLabel("免登陆链接");
+		showTime = new JLabel();
 		// 输入框
 		input = new JTextField(12);
 		input.setName("免登陆链接");
@@ -65,6 +55,7 @@ public class Main {
 		jPanel.add(oneKeyButton, BorderLayout.NORTH);
 		jPanel.add(clearButton, BorderLayout.NORTH);
 		jPanel.add(textArea1, BorderLayout.SOUTH);
+		jPanel.add(Main.showTime, BorderLayout.SOUTH);
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 350); // 设置窗体大小

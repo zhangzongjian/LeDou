@@ -1,7 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.nodes.Document;
@@ -15,7 +15,7 @@ public class 竞技场  {
 		this.mainDoc = mainDoc;
 	}
 
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 
 	public Map<String, Object> getMessage() {
 		return message;
@@ -38,7 +38,7 @@ public class 竞技场  {
 					message.put("挑战情况", "已领取奖励！");
 				}
 				if(num == 5)
-					message.put("挑战情况", "挑战次数以用完！");
+					message.put("挑战情况", "挑战次数已用完！");
 			} 
 			else {
 				message.put("挑战情况", "非赛季时间!");

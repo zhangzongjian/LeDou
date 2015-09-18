@@ -1,7 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.nodes.Document;
@@ -15,7 +15,7 @@ public class 斗神塔  {
 		this.mainDoc = mainDoc;
 	}
 
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 
 	public Map<String, Object> getMessage() {
 		return message;
@@ -31,15 +31,16 @@ public class 斗神塔  {
 			if (doc.text().contains("结束挑战")) {
 				MyUtil.clickTextUrl(MyUtil.clickTextUrl(doc, "结束挑战"),"取消");
 			}
-			if(num1 > 0) {
-				MyUtil.clickTextUrl(doc, "自动挑战");
-				message.put("挑战状态", "开始自动挑战！");
-			}
 			if(doc.text().contains("正在自动挑战中")) {
 				message.put("挑战状态", "正在自动挑战中！");
 			}
-			else 
+			else if(num1 > 0) {
+				MyUtil.clickTextUrl(doc, "自动挑战");
+				message.put("挑战状态", "开始自动挑战！");
+			}
+			else {
 				message.put("挑战状态", "今日剩余次数0");
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -51,12 +52,11 @@ public class 斗神塔  {
 			Document doc = MyUtil.clickTextUrl(mainDoc,"企鹅动态");
 			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("2:"));
 			if(result.contains("斗神塔"))
-				message.put("掉落情况", "上一次掉落："+result);
+				message.put("掉落情况", "上一次挑战奖励："+result);
 			else {
 				message.put("掉落情况", "掉落情况：找不到记录！");
 			}
 		} catch (IOException e) {
-			message.put("掉落情况", "掉落情况：找不到记录！");
 			e.printStackTrace();
 		}
 	}

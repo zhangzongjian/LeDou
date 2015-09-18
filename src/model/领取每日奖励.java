@@ -1,7 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.nodes.Document;
@@ -15,7 +15,7 @@ public class 领取每日奖励  {
 		this.mainDoc = mainDoc;
 	}
 
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 
 	public Map<String, Object> getMessage() {
 		return message;
@@ -29,22 +29,15 @@ public class 领取每日奖励  {
 				if(doc1.text().contains("您还不是达人"))
 					message.put("领取达人礼包", "达人礼包：您还不是达人");
 				else
-					message.put("领取达人礼包",MyUtil.substring(doc1.text(), "获得：", 3, "！"));
+					message.put("领取达人礼包", "领取成功！");
 			} else message.put("领取达人礼包", "达人礼包：已领取");
 			if(doc.text().contains("领取每日奖励")){
-				Document doc2 = MyUtil.clickTextUrl(doc, "领取每日奖励");
-				String end = "";
-				if(doc2.text().contains("开通乐斗达人"))
-					end = "开通乐斗达人";
-				else if(doc2.text().contains("(VIP特权)续费乐斗达人"))
-					end = "(VIP特权)续费乐斗达人";
-				else 
-					end = "恭喜你";
-				message.put("领取每日奖励", MyUtil.substring(doc2.text(), "获得了", 3, end));
+				MyUtil.clickTextUrl(doc, "领取每日奖励");
+				message.put("领取每日奖励", "领取成功！");
 			} else message.put("领取每日奖励", "每日奖励：已领取");
 			if(doc.text().contains("领取每日双倍奖励")){
-				Document doc2 = MyUtil.clickTextUrl(doc, "领取每日双倍奖励");
-				message.put("领取每日奖励", MyUtil.substring(doc2.text(), "获得了", 3, doc2.text().contains("开通乐斗达人")?"开通乐斗达人":"恭喜你"));
+				MyUtil.clickTextUrl(doc, "领取每日双倍奖励");
+				message.put("领取每日奖励", "领取成功！");
 			} else message.put("领取每日奖励", "每日奖励：已领取");
 			if(doc.text().contains("领取徒弟经验")){
 				Document doc3 = MyUtil.clickTextUrl(doc, "领取徒弟经验");

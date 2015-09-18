@@ -1,7 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.nodes.Document;
@@ -16,13 +16,13 @@ public class 十二宫 {
 		this.mainDoc = mainDoc;
 	}
 
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 
 	public Map<String, Object> getMessage() {
 		return message;
 	}
 
-	//双子宫及以上掉落黄金星辰
+	//1002及以上掉落黄金星辰
 	public void 扫荡() {
 		try {
 			if(!mainDoc.text().contains("十二宫")) return;
@@ -65,7 +65,6 @@ public class 十二宫 {
 			Document doc1;
 			while(true) {
 				doc1 = MyUtil.clickTextUrl(MyUtil.clickURL(elements.get(0).attr("href")),"挑战");
-				
 				if(doc1.text().contains("挑战次数不足")){
 					message.put("挑战情况", "挑战次数不足");
 					return;

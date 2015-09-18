@@ -1,7 +1,7 @@
 package model;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.nodes.Document;
@@ -13,7 +13,7 @@ public class 答题{
 	public 答题(Document mainURL){
 		this.mainDoc = mainURL;
 	}
-	private Map<String, Object> message = new HashMap<String, Object>();
+	private Map<String, Object> message = new LinkedHashMap<String, Object>();
 	public Map<String, Object> getMessage(){
 		return message; 
 	}
