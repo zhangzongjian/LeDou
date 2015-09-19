@@ -1,10 +1,6 @@
 package test;
 
-import java.util.List;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MapTest {
 
@@ -28,6 +24,7 @@ public class MapTest {
 		System.out.println(MapTest.i);
 		System.out.println(MapTest.i);
 		System.out.println(MapTest.t);
+		System.out.println("33".equals(null));
 	}
 
 }

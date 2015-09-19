@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.JLabel;
 
 import model.乐斗boss;
 import model.任务;
@@ -23,9 +26,13 @@ import org.jsoup.nodes.Document;
 import core.MainUI;
 
 import util.DocUtil;
+import util.UserUtil;
 
 //一键乐斗按钮响应
 public class OneKeyButtonListener implements ActionListener {
+	
+	//存放线程名列表,（多小号多线程押镖）
+	public static List<String> users = new ArrayList<String>();
 
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
@@ -37,24 +44,27 @@ public class OneKeyButtonListener implements ActionListener {
 			return;
 		}
 		ArrayList<String> list = new ArrayList<String>();
-		list.add("镖行天下");  //无异常
-		list.add("答题");   //无异常
-		list.add("副本");  //无异常
-		list.add("竞技场");  //无异常
-		list.add("斗神塔"); //无异常
-		list.add("矿洞");  //无异常
-		list.add("任务");  //无异常
-		list.add("乐斗boss"); //无异常
-		list.add("历练"); //无异常
-		list.add("领取每日奖励");  //无异常
-		list.add("十二宫"); //无异常
-		list.add("许愿"); //无异常
+//		list.add("镖行天下");  //多线程
+//		list.add("答题");   //无异常
+//		list.add("副本");  //无异常
+//		list.add("竞技场");  //无异常
+//		list.add("斗神塔"); //无异常
+//		list.add("矿洞");  //无异常
+//		list.add("任务");  //无异常
+//		list.add("乐斗boss"); //无异常
+//		list.add("历练"); //无异常
+//		list.add("领取每日奖励");  //无异常
+//		list.add("十二宫"); //无异常
+//		list.add("许愿"); //无异常
 		try {
+			final String username = UserUtil.getUsername(mainURL);
 			final Document mainDoc = DocUtil.clickURL(mainURL);
 			if (list.contains("镖行天下")) {
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
 						镖行天下 m = new 镖行天下(mainDoc);
+						JLabel showTime = new JLabel();
+						MainUI.jPanel.add(showTime);
 						m.劫镖();
 						MainUI.textArea.append("【镖行天下】\n");
 						for (Object o : m.getMessage().values()) {
@@ -63,23 +73,36 @@ public class OneKeyButtonListener implements ActionListener {
 						//计时多次送镖
 						int lastTime;
 						int num = m.getNum();
+						if(num == 0) {
+							MainUI.textArea.append("【镖行天下】\n");
+							MainUI.textArea.append("    护送次数已用完！\n");
+							return;
+						}
 						for (int i = 0; i < num; i++) {
 							m.护送押镖();
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    " + m.getMessage().get("护送状态") + "\n");
 							lastTime = m.getLastTime();
-							while(lastTime-- > 0) {
+							while(lastTime > 0) {
+								lastTime = lastTime - 1;  //每秒更新一次显示
 								try {
-									MainUI.showTime.setText("护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
+									showTime.setText(username+"：护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
 									Thread.sleep(1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
 							}
 						}
+						users.remove(username);  //结束了就从线程列表中移除
+						MainUI.jPanel.remove(showTime);
+						MainUI.jPanel.repaint(); //重绘jPanel面板，就是刷新
+						System.out.println(showTime.getText());
 					}
-				});
-				thread1.start();
+				}, username);
+				if(!users.contains(thread1.getName())){ //username账号的送镖线程不存在，则启动线程
+					users.add(username);	//启动username账号的线程
+					thread1.start();
+				}
 			}
 			if (list.contains("答题")) {
 				答题 m = new 答题(mainDoc);

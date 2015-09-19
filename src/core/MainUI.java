@@ -2,6 +2,8 @@ package core;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Set;
@@ -30,10 +32,11 @@ public class MainUI {
 
 	public static void main(String[] args) {
 		MainUI main = new MainUI();
-		main.CreateJFrame("一键乐斗小工具");
+		main.createJFrame("一键乐斗小工具");
 	}
-
-	public static JFrame jFrame = new JFrame("一键乐斗小工具");
+	
+	//UI 组件，需要随时获取信息的，设置成全局静态变量
+	public static JFrame jFrame = new JFrame("一键乐斗小工具"); 
 	public static JPanel jPanel = new JPanel();
 	public static Container container = jFrame.getContentPane();
 	public static JTextArea textArea;
@@ -49,32 +52,40 @@ public class MainUI {
 	public static JMenuItem userItem;
 
 	//打开窗口
-	public void CreateJFrame(String title) {
+	public void createJFrame(String title) {
+		//窗口
 		jFrame.setLocation(0, 200); // 窗口起始位置
+		jFrame.setResizable(false); //固定大小，不可变
 		// 标签
 		tag = new JLabel("添加小号");
-		showTime = new JLabel();
+		tag.setBounds(7, 3, 60, 25);
 		// 输入框
-		input = new JTextField(20);
+		input = new JTextField(23);
 		input.setName("免登陆链接");
 		input.setText("请复制免登陆链接到这里！");
+		input.setBounds(65, 5, 255, 23);
 		// 文本框，JScorllPane：文本框设置滚动条
-		textArea = new JTextArea(10, 30);
-		textArea.setName("输出框");
+		textArea = new JTextArea();
 		textArea1 = new JScrollPane(textArea);
+		textArea1.setBounds(7, 65, 380, 120);
 		// 按钮
 		oneKeyButton = new JButton("一键乐斗");
-		oneKeyButton.setName("一键乐斗");
+		oneKeyButton.setBounds(204, 33, 115, 23);
 		oneKeyButton.addActionListener(new OneKeyButtonListener());
 		clearButton = new JButton("清屏");
+		clearButton.setBounds(325, 33, 63, 23);
 		clearButton.addActionListener(new ClearButtonListener());
 		addUserButton = new JButton("添加");
 		addUserButton.addActionListener(new AddUserButtonListener());
+		addUserButton.setBounds(325, 5, 63, 23);
 		//菜单控件
 		userBar = new JMenuBar(); //菜单
 		userSelect = new JMenu("切换小号：（未添加）"); //菜单选项组
+		userBar.setBounds(7, 33, 193, 23);
 		loadUserList();
 		
+		//面板
+		jPanel.setLayout(null);  //设置面板为无布局形式，即手动指定组件位置尺寸
 		jPanel.add(tag, BorderLayout.NORTH);
 		jPanel.add(input, BorderLayout.NORTH);
 		jPanel.add(addUserButton, BorderLayout.NORTH);
@@ -82,7 +93,7 @@ public class MainUI {
 		jPanel.add(oneKeyButton, BorderLayout.NORTH);
 		jPanel.add(clearButton, BorderLayout.NORTH);
 		jPanel.add(textArea1, BorderLayout.SOUTH);
-		jPanel.add(MainUI.showTime, BorderLayout.SOUTH);
+
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 350); // 设置窗体大小
@@ -115,6 +126,22 @@ public class MainUI {
 			e.printStackTrace();
 		}
 	}
+	
+	public void taskList() {
+		
+	}
+	
+	public void test() {
+		final JButton test = new JButton("刷新测试");
+		test.setBounds(200, 200, 150, 60);
+		test.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent paramActionEvent) {
+				jPanel.repaint();
+			}
+		});
+		jPanel.add(test);
+	}
+	
 }
 
 
