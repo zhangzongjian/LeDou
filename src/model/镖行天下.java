@@ -26,7 +26,7 @@ public class 镖行天下{
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			if(doc.text().contains("护送完成")) {
 				Document temp = DocUtil.clickURL(DocUtil.getTextUrl(doc, "护送完成"));
-				message.put("领取奖励", DocUtil.substring(temp.text(), "获得奖励", 0, "！"));
+				message.put("护送状态", DocUtil.substring(temp.text(), "获得奖励", 0, "！"));
 				doc = DocUtil.clickURL(DocUtil.getTextUrl(temp, "领取奖励"));
 			}
 			//启动护送
@@ -84,6 +84,7 @@ public class 镖行天下{
 	 */
 	public int getLastTime() {
 		try {
+			if(!mainDoc.text().contains("镖行天下")) return 0 ;
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			int minutes = Integer.parseInt(DocUtil.substring(doc.text(), "剩余时间：", 5, "分"));
 			int seconds = Integer.parseInt(DocUtil.substring(doc.text(), "分", 1, "秒"));
@@ -100,6 +101,7 @@ public class 镖行天下{
 	 */
 	public int getNum(){
 		try {
+			if(!mainDoc.text().contains("镖行天下")) return 0;
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("剩余护送次数")+7)+"");
 			return num;

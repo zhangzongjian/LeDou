@@ -23,9 +23,18 @@ public class 矿洞   {
 	
 	public void 挑战(){
 		try {
-			if(!mainDoc.text().contains("矿洞")) return;
+			if(!mainDoc.text().contains("矿洞")) {
+				message.put("挑战情况", "未开启矿洞功能");
+				return;
+			}
 			Document doc = DocUtil.clickTextUrl(mainDoc, "矿洞");
-			if(!doc.text().contains("副本挑战中")) return;
+			if(doc.text().contains("领取奖励")) {  //上一期矿洞已打完
+				message.put("领取奖励", "上一期奖励："+DocUtil.substring(doc.text(), "【矿洞副本】", 6, "领取奖励"));
+				doc = DocUtil.clickTextUrl(doc, "领取奖励");
+			}
+			
+			/////矿洞未报名情况，未处理
+			
 			int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("剩余次数")+5)+"");
 			if(num == 0) {
 				message.put("挑战情况", "剩余挑战次数0！");

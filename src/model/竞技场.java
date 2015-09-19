@@ -23,7 +23,10 @@ public class 竞技场  {
 
 	public void 挑战(){
 		try {
-			if(!mainDoc.text().contains("竞技场")) return;
+			if(!mainDoc.text().contains("竞技场")) {
+				message.put("挑战情况", "未开启竞技场功能");
+				return;
+			}
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "竞技场"));
 			if(doc.text().contains("赛季中")) {
 				int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("今日已挑战")+6)+"");
@@ -35,7 +38,7 @@ public class 竞技场  {
 				}
 				if(DocUtil.isHref(doc1, "领取奖励")) {
 					DocUtil.clickTextUrl(doc1, "领取奖励");
-					message.put("挑战情况", "已领取奖励！");
+					message.put("领奖情况", "已领取奖励！");
 				}
 				if(num == 5)
 					message.put("挑战情况", "挑战次数已用完！");

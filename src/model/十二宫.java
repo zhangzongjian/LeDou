@@ -25,7 +25,10 @@ public class 十二宫 {
 	//1002及以上掉落黄金星辰
 	public void 扫荡() {
 		try {
-			if(!mainDoc.text().contains("十二宫")) return;
+			if(!mainDoc.text().contains("十二宫")) {
+				message.put("挑战情况", "未开启十二宫功能");
+				return;
+			}
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
 			//1005为处女宫，1000为白羊宫
 			Elements elements = doc.getElementsByAttributeValueMatching("href","scene_id=1000");
@@ -58,7 +61,10 @@ public class 十二宫 {
 	
 	public void 挑战() {
 		try {
-			if(!mainDoc.text().contains("十二宫")) return;
+			if(!mainDoc.text().contains("十二宫")) {
+				message.put("挑战情况", "未开启十二宫功能");
+				return;
+			}
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
 			Elements elements = doc.getElementsByAttributeValueMatching("href","scene_id=1000");
 			int i = 0;

@@ -50,7 +50,7 @@ public class 斗神塔  {
 		try {
 			DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "斗神塔"));
 			Document doc = DocUtil.clickTextUrl(mainDoc,"企鹅动态");
-			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("2:"));
+			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("今天"));
 			if(result.contains("斗神塔"))
 				message.put("掉落情况", "上一次挑战奖励："+result);
 			else {

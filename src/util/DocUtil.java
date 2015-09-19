@@ -8,6 +8,9 @@ import org.jsoup.select.Elements;
 
 public class DocUtil {
 	
+	/**
+	 * 全局免登陆链接，当前选择的链接
+	 */
 	public static String mainURL;
 	
 	/**

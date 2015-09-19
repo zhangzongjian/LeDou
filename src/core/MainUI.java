@@ -18,6 +18,7 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import util.DocUtil;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
@@ -47,7 +48,7 @@ public class MainUI {
 	public static JMenu userSelect;
 	public static JMenuItem userItem;
 
-	
+	//打开窗口
 	public void CreateJFrame(String title) {
 		jFrame.setLocation(0, 200); // 窗口起始位置
 		// 标签
@@ -71,7 +72,7 @@ public class MainUI {
 		addUserButton.addActionListener(new AddUserButtonListener());
 		//菜单控件
 		userBar = new JMenuBar(); //菜单
-		userSelect = new JMenu("切换小号"); //菜单选项组
+		userSelect = new JMenu("切换小号：（未添加）"); //菜单选项组
 		loadUserList();
 		
 		jPanel.add(tag, BorderLayout.NORTH);
@@ -90,6 +91,7 @@ public class MainUI {
 	
 	
 	@SuppressWarnings("unchecked")
+	//打开窗口时，将已存储的小号加载到选择菜单中
 	public void loadUserList() {
 		try {
 			Map<String, Object> usersMap;
@@ -106,6 +108,7 @@ public class MainUI {
 				userMenu.add(delete);
 				userSelect.add(userMenu); // 添加到菜单列表
 				userSelect.setText("切换小号："+username);
+				DocUtil.mainURL = usersMap.get(username).toString();
 			}
 			userBar.add(userSelect);
 		} catch (IOException e) {

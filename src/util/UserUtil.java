@@ -115,11 +115,9 @@ public class UserUtil {
 	public static String getMainURLByUsrname(String username) {
 		String mainURL = null;
 		try {
-			System.out.println(((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).keySet());
 			mainURL = ((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).get(username).toString();
 			return mainURL;
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return mainURL;

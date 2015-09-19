@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 
+import util.DocUtil;
 import util.UserUtil;
 import core.MainUI;
 
@@ -38,8 +39,13 @@ public class DeleteUserButtonListener implements ActionListener {
 		for(int i = 0; i<MainUI.userSelect.getItemCount(); i++) {
 			if(MainUI.userSelect.getItem(i).getName().equals(username)) {
 				MainUI.userSelect.remove(i);
-				return;
+				break;
 			}
+		}
+		//全部删除了
+		if(MainUI.userSelect.getItemCount() == 0) {
+			MainUI.userSelect.setText("切换小号：（未添加）");
+			DocUtil.mainURL = null;
 		}
 	}
 }

@@ -13,6 +13,7 @@ public class MapTest {
 		System.out.println("ssss");
 	}
 	static int i;
+	static String t;
 	public static void main(String[] args) throws IOException {
 //		Map<String, Object> map = new HashMap<>();
 //		Map<String, Object> map1 = new HashMap<>();
@@ -26,6 +27,7 @@ public class MapTest {
 		System.out.println(MapTest.i);
 		System.out.println(MapTest.i);
 		System.out.println(MapTest.i);
+		System.out.println(MapTest.t);
 	}
 
 }

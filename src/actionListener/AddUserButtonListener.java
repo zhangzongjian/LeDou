@@ -68,6 +68,9 @@ public class AddUserButtonListener implements ActionListener {
 		userMenu.add(select);
 		userMenu.add(delete);
 		MainUI.userSelect.add(userMenu); // 菜单选项
+		if(MainUI.userSelect.getItemCount() == 1) {
+			MainUI.userSelect.setText("切换小号："+username);
+		}
 		return true;
 	}
 }
