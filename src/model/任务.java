@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 任务  {
 	private Document mainDoc;
@@ -23,8 +23,8 @@ public class 任务  {
 
 	public void finish(){
 		try {
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "任务"));
-			Document doc1 = MyUtil.clickTextUrl(doc, "一键完成任务");
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "任务"));
+			Document doc1 = DocUtil.clickTextUrl(doc, "一键完成任务");
 			int num = 5 - doc1.getElementsContainingOwnText("替换任务").size();
 			message.put("任务完成情况", "任务完成情况：（"+num+"/5）");
 		} catch (IOException e) {
@@ -32,7 +32,7 @@ public class 任务  {
 		}
 	}
 	public static void main(String[] args) throws IOException {
-		任务 r = new 任务(MyUtil.clickURL("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?cmd=index&channel=0&sid=fybscw20pMc6EMmEIEYSybCPaieZ9Zyg60ea94d80201=="));
+		任务 r = new 任务(DocUtil.clickURL("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?cmd=index&channel=0&sid=fybscw20pMc6EMmEIEYSybCPaieZ9Zyg60ea94d80201=="));
 		r.finish();
 		System.out.println(r.getMessage());
 	}

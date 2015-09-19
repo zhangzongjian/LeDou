@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 副本  {
 	private Document mainDoc;
@@ -24,7 +24,7 @@ public class 副本  {
 	public void 挑战() {
 		try {
 			//副本主页面
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "副本"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "副本"));
 //			int num = Integer.parseInt(doc.text().substring(doc.text().indexOf("征战书")+8,doc.text().lastIndexOf("本")));
 			int num1 = Integer.parseInt(doc.text().substring(doc.text().indexOf("今天剩余次数")+7,doc.text().indexOf("/")));
 //			int num2 = Integer.parseInt(doc.text().substring(doc.text().indexOf("本周付费次数")+7,doc.text().lastIndexOf("/")));
@@ -33,7 +33,7 @@ public class 副本  {
 				message.put("挑战状态", "未组队，请手动组队再来尝试！");
 			}
 			else if(num1 > 0){
-				MyUtil.clickTextUrl(doc, "快速挑战");
+				DocUtil.clickTextUrl(doc, "快速挑战");
 				message.put("挑战状态", "快速挑战完成！");
 			} 
 			else {

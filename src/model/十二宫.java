@@ -7,7 +7,7 @@ import java.util.Map;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 十二宫 {
 	private Document mainDoc;
@@ -26,10 +26,10 @@ public class 十二宫 {
 	public void 扫荡() {
 		try {
 			if(!mainDoc.text().contains("十二宫")) return;
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "十二宫"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
 			//1005为处女宫，1000为白羊宫
 			Elements elements = doc.getElementsByAttributeValueMatching("href","scene_id=1000");
-			Document doc1 = MyUtil.clickTextUrl(MyUtil.clickURL(elements.get(1).attr("href")),"请猴王扫荡");
+			Document doc1 = DocUtil.clickTextUrl(DocUtil.clickURL(elements.get(1).attr("href")),"请猴王扫荡");
 			if(doc1.text().contains("挑战次数不足")){
 				message.put("挑战情况", "挑战次数不足");
 				return;
@@ -59,12 +59,12 @@ public class 十二宫 {
 	public void 挑战() {
 		try {
 			if(!mainDoc.text().contains("十二宫")) return;
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "十二宫"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
 			Elements elements = doc.getElementsByAttributeValueMatching("href","scene_id=1000");
 			int i = 0;
 			Document doc1;
 			while(true) {
-				doc1 = MyUtil.clickTextUrl(MyUtil.clickURL(elements.get(0).attr("href")),"挑战");
+				doc1 = DocUtil.clickTextUrl(DocUtil.clickURL(elements.get(0).attr("href")),"挑战");
 				if(doc1.text().contains("挑战次数不足")){
 					message.put("挑战情况", "挑战次数不足");
 					return;

@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 答题{
 	private Document mainDoc;
@@ -20,8 +20,8 @@ public class 答题{
 	public void answer(){
 		try {
 			if(mainDoc.text().contains("答题")){
-				Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "答题"));
-				MyUtil.clickURL(MyUtil.getTextUrl(doc, "选择"));
+				Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "答题"));
+				DocUtil.clickURL(DocUtil.getTextUrl(doc, "选择"));
 				message.put("success", "OK!");
 			} 
 			else {

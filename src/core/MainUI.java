@@ -2,10 +2,11 @@ package core;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
-import java.util.HashMap;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 import javax.swing.JButton;
-import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -17,10 +18,17 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-public class Main {
+import util.UserUtil;
+import actionListener.AddUserButtonListener;
+import actionListener.ClearButtonListener;
+import actionListener.DeleteUserButtonListener;
+import actionListener.OneKeyButtonListener;
+import actionListener.SelectUserButtonListener;
+
+public class MainUI {
 
 	public static void main(String[] args) {
-		Main main = new Main();
+		MainUI main = new MainUI();
 		main.CreateJFrame("一键乐斗小工具");
 	}
 
@@ -39,6 +47,7 @@ public class Main {
 	public static JMenu userSelect;
 	public static JMenuItem userItem;
 
+	
 	public void CreateJFrame(String title) {
 		jFrame.setLocation(0, 200); // 窗口起始位置
 		// 标签
@@ -63,11 +72,7 @@ public class Main {
 		//菜单控件
 		userBar = new JMenuBar(); //菜单
 		userSelect = new JMenu("切换小号"); //菜单选项组
-		userSelect.add(new JMenuItem("111")); //菜单选项
-		JMenu user = new JMenu("222");
-		user.add(new JMenuItem("删除"));
-		userSelect.add(user);  //菜单选项组里的一个选项，同时也是一个选项组（子菜单）
-		userBar.add(userSelect);
+		loadUserList();
 		
 		jPanel.add(tag, BorderLayout.NORTH);
 		jPanel.add(input, BorderLayout.NORTH);
@@ -76,11 +81,36 @@ public class Main {
 		jPanel.add(oneKeyButton, BorderLayout.NORTH);
 		jPanel.add(clearButton, BorderLayout.NORTH);
 		jPanel.add(textArea1, BorderLayout.SOUTH);
-		jPanel.add(Main.showTime, BorderLayout.SOUTH);
+		jPanel.add(MainUI.showTime, BorderLayout.SOUTH);
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 350); // 设置窗体大小
 		jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+	}
+	
+	
+	@SuppressWarnings("unchecked")
+	public void loadUserList() {
+		try {
+			Map<String, Object> usersMap;
+			usersMap = (Map<String, Object>) UserUtil.getSettingByKey("小号");
+			Set<String> usernames = usersMap.keySet();
+			for (String username : usernames) {
+				JMenuItem select = new JMenuItem("选择");
+				select.addActionListener(new SelectUserButtonListener(username));
+				JMenuItem delete = new JMenuItem("删除");
+				delete.addActionListener(new DeleteUserButtonListener(username));
+				JMenu userMenu = new JMenu(username); //控件显示的名称
+				userMenu.setName(username); //控件的名称
+				userMenu.add(select);
+				userMenu.add(delete);
+				userSelect.add(userMenu); // 添加到菜单列表
+				userSelect.setText("切换小号："+username);
+			}
+			userBar.add(userSelect);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }
 

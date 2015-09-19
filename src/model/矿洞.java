@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 矿洞   {
 	private Document mainDoc;
@@ -24,7 +24,7 @@ public class 矿洞   {
 	public void 挑战(){
 		try {
 			if(!mainDoc.text().contains("矿洞")) return;
-			Document doc = MyUtil.clickTextUrl(mainDoc, "矿洞");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "矿洞");
 			if(!doc.text().contains("副本挑战中")) return;
 			int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("剩余次数")+5)+"");
 			if(num == 0) {
@@ -32,8 +32,8 @@ public class 矿洞   {
 				return;
 			}
 			while(num > 0) {
-				Document doc1 = MyUtil.clickTextUrl(doc, "挑战");
-				message.put("挑战情况"+num, MyUtil.substring(doc1.text(), "矿石商店", 4, "== 副本挑战中 =="));
+				Document doc1 = DocUtil.clickTextUrl(doc, "挑战");
+				message.put("挑战情况"+num, DocUtil.substring(doc1.text(), "矿石商店", 4, "== 副本挑战中 =="));
 				num = Integer.parseInt(doc1.text().charAt(doc1.text().indexOf("剩余次数")+5)+"");
 			}
 		} catch (IOException e) {

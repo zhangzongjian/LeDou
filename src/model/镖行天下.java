@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 镖行天下{
 	
@@ -23,24 +23,24 @@ public class 镖行天下{
 		try {
 			//劫镖主页面，护送时间：10分钟
 			if(!mainDoc.text().contains("镖行天下")) return;
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "镖行天下"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			if(doc.text().contains("护送完成")) {
-				Document temp = MyUtil.clickURL(MyUtil.getTextUrl(doc, "护送完成"));
-				message.put("领取奖励", MyUtil.substring(temp.text(), "获得奖励", 0, "！"));
-				doc = MyUtil.clickURL(MyUtil.getTextUrl(temp, "领取奖励"));
+				Document temp = DocUtil.clickURL(DocUtil.getTextUrl(doc, "护送完成"));
+				message.put("领取奖励", DocUtil.substring(temp.text(), "获得奖励", 0, "！"));
+				doc = DocUtil.clickURL(DocUtil.getTextUrl(temp, "领取奖励"));
 			}
 			//启动护送
 			if(doc.text().contains("护送押镖"))
-			if(!MyUtil.isHref(doc, "护送押镖")) {  //判断是否护送中
+			if(!DocUtil.isHref(doc, "护送押镖")) {  //判断是否护送中
 				message.put("护送状态", "您正在护送押镖中哦！");
 				return;
 			}
-			Document doc1 = MyUtil.clickURL(MyUtil.getTextUrl(doc, "护送押镖"));
+			Document doc1 = DocUtil.clickURL(DocUtil.getTextUrl(doc, "护送押镖"));
 			int flushNum = Integer.parseInt(doc1.text().charAt(doc1.text().indexOf("免费刷新次数：")+7)+"");
 			if(flushNum > 0) {
-				MyUtil.clickURL(MyUtil.getTextUrl(doc1, "刷新押镖"));
+				DocUtil.clickURL(DocUtil.getTextUrl(doc1, "刷新押镖"));
 			}
-			if(MyUtil.clickURL(MyUtil.getTextUrl(doc1, "启程护送")).text().contains("今天没有护送次数了"))
+			if(DocUtil.clickURL(DocUtil.getTextUrl(doc1, "启程护送")).text().contains("今天没有护送次数了"))
 				message.put("护送状态", "今天没有护送次数了!");
 			else {
 				message.put("护送状态", "押镖已上路！");
@@ -59,7 +59,7 @@ public class 镖行天下{
 		Document doc;
 		try {
 			if(!mainDoc.text().contains("镖行天下")) return;
-			doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "镖行天下"));
+			doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("剩余拦截次数")+7)+"");
 			if(num == 0) {
 				message.put("拦截结果", "拦截次数已用完！");
@@ -67,9 +67,9 @@ public class 镖行天下{
 			}
 			String result = "";
 			while(num > 0) {
-				Document doc1 = MyUtil.clickURL(MyUtil.getTextUrl(doc, "刷新"));
-				Document doc2 = MyUtil.clickURL(MyUtil.getTextUrl(doc1, "拦截"));
-				result = MyUtil.substring(doc2.text(), "威望商店", 4, "护送");
+				Document doc1 = DocUtil.clickURL(DocUtil.getTextUrl(doc, "刷新"));
+				Document doc2 = DocUtil.clickURL(DocUtil.getTextUrl(doc1, "拦截"));
+				result = DocUtil.substring(doc2.text(), "威望商店", 4, "护送");
 				message.put("劫镖奖励"+num, "劫镖奖励："+result);
 				num = Integer.parseInt(doc2.text().charAt(doc2.text().indexOf("剩余拦截次数")+7)+"");
 			}
@@ -84,9 +84,9 @@ public class 镖行天下{
 	 */
 	public int getLastTime() {
 		try {
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "镖行天下"));
-			int minutes = Integer.parseInt(MyUtil.substring(doc.text(), "剩余时间：", 5, "分"));
-			int seconds = Integer.parseInt(MyUtil.substring(doc.text(), "分", 1, "秒"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
+			int minutes = Integer.parseInt(DocUtil.substring(doc.text(), "剩余时间：", 5, "分"));
+			int seconds = Integer.parseInt(DocUtil.substring(doc.text(), "分", 1, "秒"));
 			return minutes*60+seconds;
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -100,7 +100,7 @@ public class 镖行天下{
 	 */
 	public int getNum(){
 		try {
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "镖行天下"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
 			int num = Integer.parseInt(doc.text().charAt(doc.text().indexOf("剩余护送次数")+7)+"");
 			return num;
 		} catch (IOException e) {

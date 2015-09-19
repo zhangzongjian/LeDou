@@ -1,4 +1,4 @@
-package model;
+package util;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -7,11 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class UserSetting {
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+
+
+public class UserUtil {
 
 	private static Map<String, Object> setting = null;
 	private static String settingFile = System.getProperty("user.dir")+"\\resources\\setting.data";
@@ -86,21 +89,39 @@ public class UserSetting {
 		return map;
 	}
 	
+	/**
+	 * 从免登陆链接页面中，获取用户昵称
+	 * @return
+	 * @throws IOException 
+	 */
+	public static String getUsername(String mainURL) throws IOException {
+		Document doc = Jsoup.connect(mainURL).get();
+		String username = "";
+		if(doc.text().contains("开通达人")) {
+			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
+		}
+		else { 
+			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "续费达人");
+		}
+		//获取到的昵称前后会带一个空格，去掉
+		return username.substring(1, username.length()-1);
+	}
+	
+	/**
+	 * 获取小号对应的免登陆链接
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public static void main(String[] args) {
+	public static String getMainURLByUsrname(String username) {
+		String mainURL = null;
 		try {
-//			UserSetting.saveSetting();
-//			System.out.println(UserSetting.getSetting());
-//			System.out.println(((LinkedHashMap<String, Object>)UserSetting.getSettingByKey("小号")).remove("詠NO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"));
-			UserSetting.saveSetting();
-			System.out.println(UserSetting.getSetting());
-			Object o = UserSetting.getSetting().get("小号");
-			HashMap<String, Object> m = (HashMap<String, Object>)o;
-			System.out.println(m);
+			System.out.println(((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).keySet());
+			mainURL = ((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).get(username).toString();
+			return mainURL;
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return mainURL;
 	}
-	
 }

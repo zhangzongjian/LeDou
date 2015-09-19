@@ -6,7 +6,7 @@ import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
-import util.MyUtil;
+import util.DocUtil;
 
 public class 好友乐斗  {
 	private Document mainDoc;
@@ -23,7 +23,7 @@ public class 好友乐斗  {
 
 	public void fight(){
 		try {
-			Document doc = MyUtil.clickURL(MyUtil.getTextUrl(mainDoc, "好友"));
+			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "好友"));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
