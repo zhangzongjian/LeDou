@@ -1,14 +1,17 @@
 package core;
 
-import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Container;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.FlowLayout;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -16,16 +19,19 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
 import util.DocUtil;
+import util.Task;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
 import actionListener.DeleteUserButtonListener;
 import actionListener.OneKeyButtonListener;
+import actionListener.SaveTaskButtonListener;
 import actionListener.SelectUserButtonListener;
 
 public class MainUI {
@@ -37,28 +43,25 @@ public class MainUI {
 	
 	//UI 组件，需要随时获取信息的，设置成全局静态变量
 	public static JFrame jFrame = new JFrame("一键乐斗小工具"); 
-	public static JPanel jPanel = new JPanel();
+	public static JPanel jPanel = new JPanel(); //总面板
+	public static JPanel taskPanel = new JPanel(); //乐斗任务选项面板
+	public static JPanel timePanel = new JPanel(); //计时结果面板
 	public static Container container = jFrame.getContentPane();
-	public static JTextArea textArea;
-	public static JTextField input;
-	public static JLabel tag;
-	public static JLabel showTime; //显示押镖剩余时间
-	public static JScrollPane textArea1;
-	public static JButton oneKeyButton;
-	public static JButton clearButton;
-	public static JButton addUserButton;
-	public static JMenuBar userBar;
-	public static JMenu userSelect;
-	public static JMenuItem userItem;
+	public static JTabbedPane tabs;  //选项卡
+	public static JTextArea textArea; //文本框
+	public static JTextField input;  //输入框
+	public static JMenuBar userBar;  //小号菜单
+	public static JMenu userSelect;	 //小号菜单选项
+	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();
 
-	//打开窗口
+	//创建主窗口
 	public void createJFrame(String title) {
 		//窗口
 		jFrame.setLocation(0, 200); // 窗口起始位置
 		jFrame.setResizable(false); //固定大小，不可变
 		// 标签
-		tag = new JLabel("添加小号");
-		tag.setBounds(7, 3, 60, 25);
+		JLabel tag = new JLabel("添加小号");
+		tag.setBounds(7, 3, 58, 25);
 		// 输入框
 		input = new JTextField(23);
 		input.setName("免登陆链接");
@@ -66,16 +69,16 @@ public class MainUI {
 		input.setBounds(65, 5, 255, 23);
 		// 文本框，JScorllPane：文本框设置滚动条
 		textArea = new JTextArea();
-		textArea1 = new JScrollPane(textArea);
+		JScrollPane textArea1 = new JScrollPane(textArea);
 		textArea1.setBounds(7, 65, 380, 120);
 		// 按钮
-		oneKeyButton = new JButton("一键乐斗");
+		JButton oneKeyButton = new JButton("一键乐斗");
 		oneKeyButton.setBounds(204, 33, 115, 23);
 		oneKeyButton.addActionListener(new OneKeyButtonListener());
-		clearButton = new JButton("清屏");
+		JButton clearButton = new JButton("清屏");
 		clearButton.setBounds(325, 33, 63, 23);
 		clearButton.addActionListener(new ClearButtonListener());
-		addUserButton = new JButton("添加");
+		JButton addUserButton = new JButton("添加");
 		addUserButton.addActionListener(new AddUserButtonListener());
 		addUserButton.setBounds(325, 5, 63, 23);
 		//菜单控件
@@ -83,17 +86,26 @@ public class MainUI {
 		userSelect = new JMenu("切换小号：（未添加）"); //菜单选项组
 		userBar.setBounds(7, 33, 193, 23);
 		loadUserList();
-		
 		//面板
+		JScrollPane timePanelScroll = new JScrollPane(timePanel); //计时结果面板,滚动窗形式
+		timePanelScroll.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
+		//选项卡
+		tabs = new JTabbedPane(); //选项卡
+		tabs.setBounds(7, 190, 379, 125);
+		tabs.addTab("乐斗选项", new JScrollPane(createTaskPanel()));
+		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		tabs.addTab("定时器", timePanel);
+		
 		jPanel.setLayout(null);  //设置面板为无布局形式，即手动指定组件位置尺寸
-		jPanel.add(tag, BorderLayout.NORTH);
-		jPanel.add(input, BorderLayout.NORTH);
-		jPanel.add(addUserButton, BorderLayout.NORTH);
+		jPanel.add(tag);
+		jPanel.add(input);
+		jPanel.add(addUserButton);
 		jPanel.add(userBar);
-		jPanel.add(oneKeyButton, BorderLayout.NORTH);
-		jPanel.add(clearButton, BorderLayout.NORTH);
-		jPanel.add(textArea1, BorderLayout.SOUTH);
-
+		jPanel.add(oneKeyButton);
+		jPanel.add(clearButton);
+		jPanel.add(textArea1);
+		jPanel.add(tabs);
+		
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 350); // 设置窗体大小
@@ -127,19 +139,50 @@ public class MainUI {
 		}
 	}
 	
-	public void taskList() {
-		
+	//创建乐斗选项多选框面板
+	public JPanel createTaskPanel() {
+		taskPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		List<String> list = new ArrayList<String>();
+		list.add(Task.镖行天下); 
+		list.add(Task.任务); 
+		list.add(Task.历练); 
+		list.add(Task.炼丹); 
+		list.add(Task.副本); 
+		list.add(Task.许愿); 
+		list.add(Task.巅峰之战); 
+		list.add(Task.踢馆); 
+		list.add(Task.掠夺); 
+		list.add(Task.供奉);  
+		list.add(Task.帮战);  
+		list.add(Task.武林大会);  
+		list.add(Task.分享); 
+		list.add(Task.矿洞); 
+		list.add(Task.锦标赛); 
+		list.add(Task.门派大战); 
+		list.add(Task.斗神塔); 
+		list.add(Task.抢地盘); 
+		list.add(Task.十二宫); 
+		list.add(Task.竞技场); 
+		list.add(Task.结拜赛); //含助威  
+		list.add(Task.活跃度); 
+		list.add(Task.每日领奖); 
+		list.add(Task.乐斗boss);
+		list.add(Task.助阵);
+		JButton saveTask = new JButton("保存");
+		saveTask.addActionListener(new SaveTaskButtonListener());
+		taskPanel.add(saveTask);
+		for(String taskName : list) {
+			JCheckBox task = new JCheckBox(taskName);
+			taskPanel.add(task);  //放到面板上。
+			taskList.add(task);		//加入到数组中。
+		}
+		return taskPanel;
 	}
 	
 	public void test() {
-		final JButton test = new JButton("刷新测试");
-		test.setBounds(200, 200, 150, 60);
-		test.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent paramActionEvent) {
-				jPanel.repaint();
-			}
-		});
-		jPanel.add(test);
+		for(int i = 0;i<100; i++) {
+			timePanel.add(new JLabel(i+" "));
+		}
 	}
 	
 }

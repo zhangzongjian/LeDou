@@ -8,10 +8,10 @@ import org.jsoup.nodes.Document;
 
 import util.DocUtil;
 
-public class 领取每日奖励  {
+public class 每日领奖  {
 	private Document mainDoc;
 
-	public 领取每日奖励(Document mainDoc) {
+	public 每日领奖(Document mainDoc) {
 		this.mainDoc = mainDoc;
 	}
 

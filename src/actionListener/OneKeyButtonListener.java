@@ -19,13 +19,14 @@ import model.竞技场;
 import model.答题;
 import model.许愿;
 import model.镖行天下;
-import model.领取每日奖励;
+import model.每日领奖;
 
 import org.jsoup.nodes.Document;
 
 import core.MainUI;
 
 import util.DocUtil;
+import util.Task;
 import util.UserUtil;
 
 //一键乐斗按钮响应
@@ -33,7 +34,9 @@ public class OneKeyButtonListener implements ActionListener {
 	
 	//存放线程名列表,（多小号多线程押镖）
 	public static List<String> users = new ArrayList<String>();
-
+	//乐斗任务列表，只执行列表中的任务，为null时表示没有任务
+	public static List<String> tasks;
+	
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		long startTime = System.currentTimeMillis();
@@ -44,6 +47,7 @@ public class OneKeyButtonListener implements ActionListener {
 			return;
 		}
 		ArrayList<String> list = new ArrayList<String>();
+		System.out.println(tasks);
 //		list.add("镖行天下");  //多线程
 //		list.add("答题");   //无异常
 //		list.add("副本");  //无异常
@@ -59,12 +63,13 @@ public class OneKeyButtonListener implements ActionListener {
 		try {
 			final String username = UserUtil.getUsername(mainURL);
 			final Document mainDoc = DocUtil.clickURL(mainURL);
-			if (list.contains("镖行天下")) {
+			if (list.contains(Task.镖行天下)) {
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
 						镖行天下 m = new 镖行天下(mainDoc);
 						JLabel showTime = new JLabel();
-						MainUI.jPanel.add(showTime);
+						MainUI.timePanel.add(showTime);
+						MainUI.tabs.setSelectedIndex(1); //切换选项卡到计时器面板
 						m.劫镖();
 						MainUI.textArea.append("【镖行天下】\n");
 						for (Object o : m.getMessage().values()) {
@@ -72,21 +77,21 @@ public class OneKeyButtonListener implements ActionListener {
 						}
 						//计时多次送镖
 						int lastTime;
-						int num = m.getNum();
+						int num = m.getNum(); num = 1;
 						if(num == 0) {
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    护送次数已用完！\n");
 							return;
 						}
 						for (int i = 0; i < num; i++) {
-							m.护送押镖();
+//							m.护送押镖();
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    " + m.getMessage().get("护送状态") + "\n");
-							lastTime = m.getLastTime();
+							lastTime = m.getLastTime(); lastTime = 20;
 							while(lastTime > 0) {
 								lastTime = lastTime - 1;  //每秒更新一次显示
 								try {
-									showTime.setText(username+"：护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
+									showTime.setText("护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
 									Thread.sleep(1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
@@ -94,9 +99,8 @@ public class OneKeyButtonListener implements ActionListener {
 							}
 						}
 						users.remove(username);  //结束了就从线程列表中移除
-						MainUI.jPanel.remove(showTime);
-						MainUI.jPanel.repaint(); //重绘jPanel面板，就是刷新
-						System.out.println(showTime.getText());
+						MainUI.timePanel.remove(showTime);
+						MainUI.timePanel.repaint(); //重绘jPanel面板，就是刷新
 					}
 				}, username);
 				if(!users.contains(thread1.getName())){ //username账号的送镖线程不存在，则启动线程
@@ -104,7 +108,7 @@ public class OneKeyButtonListener implements ActionListener {
 					thread1.start();
 				}
 			}
-			if (list.contains("答题")) {
+			if (list.contains(Task.答题)) {
 				答题 m = new 答题(mainDoc);
 				m.answer();
 				MainUI.textArea.append("【答题】\n");
@@ -112,7 +116,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("斗神塔")) {
+			if (list.contains(Task.斗神塔)) {
 				斗神塔 m = new 斗神塔(mainDoc);
 				m.挑战();
 				m.查看掉落情况();
@@ -121,7 +125,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("副本")) {
+			if (list.contains(Task.副本)) {
 				副本 m = new 副本(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【副本】\n");
@@ -129,7 +133,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("竞技场")) {
+			if (list.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【竞技场】\n");
@@ -137,7 +141,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("矿洞")) {
+			if (list.contains(Task.矿洞)) {
 				矿洞 m = new 矿洞(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【矿洞】\n");
@@ -145,7 +149,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("乐斗boss")) {
+			if (list.contains(Task.乐斗boss)) {
 				乐斗boss m = new 乐斗boss(mainDoc);
 				m.一键挑战();
 				MainUI.textArea.append("【乐斗boss】\n");
@@ -153,7 +157,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("历练")) {
+			if (list.contains(Task.历练)) {
 				历练 m = new 历练(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【历练】\n");
@@ -161,15 +165,15 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("领取每日奖励")) {
-				领取每日奖励 m = new 领取每日奖励(mainDoc);
+			if (list.contains(Task.每日领奖)) {
+				每日领奖 m = new 每日领奖(mainDoc);
 				m.领取();
 				MainUI.textArea.append("【领取每日奖励】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains("十二宫")) {
+			if (list.contains(Task.十二宫)) {
 				十二宫 m = new 十二宫(mainDoc);
 				//m.挑战();
 				m.扫荡();
@@ -179,7 +183,7 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			//许愿必须得放在好友乐斗之后执行
-			if (list.contains("许愿")) {
+			if (list.contains(Task.许愿)) {
 				许愿 m = new 许愿(mainDoc);
 				m.xuYuan();
 				MainUI.textArea.append("【许愿】\n");
@@ -188,7 +192,7 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			//完成任务要放到最后执行
-			if (list.contains("任务")) {
+			if (list.contains(Task.任务)) {
 				任务 m = new 任务(mainDoc);
 				m.finish();
 				MainUI.textArea.append("【任务】\n");
