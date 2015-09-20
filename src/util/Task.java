@@ -24,7 +24,7 @@ public class Task {
 	public static final String 结拜赛 = "结拜赛"; 
 	public static final String 助威 = "助威"; 
 	public static final String 活跃度 = "活跃度"; 
-	public static final String 每日领奖 = ""; 
+	public static final String 每日领奖 = "每日领奖"; 
 	public static final String 乐斗boss = "乐斗boss";
 	public static final String 助阵 = "助阵";
 	public static final String 答题 = "答题";

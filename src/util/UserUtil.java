@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -53,6 +54,9 @@ public class UserUtil {
 	 */
 	public static Object getSettingByKey(String key) throws IOException {
 		setting = loadSetting();
+		if(setting.get(key) == null) {
+			setting.put(key, null);
+		}
 		return setting.get(key);
 	}
 	
@@ -121,5 +125,31 @@ public class UserUtil {
 			e.printStackTrace();
 		}
 		return mainURL;
+	}
+	
+	//重置设置数据
+	private static void resetSetting() {
+		try {
+			setting = new LinkedHashMap<String, Object>();
+			//放入设置关键字，以及对应的数据类型，免得等到用该设置的时候再去判断是否存在关键字
+			setting.put("小号", new LinkedHashMap<String, Object>());
+			setting.put("任务列表", new ArrayList<String>());
+			File file = new File(settingFile);
+			ObjectOutputStream out = new ObjectOutputStream(
+					new FileOutputStream(file));
+			out.writeObject(setting);
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static void main(String[] args) {
+		resetSetting();
+		try {
+			System.out.println(getSetting());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

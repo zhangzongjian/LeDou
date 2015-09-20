@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import model.乐斗boss;
@@ -46,24 +47,11 @@ public class OneKeyButtonListener implements ActionListener {
 			MainUI.textArea.append("    未选择小号！\n");
 			return;
 		}
-		ArrayList<String> list = new ArrayList<String>();
-		System.out.println(tasks);
-//		list.add("镖行天下");  //多线程
-//		list.add("答题");   //无异常
-//		list.add("副本");  //无异常
-//		list.add("竞技场");  //无异常
-//		list.add("斗神塔"); //无异常
-//		list.add("矿洞");  //无异常
-//		list.add("任务");  //无异常
-//		list.add("乐斗boss"); //无异常
-//		list.add("历练"); //无异常
-//		list.add("领取每日奖励");  //无异常
-//		list.add("十二宫"); //无异常
-//		list.add("许愿"); //无异常
 		try {
+			tasks = saveTask();
 			final String username = UserUtil.getUsername(mainURL);
 			final Document mainDoc = DocUtil.clickURL(mainURL);
-			if (list.contains(Task.镖行天下)) {
+			if (tasks.contains(Task.镖行天下)) {
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
 						镖行天下 m = new 镖行天下(mainDoc);
@@ -77,17 +65,17 @@ public class OneKeyButtonListener implements ActionListener {
 						}
 						//计时多次送镖
 						int lastTime;
-						int num = m.getNum(); num = 1;
+						int num = m.getNum();
 						if(num == 0) {
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    护送次数已用完！\n");
 							return;
 						}
 						for (int i = 0; i < num; i++) {
-//							m.护送押镖();
+							m.护送押镖();
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    " + m.getMessage().get("护送状态") + "\n");
-							lastTime = m.getLastTime(); lastTime = 20;
+							lastTime = m.getLastTime();
 							while(lastTime > 0) {
 								lastTime = lastTime - 1;  //每秒更新一次显示
 								try {
@@ -108,7 +96,7 @@ public class OneKeyButtonListener implements ActionListener {
 					thread1.start();
 				}
 			}
-			if (list.contains(Task.答题)) {
+			if (tasks.contains(Task.答题)) {
 				答题 m = new 答题(mainDoc);
 				m.answer();
 				MainUI.textArea.append("【答题】\n");
@@ -116,7 +104,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.斗神塔)) {
+			if (tasks.contains(Task.斗神塔)) {
 				斗神塔 m = new 斗神塔(mainDoc);
 				m.挑战();
 				m.查看掉落情况();
@@ -125,7 +113,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.副本)) {
+			if (tasks.contains(Task.副本)) {
 				副本 m = new 副本(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【副本】\n");
@@ -133,7 +121,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.竞技场)) {
+			if (tasks.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【竞技场】\n");
@@ -141,7 +129,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.矿洞)) {
+			if (tasks.contains(Task.矿洞)) {
 				矿洞 m = new 矿洞(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【矿洞】\n");
@@ -149,7 +137,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.乐斗boss)) {
+			if (tasks.contains(Task.乐斗boss)) {
 				乐斗boss m = new 乐斗boss(mainDoc);
 				m.一键挑战();
 				MainUI.textArea.append("【乐斗boss】\n");
@@ -157,7 +145,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.历练)) {
+			if (tasks.contains(Task.历练)) {
 				历练 m = new 历练(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【历练】\n");
@@ -165,7 +153,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.每日领奖)) {
+			if (tasks.contains(Task.每日领奖)) {
 				每日领奖 m = new 每日领奖(mainDoc);
 				m.领取();
 				MainUI.textArea.append("【领取每日奖励】\n");
@@ -173,7 +161,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-			if (list.contains(Task.十二宫)) {
+			if (tasks.contains(Task.十二宫)) {
 				十二宫 m = new 十二宫(mainDoc);
 				//m.挑战();
 				m.扫荡();
@@ -183,7 +171,7 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			//许愿必须得放在好友乐斗之后执行
-			if (list.contains(Task.许愿)) {
+			if (tasks.contains(Task.许愿)) {
 				许愿 m = new 许愿(mainDoc);
 				m.xuYuan();
 				MainUI.textArea.append("【许愿】\n");
@@ -192,7 +180,7 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			//完成任务要放到最后执行
-			if (list.contains(Task.任务)) {
+			if (tasks.contains(Task.任务)) {
 				任务 m = new 任务(mainDoc);
 				m.finish();
 				MainUI.textArea.append("【任务】\n");
@@ -200,7 +188,10 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
-
+			if(tasks == null || tasks.isEmpty()) {
+				MainUI.textArea.append("【系统消息】\n");
+				MainUI.textArea.append("    未选择任何操作！\n");
+			}
 			long endTime = System.currentTimeMillis();
 			MainUI.textArea.append("(耗时：" + (endTime - startTime) / 1000.0
 					+ "秒)\n");
@@ -215,4 +206,19 @@ public class OneKeyButtonListener implements ActionListener {
 		}
 	}
 
+	//保存任务选项
+	public List<String> saveTask() {
+		try {
+			tasks = new ArrayList<String>();
+			for (JCheckBox j : MainUI.taskList) {
+				if (j.isSelected())
+					OneKeyButtonListener.tasks.add(j.getText());
+			}
+			UserUtil.addSetting("任务列表", tasks);
+			UserUtil.saveSetting();
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return tasks;
+	}
 }
