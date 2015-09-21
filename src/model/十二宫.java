@@ -1,25 +1,17 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 十二宫 {
-	private Document mainDoc;
+public class 十二宫 extends 乐斗项目{
 
-	public 十二宫(Document mainDoc) {
-		this.mainDoc = mainDoc;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
+	public 十二宫(Document mainURL) {
+		super(mainURL);
 	}
 
 	//1002及以上掉落黄金星辰

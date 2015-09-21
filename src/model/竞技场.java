@@ -1,24 +1,16 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 竞技场  {
-	private Document mainDoc;
+public class 竞技场 extends 乐斗项目{
 
-	public 竞技场(Document mainDoc) {
-		this.mainDoc = mainDoc;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
+	public 竞技场(Document mainURL) {
+		super(mainURL);
 	}
 
 	public void 挑战(){

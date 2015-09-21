@@ -1,26 +1,17 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 任务  {
-	private Document mainDoc;
+public class 任务 extends 乐斗项目{
 
-	public 任务(Document mainDoc) {
-		this.mainDoc = mainDoc;
+	public 任务(Document mainURL) {
+		super(mainURL);
 	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
-
 	public void finish(){
 		try {
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "任务"));

@@ -2,26 +2,18 @@ package model;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 乐斗boss {
-	private Document mainDoc;
+public class 乐斗boss extends 乐斗项目{
 
-	public 乐斗boss(Document mainDoc) {
-		this.mainDoc = mainDoc;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
+	public 乐斗boss(Document mainURL) {
+		super(mainURL);
 	}
 
 	public void 一键挑战() throws IOException, SocketTimeoutException {

@@ -1,26 +1,18 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 踢馆 {
-	private Document mainDoc;
-
-	public 踢馆(Document mainURL) {
-		this.mainDoc = mainURL;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
+public class 踢馆 extends 乐斗项目{
 	
+	public 踢馆(Document mainURL) {
+		super(mainURL);
+	}
+
 	public void 挑战() {
 		if (!mainDoc.text().contains("踢馆")) {
 			message.put("挑战情况", "未开启踢馆功能！");

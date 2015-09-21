@@ -1,27 +1,19 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 许愿 {
-	private Document mainDoc;
-
-	public 许愿(Document mainDoc) {
-		this.mainDoc = mainDoc;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
+public class 许愿 extends 乐斗项目{
 	
+	public 许愿(Document mainURL) {
+		super(mainURL);
+	}
+
 	public void xuYuan(){
 		try {
 			Elements elements = mainDoc.getElementsByAttributeValueMatching("href","wish");

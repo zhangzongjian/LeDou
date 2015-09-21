@@ -1,26 +1,18 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 武林大会 {
-	private Document mainDoc;
-
-	public 武林大会(Document mainURL) {
-		this.mainDoc = mainURL;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
+public class 武林大会 extends 乐斗项目{
 	
+	public 武林大会(Document mainURL) {
+		super(mainURL);
+	}
+
 	//每天13点开始
 	public void 报名() {
 		try {

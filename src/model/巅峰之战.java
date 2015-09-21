@@ -2,28 +2,20 @@ package model;
 
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 巅峰之战 {
-	private Document mainDoc;
+public class 巅峰之战  extends 乐斗项目{
+	public 巅峰之战(Document mainURL) {
+		super(mainURL);
+	}
+
 	private int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1; // 周日为0
 	private static int lastTime = 0;
-	
-	public 巅峰之战(Document mainDoc) {
-		this.mainDoc = mainDoc;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
 
 	/**
 	 * 返回剩余挑战次数

@@ -1,27 +1,20 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.Random;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 历练  {
-	private Document mainDoc;
+public class 历练 extends 乐斗项目{
 
-	public 历练(Document mainDoc) {
-		this.mainDoc = mainDoc;
+	public 历练(Document mainURL) {
+		super(mainURL);
 	}
 
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
 	//随机挑战
 	public void 挑战(){
 		try {

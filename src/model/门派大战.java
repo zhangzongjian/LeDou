@@ -1,27 +1,18 @@
 package model;
 
 import java.io.IOException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.乐斗项目;
 
-public class 门派大战 {
-	private Document mainDoc;
-
-	public 门派大战(Document mainURL) {
-		this.mainDoc = mainURL;
-	}
-
-	private Map<String, Object> message = new LinkedHashMap<String, Object>();
-
-	public Map<String, Object> getMessage() {
-		return message;
-	}
+public class 门派大战  extends 乐斗项目{
 	
+	public 门派大战(Document mainURL) {
+		super(mainURL);
+	}
 	public void 报名() {
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "门派大战");
