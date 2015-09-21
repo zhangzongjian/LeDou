@@ -7,7 +7,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -18,7 +17,7 @@ import org.jsoup.nodes.Document;
 public class UserUtil {
 
 	private static Map<String, Object> setting = null;
-	private static String settingFile = System.getProperty("user.dir")+"\\resources\\setting.data";
+	private static String settingFile = "resources/setting.data"; //相对路径
 	
 	public static Map<String, Object> getSetting() throws IOException {
 		setting = loadSetting();
@@ -105,12 +104,12 @@ public class UserUtil {
 			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
 		}
 		else { 
-			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "续费达人");
+			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "续费达人   等级");
 		}
 		//获取到的昵称前后会带一个空格，去掉
 		return username.substring(1, username.length()-1);
 	}
-	
+
 	/**
 	 * 获取小号对应的免登陆链接
 	 * @return
@@ -128,7 +127,7 @@ public class UserUtil {
 	}
 	
 	//重置设置数据
-	private static void resetSetting() {
+	/*private static void resetSetting() {
 		try {
 			setting = new LinkedHashMap<String, Object>();
 			//放入设置关键字，以及对应的数据类型，免得等到用该设置的时候再去判断是否存在关键字
@@ -142,14 +141,5 @@ public class UserUtil {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	
-	public static void main(String[] args) {
-		resetSetting();
-		try {
-			System.out.println(getSetting());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
+	}*/
 }

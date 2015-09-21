@@ -174,6 +174,8 @@ public class MainUI {
 			list.add(Task.每日领奖);
 			list.add(Task.乐斗boss);
 			list.add(Task.助阵);
+			list.add(Task.好友乐斗);
+			list.add(Task.答题);
 			for (String taskName : list) {
 				JCheckBox task = new JCheckBox(taskName);
 				if (dataTask.contains(taskName))
