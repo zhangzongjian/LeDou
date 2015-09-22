@@ -16,9 +16,9 @@ public class 斗神塔   extends 乐斗项目{
 	public void 挑战() {
 		try {
 			// 斗神塔主页面
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "斗神塔"));
+			Document doc = DocUtil.clickURL(mainDoc.getElementsByAttributeValueMatching("href","towerfight").attr("href"));
+			//貌似有bug，获取num这句
 			int num1 = Integer.parseInt(doc.text().charAt(doc.text().indexOf("今日剩余次数")+7)+"");
-//			int num2 = Integer.parseInt(doc.text().charAt(doc.text().indexOf("本周付费次数")+7)+"");
 			//不复活
 			if (doc.text().contains("结束挑战")) {
 				DocUtil.clickTextUrl(DocUtil.clickTextUrl(doc, "结束挑战"),"取消");
@@ -40,7 +40,7 @@ public class 斗神塔   extends 乐斗项目{
 	
 	public void 查看掉落情况(){
 		try {
-			DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "斗神塔"));
+			DocUtil.clickURL(mainDoc.getElementsByAttributeValueMatching("href","towerfight").attr("href"));
 			Document doc = DocUtil.clickTextUrl(mainDoc,"企鹅动态");
 			String result = doc.text().substring(doc.text().indexOf("1:")+2, doc.text().indexOf("今天"));
 			if(result.contains("斗神塔"))

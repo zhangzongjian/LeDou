@@ -31,6 +31,7 @@ import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
 import actionListener.DeleteUserButtonListener;
 import actionListener.OneKeyButtonListener;
+import actionListener.SelectAllListener;
 import actionListener.SelectUserButtonListener;
 
 public class MainUI {
@@ -90,8 +91,9 @@ public class MainUI {
 		timePanelScroll.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
 		//选项卡
 		tabs = new JTabbedPane(); //选项卡
-		tabs.setBounds(7, 190, 379, 125);
-		tabs.addTab("乐斗选项", new JScrollPane(createTaskPanel()));
+		tabs.setBounds(7, 190, 379, 200);
+//		tabs.addTab("乐斗选项", new JScrollPane(createTaskPanel()));
+		tabs.addTab("乐斗选项", createTaskPanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		tabs.addTab("定时器", timePanel);
 		
@@ -107,7 +109,7 @@ public class MainUI {
 		
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
-		jFrame.setSize(400, 350); // 设置窗体大小
+		jFrame.setSize(400, 430); // 设置窗体大小
 		jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 	}
 	
@@ -152,7 +154,6 @@ public class MainUI {
 			list.add(Task.镖行天下);
 			list.add(Task.任务);
 			list.add(Task.历练);
-			list.add(Task.炼丹);
 			list.add(Task.副本);
 			list.add(Task.许愿);
 			list.add(Task.巅峰之战);
@@ -173,9 +174,13 @@ public class MainUI {
 			list.add(Task.活跃度);
 			list.add(Task.每日领奖);
 			list.add(Task.乐斗boss);
-			list.add(Task.助阵);
+//			list.add(Task.助阵);
 			list.add(Task.好友乐斗);
 			list.add(Task.答题);
+			list.add(Task.帮战奖励);
+			JCheckBox selectAll = new JCheckBox("全选");
+			selectAll.addActionListener(new SelectAllListener());
+			taskPanel.add(selectAll);
 			for (String taskName : list) {
 				JCheckBox task = new JCheckBox(taskName);
 				if (dataTask.contains(taskName))

@@ -92,6 +92,7 @@ public class 镖行天下 extends 乐斗项目{
 	 * 返回剩余送镖次数
 	 * @return
 	 */
+	//并发下，有问题，Exception: read timed out
 	public int getNum(){
 		try {
 			if(!mainDoc.text().contains("镖行天下")) return 0;

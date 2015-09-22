@@ -43,6 +43,13 @@ public class 每日领奖  extends 乐斗项目{
 					message.put("领取无字天书","无字天书：领取成功！");
 				}
 			} else message.put("领取无字天书", "无字天书：已领取");
+			
+			//每日领取传功符
+			doc = DocUtil.clickTextUrl(doc, "经脉");
+			if(doc.text().contains("领取传功符")) {
+				DocUtil.clickTextUrl(doc, "领取传功符");
+				message.put("领取传功符", "每日传功符：领取成功！");
+			} else message.put("领取传功符", "每日传功符：已领取");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -29,4 +29,5 @@ public class Task {
 	public static final String 助阵 = "助阵";
 	public static final String 答题 = "答题";
 	public static final String 好友乐斗 = "好友乐斗";
+	public static final String 帮战奖励 = "帮战奖励";
 }

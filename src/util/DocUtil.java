@@ -119,20 +119,17 @@ public class DocUtil {
 	}
 	
 	/**
-	 * 延缓当前线程达到计时器的作用，时间到则返回true
-	 * @param minutes
-	 * @param seconds
+	 * 返回字符串内的子字符串的个数
+	 * @param doc
+	 * @param text
 	 * @return
 	 */
-	public static boolean timing(int minutes, int seconds) {
-		//转成毫秒
-		int paramLong = (minutes << 4) * 3750 + (seconds <<3) * 125;
-		try {
-			Thread.sleep(paramLong);
-			return true;
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+	public static int stringNumbers(String doc, String text) {
+		int sum = 0;
+		while (doc.indexOf(text) != -1) {
+			sum++;
+			doc = doc.substring(doc.indexOf(text)+text.length());
 		}
-		return false;
+		return sum;
 	}
 }

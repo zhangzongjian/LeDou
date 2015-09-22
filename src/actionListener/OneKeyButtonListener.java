@@ -125,15 +125,16 @@ public class OneKeyButtonListener implements ActionListener {
 							return;
 						}
 						MainUI.tabs.setSelectedIndex(1); //切换选项卡到计时器面板
-						for (int i = 0; i < num; i++) {
+						while(num > 0) {
 							m.护送押镖();
+							num--;
 							MainUI.textArea.append("【镖行天下】\n");
 							MainUI.textArea.append("    " + m.getMessage().get("护送状态") + "\n");
 							lastTime = m.getLastTime();
 							while(lastTime > 0) {
 								lastTime = lastTime - 1;  //每秒更新一次显示
 								try {
-									showTime.setText("护送押镖("+m.getNum()+"/3)："+lastTime+"秒");
+									showTime.setText("护送押镖("+num+"/3)："+lastTime+"秒");
 									Thread.sleep(1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
@@ -291,12 +292,58 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
+			////////////////////////////////////////////////////////////
+			if (tasks.contains(Task.锦标赛)) {
+				锦标赛 m = new 锦标赛(mainDoc);
+				m.赞助();
+				MainUI.textArea.append("【锦标赛】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			///////////////////////////////////////////////////////////
+			if (tasks.contains(Task.供奉)) {
+				供奉 m = new 供奉(mainDoc);
+				m.一键供奉();
+				MainUI.textArea.append("【供奉】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			////////////////////////////////////////////////////////////
+			if (tasks.contains(Task.分享)) {
+				分享 m = new 分享(mainDoc);
+				m.一键分享();
+				MainUI.textArea.append("【分享】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.帮战奖励)) {
+				帮战奖励 m = new 帮战奖励(mainDoc);
+				m.领奖();
+				MainUI.textArea.append("【帮战奖励】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
             ////////////////////////////////////////////////////////////
 			//完成任务要放到最后执行
 			if (tasks.contains(Task.任务)) {
 				任务 m = new 任务(mainDoc);
 				m.finish();
 				MainUI.textArea.append("【任务】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
+			//活跃度要放到更后面执行
+			if (tasks.contains(Task.活跃度)) {
+				活跃度 m = new 活跃度(mainDoc);
+				m.领取();
+				MainUI.textArea.append("【活跃度】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}

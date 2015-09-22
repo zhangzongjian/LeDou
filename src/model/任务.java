@@ -14,17 +14,20 @@ public class 任务 extends 乐斗项目{
 	}
 	public void finish(){
 		try {
+			//普通任务
 			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "任务"));
 			Document doc1 = DocUtil.clickTextUrl(doc, "一键完成任务");
 			int num = 5 - doc1.getElementsContainingOwnText("替换任务").size();
 			message.put("任务完成情况", "任务完成情况：（"+num+"/5）");
+			//帮派任务
+			Document doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
+			while(doc2.text().contains("领取奖励")) {
+				doc2 = DocUtil.clickTextUrl(doc2, "领取奖励");
+			}
+			System.out.println(doc2.text());
+			message.put("帮派任务完成情况", "帮派任务：（"+DocUtil.stringNumbers(doc2.text(), "已领奖")+"/3）");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	public static void main(String[] args) throws IOException {
-		任务 r = new 任务(DocUtil.clickURL("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?cmd=index&channel=0&sid=fybscw20pMc6EMmEIEYSybCPaieZ9Zyg60ea94d80201=="));
-		r.finish();
-		System.out.println(r.getMessage());
 	}
 }
