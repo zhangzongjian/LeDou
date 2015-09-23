@@ -31,7 +31,7 @@ import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
 import actionListener.DeleteUserButtonListener;
 import actionListener.OneKeyButtonListener;
-import actionListener.SelectAllListener;
+import actionListener.SelectAllTaskListener;
 import actionListener.SelectUserButtonListener;
 
 public class MainUI {
@@ -53,7 +53,8 @@ public class MainUI {
 	public static JMenuBar userBar;  //小号菜单
 	public static JMenu userSelect;	 //小号菜单选项
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();
-
+	public static JCheckBox allUsers = new JCheckBox("所有小号");
+	
 	//创建主窗口
 	public void createJFrame(String title) {
 		//窗口
@@ -84,7 +85,7 @@ public class MainUI {
 		//菜单控件
 		userBar = new JMenuBar(); //菜单
 		userSelect = new JMenu("切换小号：（未添加）"); //菜单选项组
-		userBar.setBounds(7, 33, 193, 23);
+		userBar.setBounds(7, 33, 119, 23);
 		loadUserList();
 		//面板
 		JScrollPane timePanelScroll = new JScrollPane(timePanel); //计时结果面板,滚动窗形式
@@ -106,6 +107,9 @@ public class MainUI {
 		jPanel.add(clearButton);
 		jPanel.add(textArea1);
 		jPanel.add(tabs);
+		
+		allUsers.setBounds(125, 33, 78, 23);
+		jPanel.add(allUsers);
 		
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
@@ -178,7 +182,7 @@ public class MainUI {
 //			list.add(Task.好友乐斗);
 			list.add(Task.帮战奖励);
 			JCheckBox selectAll = new JCheckBox("全选");
-			selectAll.addActionListener(new SelectAllListener());
+			selectAll.addActionListener(new SelectAllTaskListener());
 			taskPanel.add(selectAll);
 			for (String taskName : list) {
 				JCheckBox task = new JCheckBox(taskName);

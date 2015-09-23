@@ -20,7 +20,7 @@ public class DocUtil {
 	 * @throws IOException
 	 */
 	public static Document clickURL(String URL) throws IOException {
-		Document doc = Jsoup.connect(URL).get();
+		Document doc = Jsoup.connect(URL).timeout(5000).get();
 		return doc;
 	}
 	/**

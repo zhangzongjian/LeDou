@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
@@ -29,19 +30,44 @@ public class OneKeyButtonListener implements ActionListener {
 	// 乐斗任务列表，只执行列表中的任务，为null时表示没有任务
 	public static List<String> tasks;
 
-	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		String mainURL = DocUtil.mainURL;
+		tasks = saveTask();
+		if(MainUI.allUsers.isSelected()) {
+			try {
+				for(final Object s :((Map<String, Object>)UserUtil.getSetting().get("小号")).values()) {
+					Thread t = new Thread(new Runnable(){
+						public void run() {
+							oneKeyLeDou(s.toString());
+						}
+					});
+					t.start();
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		} else {
+			//一个小号执行的时候，用一个线程开始，比不用线程体验要好得多
+			Thread t = new Thread(new Runnable(){
+				public void run() {
+					String mainURL = DocUtil.mainURL;
+					oneKeyLeDou(mainURL);
+				}
+			});
+			t.start();
+		}
+		
+	}
+	
+	public void oneKeyLeDou(String mainURL) {
 		if (mainURL == null) {
 			MainUI.textArea.append("【系统消息】\n");
 			MainUI.textArea.append("    未选择小号！\n");
 			return;
 		}
 		try {
-			tasks = saveTask();
+//			tasks = saveTask();
 			final Document mainDoc = DocUtil.clickURL(mainURL);
 			final String username = UserUtil.getUsername(mainURL);
-			// //////////////////////////////////////////////////////////待测试。。。
 			if (tasks.contains(Task.巅峰之战)) {
 				// 巅峰之战 m = new 巅峰之战(mainDoc);
 				// m.领奖和报名(); //周一6点钟之后执行

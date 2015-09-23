@@ -7,7 +7,7 @@ import javax.swing.JCheckBox;
 
 import core.MainUI;
 
-public class SelectAllListener implements ActionListener {
+public class SelectAllTaskListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
