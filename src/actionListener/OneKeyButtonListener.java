@@ -57,20 +57,26 @@ public class OneKeyButtonListener implements ActionListener {
 						if (!m.is挑战时间()) {
 							MainUI.textArea.append("【巅峰之战】\n");
 							MainUI.textArea.append("    非挑战时间！\n");
+							users1.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
 						int lastTime;
 						int num = m.getNum();
 						if (num == 0) {
 							MainUI.textArea.append("【巅峰之战】\n");
-							MainUI.textArea.append("    挑战次数已用完！\n");
+							MainUI.textArea.append("    复活次数已用完！\n");
+							users1.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
 						MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
 						while (num > 0) {
 							m.挑战();
-							if ("今日挑战次数已用完！".equals(m.getMessage().get("挑战结束")))
-								break;
+							if ("今日挑战次数已用完！".equals(m.getMessage().get("挑战结束"))) {
+								MainUI.textArea.append("【巅峰之战】\n");
+								MainUI.textArea.append("    您今天挑战次数已经达到上限了，请明天再来！\n");
+								users1.remove(username); // 结束了就从线程列表中移除
+								return;
+							}
 							num = m.getNum();
 							MainUI.textArea.append("【巅峰之战】\n");
 							for (Object o : m.getMessage().values()) {
@@ -233,6 +239,7 @@ public class OneKeyButtonListener implements ActionListener {
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
+				MainUI.jPanel.repaint();
 			}
 			// //////////////////////////////////////////////////////////
 			// 许愿必须得放在好友乐斗之后执行

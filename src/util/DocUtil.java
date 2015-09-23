@@ -47,7 +47,7 @@ public class DocUtil {
 				for(int i=0; i<elements.size(); i++) {
 					if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
 						elements.remove(i);
-					if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
+					else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
 						elements.remove(i);
 				}
 		return elements.attr("href"); 
@@ -64,7 +64,7 @@ public class DocUtil {
 		for(int i=0; i<elements.size(); i++) {
 			if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
 				elements.remove(i);
-			if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
+			else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
 				elements.remove(i);
 		}
 		Document doc1 = Jsoup.connect(elements.get(0).attr("href")).get();
@@ -82,7 +82,7 @@ public class DocUtil {
 		for(int i=0; i<elements.size(); i++) {
 			if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
 				elements.remove(i);
-			if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
+			else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
 				elements.remove(i);
 		}
 		Document doc1 = Jsoup.connect(elements.get(index).attr("href")).get();

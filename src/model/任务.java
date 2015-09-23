@@ -22,7 +22,7 @@ public class 任务 extends 乐斗项目 {
 			message.put("任务完成情况", "任务完成情况：（" + num + "/5）");
 			// 帮派任务
 			Document doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
-			while (doc2.text().contains("领取奖励")) {
+			while (doc2.toString().contains("sub=3")) {  //sub=3，仅领取奖励的链接有，如果不包含，说明不存在领取奖励的链接
 				doc2 = DocUtil.clickTextUrl(doc2, "领取奖励");
 			}
 			message.put("帮派任务完成情况",

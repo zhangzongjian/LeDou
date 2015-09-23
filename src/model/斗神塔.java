@@ -19,7 +19,6 @@ public class 斗神塔 extends 乐斗项目 {
 			Document doc = DocUtil.clickURL(mainDoc
 					.getElementsByAttributeValueMatching("href", "towerfight")
 					.attr("href"));
-			// 貌似有bug，获取num这句
 			int num1 = Integer.parseInt(doc.text().charAt(
 					doc.text().indexOf("今日剩余次数") + 7)
 					+ "");

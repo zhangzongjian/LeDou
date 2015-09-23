@@ -158,14 +158,13 @@ public class MainUI {
 			list.add(Task.踢馆);
 			list.add(Task.掠夺);
 			list.add(Task.供奉);
-			list.add(Task.帮战);
 			list.add(Task.分享);
 			list.add(Task.矿洞);
 //			list.add(Task.助阵);
 			list.add(Task.答题);
 			list.add(Task.锦标赛);
 			list.add(Task.斗神塔);
-			list.add(Task.抢地盘);
+//			list.add(Task.抢地盘);
 			list.add(Task.十二宫);
 			list.add(Task.竞技场);
 			list.add(Task.结拜赛); // 含助威
@@ -176,7 +175,7 @@ public class MainUI {
 			list.add(Task.武林大会);
 			list.add(Task.门派大战);
 			list.add(Task.每日领奖);
-			list.add(Task.好友乐斗);
+//			list.add(Task.好友乐斗);
 			list.add(Task.帮战奖励);
 			JCheckBox selectAll = new JCheckBox("全选");
 			selectAll.addActionListener(new SelectAllListener());
