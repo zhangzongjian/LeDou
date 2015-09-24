@@ -1,13 +1,14 @@
-package model;
+package model.impl;
 
 import java.io.IOException;
 import java.util.Calendar;
+
+import model.乐斗项目;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
-import util.乐斗项目;
 
 public class 巅峰之战 extends 乐斗项目 {
 	public 巅峰之战(Document mainURL) {

@@ -97,7 +97,7 @@ public class UserUtil {
 	 * @return
 	 * @throws IOException 
 	 */
-	public static String getUsername(String mainURL) throws IOException {
+	public static String getUsername(String mainURL) throws IOException, StringIndexOutOfBoundsException {
 		Document doc = Jsoup.connect(mainURL).get();
 		String username = "";
 		if(doc.text().contains("开通达人")) {

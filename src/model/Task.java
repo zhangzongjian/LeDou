@@ -1,4 +1,4 @@
-package util;
+package model;
 
 public class Task {
 	public static final String 镖行天下 = "镖行天下";

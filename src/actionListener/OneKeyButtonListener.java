@@ -10,34 +10,34 @@ import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import model.乐斗boss;
-import model.任务;
-import model.供奉;
-import model.分享;
-import model.副本;
-import model.十二宫;
-import model.历练;
-import model.巅峰之战;
-import model.帮战奖励;
-import model.掠夺;
-import model.斗神塔;
-import model.武林大会;
-import model.每日领奖;
-import model.活跃度;
-import model.矿洞;
-import model.竞技场;
-import model.答题;
-import model.结拜赛;
-import model.许愿;
-import model.踢馆;
-import model.锦标赛;
-import model.镖行天下;
-import model.门派大战;
+import model.Task;
+import model.impl.乐斗boss;
+import model.impl.任务;
+import model.impl.供奉;
+import model.impl.分享;
+import model.impl.副本;
+import model.impl.十二宫;
+import model.impl.历练;
+import model.impl.巅峰之战;
+import model.impl.帮战奖励;
+import model.impl.掠夺;
+import model.impl.斗神塔;
+import model.impl.武林大会;
+import model.impl.每日领奖;
+import model.impl.活跃度;
+import model.impl.矿洞;
+import model.impl.竞技场;
+import model.impl.答题;
+import model.impl.结拜赛;
+import model.impl.许愿;
+import model.impl.踢馆;
+import model.impl.锦标赛;
+import model.impl.镖行天下;
+import model.impl.门派大战;
 
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
-import util.Task;
 import util.UserUtil;
 import core.MainUI;
 
@@ -53,7 +53,7 @@ public class OneKeyButtonListener implements ActionListener {
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		tasks = saveTask();
+		tasks = saveTask();  //一键乐斗前，把任务多选框面板的选项保存一下
 		if(MainUI.allUsers.isSelected()) {
 			try {
 				for(final Object s :((Map<String, Object>)UserUtil.getSetting().get("小号")).values()) {
@@ -87,7 +87,6 @@ public class OneKeyButtonListener implements ActionListener {
 			return;
 		}
 		try {
-//			tasks = saveTask();
 			final Document mainDoc = DocUtil.clickURL(mainURL);
 			final String username = UserUtil.getUsername(mainURL);
 			if (tasks.contains(Task.巅峰之战)) {
@@ -114,10 +113,9 @@ public class OneKeyButtonListener implements ActionListener {
 							if (null != m.getMessage().get("挑战结束")) {
 								MainUI.textArea.append("【巅峰之战】\n");
 								MainUI.textArea.append("    "+m.getMessage().get("挑战结束")+"\n");
-								users1.remove(username); // 结束了就从线程列表中移除
 								break;
 							}
-							MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
+							MainUI.tabs.setSelectedIndex(2); // 切换选项卡到计时器面板
 							MainUI.textArea.append("【巅峰之战】\n");
 							for (Object o : m.getMessage().values()) {
 								MainUI.textArea.append("    " + o.toString()
@@ -165,7 +163,7 @@ public class OneKeyButtonListener implements ActionListener {
 							users.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
-						MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
+						MainUI.tabs.setSelectedIndex(2); // 切换选项卡到计时器面板
 						while (num > 0) {
 							m.护送押镖();
 							// 若正在护送，次数不减
@@ -403,6 +401,10 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			MainUI.textArea.append("\n");
+		} catch (StringIndexOutOfBoundsException e) {
+			MainUI.textArea.append("【系统消息】\n");
+			MainUI.textArea.append("    免登陆链接已失效，请重新录入小号试试！\n");
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			MainUI.textArea.append("【系统消息】\n");
 			MainUI.textArea.append("    访问失败，请重试！\n");
