@@ -24,16 +24,16 @@ public class 巅峰之战 extends 乐斗项目 {
 	public void 挑战() {
 		try {
 			if (!mainDoc.text().contains("巅峰之战进行中")) {
-				message.put("挑战情况", "未开启巅峰之战功能！");
+				message.put("挑战结束", "未开启巅峰之战功能！");
 				return;
 			}
 			if (day == 1 || day == 2) {
-				message.put("挑战情况", "挑战时间为每周三~周日！");
+				message.put("挑战结束", "挑战时间为每周三~周日！");
 				return;
 			}
 			Document doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
 			if (doc.text().contains("未参加")) {
-				message.put("挑战情况", "本周未参战，报名时间为每周一~周二！");
+				message.put("挑战结束", "本周未参战，报名时间为每周一~周二！");
 				return;
 			}
 			int i = 0;
@@ -42,7 +42,7 @@ public class 巅峰之战 extends 乐斗项目 {
 				i++;
 				doc = DocUtil.clickTextUrl(doc, "征战");
 				if (doc.text().contains("已经用完复活次数")) {
-					message.put("挑战结束", "今日挑战次数已用完！");
+					message.put("挑战结束", "今日复活次数已用完！");
 					break;
 				} else if (doc.text().contains("查看乐斗过程")) {
 					message.put("挑战情况" + i, DocUtil.substring(doc.text(),
@@ -51,7 +51,7 @@ public class 巅峰之战 extends 乐斗项目 {
 					message.put("等待时间", "等待时间结束后才能再次挑战！");
 					break;
 				} else {
-					message.put("挑战结束", "今日挑战次数已用完！");
+					message.put("挑战结束", "您今天挑战次数已经达到上限了，请明天再来！");
 					break;
 				}
 				if (i > 5)

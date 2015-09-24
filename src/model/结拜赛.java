@@ -62,12 +62,34 @@ public class 结拜赛 extends 乐斗项目 {
 		}
 	}
 
-	// public void 助威() {
-	// if (!mainDoc.text().contains("结拜")) {
-	// message.put("报名情况", "未开启结拜功能！");
-	// return;
-	// }
-	// }
+	 public void 助威() {
+		 if (!mainDoc.text().contains("结拜")) {
+			 message.put("报名情况", "未开启结拜功能！");
+			 return;
+		 }
+		 try {
+			Document doc = DocUtil.clickTextUrl(mainDoc, "结拜");
+			if(!doc.text().contains("本届未助威")) {
+				message.put("助威情况", "助威状态：已助威！");
+				return;
+			} else {
+				doc = DocUtil.clickTextUrl(doc, "助威");
+				if(doc.toString().contains("5999466")) {
+					Element element = doc.getElementsByAttributeValueMatching("href", "5999466").get(1);
+					doc = DocUtil.clickTextUrl(DocUtil.clickURL(element.attr("href")), "确定");
+					message.put("助威情况", "助威成功！");
+					return;
+				}
+				else {
+					message.put("助威情况", "助威失败，默认助威队伍不存在！");
+					return;
+				}
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		}
+	 }
 
 	// 周六~周日
 	public void 助威领奖() {
@@ -77,6 +99,7 @@ public class 结拜赛 extends 乐斗项目 {
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "结拜");
+			doc = DocUtil.clickTextUrl(doc, "助威");
 			if (doc.text().contains("本届未助威")) {
 				message.put("领奖情况", "助威领奖：本届未助威，不能领奖！");
 				return;

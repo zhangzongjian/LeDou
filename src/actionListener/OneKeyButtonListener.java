@@ -10,15 +10,36 @@ import java.util.Map;
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
-import model.*;
+import model.乐斗boss;
+import model.任务;
+import model.供奉;
+import model.分享;
+import model.副本;
+import model.十二宫;
+import model.历练;
+import model.巅峰之战;
+import model.帮战奖励;
+import model.掠夺;
+import model.斗神塔;
+import model.武林大会;
+import model.每日领奖;
+import model.活跃度;
+import model.矿洞;
+import model.竞技场;
+import model.答题;
+import model.结拜赛;
+import model.许愿;
+import model.踢馆;
+import model.锦标赛;
+import model.镖行天下;
+import model.门派大战;
 
 import org.jsoup.nodes.Document;
-
-import core.MainUI;
 
 import util.DocUtil;
 import util.Task;
 import util.UserUtil;
+import core.MainUI;
 
 //一键乐斗按钮响应
 public class OneKeyButtonListener implements ActionListener {
@@ -30,6 +51,7 @@ public class OneKeyButtonListener implements ActionListener {
 	// 乐斗任务列表，只执行列表中的任务，为null时表示没有任务
 	public static List<String> tasks;
 
+	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		tasks = saveTask();
 		if(MainUI.allUsers.isSelected()) {
@@ -87,23 +109,15 @@ public class OneKeyButtonListener implements ActionListener {
 							return;
 						}
 						int lastTime;
-						int num = m.getNum();
-						if (num == 0) {
-							MainUI.textArea.append("【巅峰之战】\n");
-							MainUI.textArea.append("    复活次数已用完！\n");
-							users1.remove(username); // 结束了就从线程列表中移除
-							return;
-						}
-						MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
-						while (num > 0) {
+						while (true) {
 							m.挑战();
-							if ("今日挑战次数已用完！".equals(m.getMessage().get("挑战结束"))) {
+							if (null != m.getMessage().get("挑战结束")) {
 								MainUI.textArea.append("【巅峰之战】\n");
-								MainUI.textArea.append("    您今天挑战次数已经达到上限了，请明天再来！\n");
+								MainUI.textArea.append("    "+m.getMessage().get("挑战结束")+"\n");
 								users1.remove(username); // 结束了就从线程列表中移除
-								return;
+								break;
 							}
-							num = m.getNum();
+							MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
 							MainUI.textArea.append("【巅峰之战】\n");
 							for (Object o : m.getMessage().values()) {
 								MainUI.textArea.append("    " + o.toString()
@@ -291,7 +305,8 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.结拜赛)) {
 				结拜赛 m = new 结拜赛(mainDoc);
 				m.报名(); // 周一12点开始
-				m.助威领奖(); // 助威周四0点开始，领奖周六0点开始
+				m.助威(); //助威周四0点开始，
+				m.助威领奖(); //领奖周六0点开始
 				MainUI.textArea.append("【结拜赛】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");

@@ -96,7 +96,7 @@ public class MainUI {
 //		tabs.addTab("乐斗选项", new JScrollPane(createTaskPanel()));
 		tabs.addTab("乐斗选项", createTaskPanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		tabs.addTab("定时器", timePanel);
+		tabs.addTab("计时器", timePanel);
 		
 		jPanel.setLayout(null);  //设置面板为无布局形式，即手动指定组件位置尺寸
 		jPanel.add(tag);
