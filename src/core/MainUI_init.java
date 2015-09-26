@@ -3,7 +3,6 @@ package core;
 import java.awt.FlowLayout;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +14,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import model.Task;
-
 import util.DocUtil;
 import util.UserUtil;
 import actionListener.DeleteUserButtonListener;
@@ -63,6 +61,7 @@ public class MainUI_init extends MainUI{
 					.getSettingByKey("任务列表");
 			List<String> list = new ArrayList<String>();
 			list.add(Task.任务);
+			list.add(Task.传功);
 			list.add(Task.历练);
 			list.add(Task.副本);
 			list.add(Task.许愿);
@@ -71,16 +70,17 @@ public class MainUI_init extends MainUI{
 			list.add(Task.供奉);
 			list.add(Task.分享);
 			list.add(Task.矿洞);
-			// list.add(Task.助阵);
+			list.add(Task.助阵);
 			list.add(Task.答题);
 			list.add(Task.锦标赛);
 			list.add(Task.斗神塔);
-			// list.add(Task.抢地盘);
+			list.add(Task.抢地盘);
 			list.add(Task.十二宫);
 			list.add(Task.竞技场);
 			list.add(Task.结拜赛); // 含助威
 			list.add(Task.活跃度);
 			list.add(Task.乐斗boss);
+			list.add(Task.回流好友召回);
 			list.add(Task.镖行天下);
 			list.add(Task.巅峰之战);
 			list.add(Task.武林大会);

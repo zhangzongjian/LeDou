@@ -11,29 +11,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import model.Task;
-import model.impl.乐斗boss;
-import model.impl.任务;
-import model.impl.供奉;
-import model.impl.分享;
-import model.impl.副本;
-import model.impl.十二宫;
-import model.impl.历练;
-import model.impl.巅峰之战;
-import model.impl.帮战奖励;
-import model.impl.掠夺;
-import model.impl.斗神塔;
-import model.impl.武林大会;
-import model.impl.每日领奖;
-import model.impl.活跃度;
-import model.impl.矿洞;
-import model.impl.竞技场;
-import model.impl.答题;
-import model.impl.结拜赛;
-import model.impl.许愿;
-import model.impl.踢馆;
-import model.impl.锦标赛;
-import model.impl.镖行天下;
-import model.impl.门派大战;
+import model.impl.*;
 
 import org.jsoup.nodes.Document;
 
@@ -56,8 +34,9 @@ public class OneKeyButtonListener implements ActionListener {
 		tasks = saveTask();  //一键乐斗前，把任务多选框面板的选项保存一下
 		if(MainUI.allUsers.isSelected()) {
 			try {
-				for(final Object s :((Map<String, Object>)UserUtil.getSetting().get("小号")).values()) {
-					Thread t = new Thread(new Runnable(){
+				for (final Object s : ((Map<String, Object>) UserUtil
+						.getSetting().get("小号")).values()) {
+					Thread t = new Thread(new Runnable() {
 						public void run() {
 							oneKeyLeDou(s.toString());
 						}
@@ -224,6 +203,15 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.助阵)) {
+				助阵 m = new 助阵(mainDoc);
+				m.doit("以柔克刚", 1);
+				MainUI.textArea.append("【助阵】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(mainDoc);
 				m.挑战();
@@ -242,6 +230,15 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.传功)) {
+				传功 m = new 传功(mainDoc);
+				m.doit();
+				MainUI.textArea.append("【传功】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.乐斗boss)) {
 				乐斗boss m = new 乐斗boss(mainDoc);
 				m.一键挑战();
@@ -255,6 +252,15 @@ public class OneKeyButtonListener implements ActionListener {
 				历练 m = new 历练(mainDoc);
 				m.挑战();
 				MainUI.textArea.append("【历练】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.抢地盘)) {
+				抢地盘 m = new 抢地盘(mainDoc);
+				m.doit();
+				MainUI.textArea.append("【抢地盘】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
@@ -310,10 +316,19 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.append("    " + o.toString() + "\n");
 				}
 			}
+			////////////////////////////////////////////////////////////
+			if (tasks.contains(Task.回流好友召回)) {
+				回流好友召回 m = new 回流好友召回(mainDoc);
+				m.doit();
+				MainUI.textArea.append("【回流好友召回】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.踢馆)) {
 				踢馆 m = new 踢馆(mainDoc);
-				m.领奖(); // 周六0点开始
+				m.领奖和报名(); // 周六0点开始
 				m.挑战(); // 周五6点开始
 				MainUI.textArea.append("【踢馆】\n");
 				for (Object o : m.getMessage().values()) {
@@ -401,10 +416,6 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			MainUI.textArea.append("\n");
-		} catch (StringIndexOutOfBoundsException e) {
-			MainUI.textArea.append("【系统消息】\n");
-			MainUI.textArea.append("    免登陆链接已失效，请重新录入小号试试！\n");
-			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
 			MainUI.textArea.append("【系统消息】\n");
 			MainUI.textArea.append("    访问失败，请重试！\n");

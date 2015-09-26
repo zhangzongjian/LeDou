@@ -1,9 +1,12 @@
 package util;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 public class DocUtil {
@@ -59,16 +62,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 */
 	public static Document clickTextUrl(Document doc, String text) throws IOException{
-		//获取含有指定文本的元素节点
-		Elements elements = doc.getElementsContainingOwnText(text);
-		for(int i=0; i<elements.size(); i++) {
-			if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
-				elements.remove(i);
-			else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
-				elements.remove(i);
-		}
-		Document doc1 = Jsoup.connect(elements.get(0).attr("href")).get();
-		return doc1;
+		return clickTextUrl(doc, text, 0);
 	}
 	
 	/**
@@ -79,13 +73,15 @@ public class DocUtil {
 	public static Document clickTextUrl(Document doc, String text, int index) throws IOException{
 		//获取含有指定文本的元素节点
 		Elements elements = doc.getElementsContainingOwnText(text);
+		List<Element> list = new ArrayList<Element>();
+		//去掉文本不完全匹配但包含该文本的元素
+		//去掉非超链接元素
 		for(int i=0; i<elements.size(); i++) {
-			if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
-				elements.remove(i);
-			else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
-				elements.remove(i);
+			if(elements.get(i).hasAttr("href") && text.equals(elements.get(i).html())) {//去掉非超链接元素
+				list.add(elements.get(i));
+			}
 		}
-		Document doc1 = Jsoup.connect(elements.get(index).attr("href")).get();
+		Document doc1 = Jsoup.connect(list.get(index).attr("href")).get();
 		return doc1;
 	}
 

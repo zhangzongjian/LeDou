@@ -18,7 +18,6 @@ public class 踢馆 extends 乐斗项目 {
 	private int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1; // 周日为0
 
 	public void 挑战() {
-		message.clear();
 		if (!mainDoc.text().contains("踢馆")) {
 			message.put("挑战结束", "未开启踢馆功能！");
 			return;
@@ -82,16 +81,24 @@ public class 踢馆 extends 乐斗项目 {
 	}
 
 	// 周五挑战结束后，到下周四
-	public void 领奖() {
+	public void 领奖和报名() {
 		if (!mainDoc.text().contains("踢馆")) {
 			message.put("领奖情况", "踢馆领奖：未开启踢馆功能！");
 			return;
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "踢馆");
+			//有两个"报名"字符串，说明未报名状态，则第二个"报名"字符串为报名链接
+			if(DocUtil.stringNumbers(doc.text(), "报名") == 2) {
+				doc = DocUtil.clickTextUrl(doc, "报名");
+				message.put("报名情况", "报名情况："+DocUtil.substring(doc.text(), "功勋商店", 4, "！"));
+			}
 			doc = DocUtil.clickTextUrl(doc, "领奖");
 			message.put("领奖情况",
 					"踢馆领奖：" + DocUtil.substring(doc.text(), "功勋商店", 4, "！"));
+			doc = DocUtil.clickTextUrl(doc, "排行奖励");
+			doc = DocUtil.clickTextUrl(doc,"领取奖励");
+			message.put("领奖情况1", "踢馆排行领奖："+DocUtil.substring(doc.text(), "领取奖励", 4, "！"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
