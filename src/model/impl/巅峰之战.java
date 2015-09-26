@@ -38,9 +38,15 @@ public class 巅峰之战 extends 乐斗项目 {
 				return;
 			}
 			int i = 0;
+			int j = 0;
 			message.clear();
 			while (true) {
 				i++;
+				while(doc.text().contains("繁忙")) {  //出现繁忙情况，重试3次
+					doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
+					j++;
+					if(j > 2) break;
+				}
 				doc = DocUtil.clickTextUrl(doc, "征战");
 				if (doc.text().contains("已经用完复活次数")) {
 					message.put("挑战结束", "今日复活次数已用完！");

@@ -266,6 +266,15 @@ public class OneKeyButtonListener implements ActionListener {
 				}
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.好友乐斗)) {
+				好友乐斗 m = new 好友乐斗(mainDoc);
+				m.doit();
+				MainUI.textArea.append("【好友乐斗】\n");
+				for (Object o : m.getMessage().values()) {
+					MainUI.textArea.append("    " + o.toString() + "\n");
+				}
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.每日领奖)) {
 				每日领奖 m = new 每日领奖(mainDoc);
 				m.领取();

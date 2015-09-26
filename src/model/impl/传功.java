@@ -26,7 +26,7 @@ public class 传功 extends 乐斗项目 {
 				DocUtil.clickTextUrl(doc, "关闭");
 			for(int i=0; i<12; i++) {
 				doc = DocUtil.clickTextUrl(doc, "传功");
-				if(doc.text().contains("传功符不足")) {
+				if(doc.text().contains("传功符不足！")) {
 					message.put("传功情况", "传功符不足！");
 					return;
 				}

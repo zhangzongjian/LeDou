@@ -86,7 +86,7 @@ public class MainUI_init extends MainUI{
 			list.add(Task.武林大会);
 			list.add(Task.门派大战);
 			list.add(Task.每日领奖);
-			// list.add(Task.好友乐斗);
+			 list.add(Task.好友乐斗);
 			list.add(Task.帮战奖励);
 			JCheckBox selectAll = new JCheckBox("全选");
 			selectAll.addActionListener(new SelectAllTaskListener());
