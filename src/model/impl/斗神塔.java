@@ -28,7 +28,7 @@ public class 斗神塔 extends 乐斗项目 {
 					doc.text().indexOf("今日剩余次数") + 7)
 					+ "");
 			// 不复活
-			if (doc.text().contains("结束挑战")) {
+			if (doc.text().contains("结束挑战") && num1 == 1) {
 				DocUtil.clickTextUrl(DocUtil.clickTextUrl(doc, "结束挑战"), "取消");
 			}
 			if (doc.text().contains("正在自动挑战中")) {
