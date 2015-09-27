@@ -1,10 +1,15 @@
 package model.impl;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import model.乐斗项目;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -23,6 +28,36 @@ public class 任务 extends 乐斗项目 {
 			message.put("任务完成情况", "任务完成情况：（" + num + "/5）");
 			// 帮派任务
 			Document doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
+			Document 帮派首页 = DocUtil.clickTextUrl(mainDoc, "我的帮派");
+			if(doc2.text().contains("帮友强化 未完成")) {
+				Elements es = DocUtil.clickTextUrl(DocUtil.clickTextUrl(mainDoc, "炼丹"),"帮友丹炉").getElementsByAttributeValueMatching("href", "subtype=4");
+				for(int i=0; i<3; i++)
+					DocUtil.clickURL(es.get(i).attr("href"));
+			}
+			if(doc2.text().contains("查看帮战 未完成") || doc2.text().contains("帮战冠军 未完成")) {
+				DocUtil.clickTextUrl(帮派首页, "帮战");
+			}
+			if(doc2.text().contains("加速贡献 未完成")) {
+				DocUtil.clickURL(DocUtil.clickTextUrl(mainDoc, "好友").getElementsByAttributeValueMatching("href",
+						"3038").get(1).attr("href"));
+			}
+			if (doc2.text().contains("查看帮贡 未完成")) {
+				DocUtil.clickTextUrl(帮派首页,"贡献度");
+			}
+			if (doc2.text().contains("帮派供奉 未完成")) {
+				供奉 m = new 供奉(mainDoc);
+				m.一键供奉();
+			}
+			if (doc2.text().contains("帮派修炼 未完成")) {
+				Element button = DocUtil.clickTextUrl(帮派首页,"帮修").getElementsByTag("anchor").get(0);
+				String href = button.getElementsByTag("go").attr("href");
+				Map<String, String> parameters = new HashMap<String, String>();
+				for(Element e : button.getElementsByTag("postfield")) {
+					parameters.put(e.attr("name"), e.attr("value"));
+				}
+				Jsoup.connect(href).data(parameters).data("num", "1").post();
+			}
+			doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
 			while (doc2.toString().contains("sub=3")) {  //sub=3，仅领取奖励的链接有，如果不包含，说明不存在领取奖励的链接
 				doc2 = DocUtil.clickTextUrl(doc2, "领取奖励");
 			}

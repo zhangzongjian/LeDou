@@ -36,8 +36,8 @@ public class 乐斗boss extends 乐斗项目 {
 			boss.removeAll(temp.getElementsContainingOwnText("已乐斗"));
 			boss.removeAll(temp.getElementsByTag("body"));
 			int size = boss.size();
-			// 挑战前先吞4瓶贡献药水
-			if (size != 0)
+			// 挑战前先吞贡献药水
+			if (doc.text().contains("贡献药水 速购 使用 剩0次"))
 				for (int i = 0; i < 4; i++) {
 					DocUtil.clickURL(elements.get(1).attr("href"));
 					message.put("使用贡献药水", "自动使用贡献药水4瓶！");
