@@ -158,8 +158,8 @@ public class 巅峰之战 extends 乐斗项目 {
 			if (!mainDoc.text().contains("巅峰之战进行中")) {
 				return 0;
 			}
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc,
-					"巅峰之战进行中"));
+			Document doc = DocUtil.clickTextUrl(mainDoc,
+					"巅峰之战进行中");
 			if (doc.text().contains("未参加")) {
 				return 0;
 			}

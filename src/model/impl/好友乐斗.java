@@ -18,7 +18,7 @@ public class 好友乐斗 extends 乐斗项目 {
 
 	public void doit() {
 		try {
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "侠侣"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "侠侣");
 			String subStringResult = doc.toString().substring(doc.toString().indexOf("19级") + 231,doc.toString().indexOf("【快速购买】"));
 			doc = Jsoup.parse(subStringResult);
 			Elements friends = doc.getElementsContainingOwnText("乐斗");

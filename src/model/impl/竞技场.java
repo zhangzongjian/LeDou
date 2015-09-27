@@ -20,7 +20,7 @@ public class 竞技场 extends 乐斗项目 {
 				message.put("挑战情况", "未开启竞技场功能");
 				return;
 			}
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "竞技场"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "竞技场");
 			if (doc.text().contains("赛季中")) {
 				int num = Integer.parseInt(doc.text().charAt(
 						doc.text().indexOf("今日已挑战") + 6)

@@ -22,10 +22,25 @@ public class 任务 extends 乐斗项目 {
 	public void finish() {
 		try {
 			// 普通任务
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "任务"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "任务");
+			if(doc.text().contains("炼丹 替换任务")) {
+				DocUtil.clickTextUrl(DocUtil.clickTextUrl(mainDoc, "炼丹"),"炼制");
+			}
+			if(doc.text().contains("好友切磋 替换任务") || doc.text().contains("挑战陌生人 替换任务")) {
+				Document temp = DocUtil.clickTextUrl(mainDoc, "斗友");
+				for(int i=0; i<7; i++)
+					DocUtil.clickTextUrl(temp, "乐斗", i);
+			}
+			if(doc.text().contains("查看好友资料 替换任务")) {
+				Document temp = DocUtil.clickTextUrl(mainDoc, "好友");
+				for(int i=0; i<5; i++)
+					DocUtil.clickURL(temp.getElementsByAttributeValueMatching("href", "from_pf_list=1").get(i).attr("href"));
+			}
 			Document doc1 = DocUtil.clickTextUrl(doc, "一键完成任务");
 			int num = 5 - doc1.getElementsContainingOwnText("替换任务").size();
 			message.put("任务完成情况", "任务完成情况：（" + num + "/5）");
+			
+			
 			// 帮派任务
 			Document doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
 			Document 帮派首页 = DocUtil.clickTextUrl(mainDoc, "我的帮派");

@@ -31,8 +31,8 @@ public class OneKeyButtonListener implements ActionListener {
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		tasks = saveTask();  //一键乐斗前，把任务多选框面板的选项保存一下
-		if(MainUI.allUsers.isSelected()) {
+		tasks = saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
+		if (MainUI.allUsers.isSelected()) {
 			try {
 				for (final Object s : ((Map<String, Object>) UserUtil
 						.getSetting().get("小号")).values()) {
@@ -47,8 +47,8 @@ public class OneKeyButtonListener implements ActionListener {
 				e.printStackTrace();
 			}
 		} else {
-			//一个小号执行的时候，用一个线程开始，比不用线程体验要好得多
-			Thread t = new Thread(new Runnable(){
+			// 一个小号执行的时候，用一个线程开始，比不用线程体验要好得多
+			Thread t = new Thread(new Runnable() {
 				public void run() {
 					String mainURL = DocUtil.mainURL;
 					oneKeyLeDou(mainURL);
@@ -56,9 +56,9 @@ public class OneKeyButtonListener implements ActionListener {
 			});
 			t.start();
 		}
-		
+
 	}
-	
+
 	public void oneKeyLeDou(String mainURL) {
 		if (mainURL == null) {
 			MainUI.textArea.append("【系统消息】\n");
@@ -73,7 +73,8 @@ public class OneKeyButtonListener implements ActionListener {
 				// m.领奖和报名(); //周一6点钟之后执行
 				// MainUI.textArea.append("【巅峰之战】\n");
 				// for (Object o : m.getMessage().values()) {
-				// MainUI.textArea.append("    " + o.toString() + "\n");
+				// MainUI.textArea.append("    " + o.toString() +
+				// "\n");MainUI.textArea.setCaretPosition(MainUI.textArea.getText().length());
 				// }
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
@@ -91,7 +92,8 @@ public class OneKeyButtonListener implements ActionListener {
 							m.挑战();
 							if (null != m.getMessage().get("挑战结束")) {
 								MainUI.textArea.append("【巅峰之战】\n");
-								MainUI.textArea.append("    "+m.getMessage().get("挑战结束")+"\n");
+								MainUI.textArea.append("    "
+										+ m.getMessage().get("挑战结束") + "\n");
 								break;
 							}
 							MainUI.tabs.setSelectedIndex(2); // 切换选项卡到计时器面板
@@ -132,6 +134,8 @@ public class OneKeyButtonListener implements ActionListener {
 						MainUI.textArea.append("【镖行天下】\n");
 						for (Object o : m.getMessage().values()) {
 							MainUI.textArea.append("    " + o.toString() + "\n");
+							MainUI.textArea.setCaretPosition(MainUI.textArea
+									.getText().length());
 						}
 						// 计时多次送镖
 						int lastTime;
@@ -181,6 +185,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【答题】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -191,6 +197,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【斗神塔】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -200,6 +208,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【副本】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -209,6 +219,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【助阵】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -218,6 +230,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【竞技场】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -227,6 +241,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【矿洞】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -236,6 +252,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【传功】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -245,6 +263,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【乐斗boss】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -254,6 +274,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【历练】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -263,6 +285,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【抢地盘】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -272,6 +296,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【好友乐斗】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -281,6 +307,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【领取每日奖励】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -291,6 +319,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【十二宫】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 				MainUI.jPanel.repaint();
 			}
@@ -302,6 +332,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【许愿】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -312,26 +344,34 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【门派大战】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.结拜赛)) {
 				结拜赛 m = new 结拜赛(mainDoc);
 				m.报名(); // 周一12点开始
-				m.助威(); //助威周四0点开始，
-				m.助威领奖(); //领奖周六0点开始
+				m.助威(); // 助威周四0点开始，
+				m.助威领奖(); // 领奖周六0点开始
 				MainUI.textArea.append("【结拜赛】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
-			////////////////////////////////////////////////////////////
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.回流好友召回)) {
 				回流好友召回 m = new 回流好友召回(mainDoc);
 				m.doit();
 				MainUI.textArea.append("【回流好友召回】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -342,6 +382,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【踢馆】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -351,6 +393,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【武林大会】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -360,6 +404,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【掠夺】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -369,6 +415,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【锦标赛】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// /////////////////////////////////////////////////////////
@@ -378,6 +426,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【供奉】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -387,6 +437,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【分享】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -396,6 +448,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【帮战奖励】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -406,6 +460,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【任务】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////
@@ -416,6 +472,8 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("【活跃度】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
+					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+							.length());
 				}
 			}
 			// //////////////////////////////////////////////////////////

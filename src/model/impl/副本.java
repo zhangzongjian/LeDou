@@ -17,13 +17,15 @@ public class 副本 extends 乐斗项目 {
 	public void 挑战() {
 		try {
 			// 副本主页面
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "副本"));
-			// int num =
-			// Integer.parseInt(doc.text().substring(doc.text().indexOf("征战书")+8,doc.text().lastIndexOf("本")));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "副本");
+			int j = 0;
+			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
+				doc = DocUtil.clickTextUrl(mainDoc, "副本");
+				j++;
+				if(j > 2) break;
+			}
 			int num1 = Integer.parseInt(doc.text().substring(
 					doc.text().indexOf("今天剩余次数") + 7, doc.text().indexOf("/")));
-			// int num2 =
-			// Integer.parseInt(doc.text().substring(doc.text().indexOf("本周付费次数")+7,doc.text().lastIndexOf("/")));
 			// 未组队
 			if (doc.text().contains("请先通过“好友组队”组建2名队友")) {
 				message.put("挑战状态", "未组队，请手动组队再来尝试！");

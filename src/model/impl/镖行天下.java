@@ -20,14 +20,12 @@ public class 镖行天下 extends 乐斗项目 {
 			// 劫镖主页面，护送时间：10分钟
 			if (!mainDoc.text().contains("镖行天下"))
 				return;
-			Document doc = DocUtil
-					.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "镖行天下");
 			if (doc.text().contains("护送完成")) {
-				Document temp = DocUtil.clickURL(DocUtil
-						.getTextUrl(doc, "护送完成"));
+				Document temp = DocUtil.clickTextUrl(doc, "护送完成");
 				message.put("护送奖励",
 						DocUtil.substring(temp.text(), "获得奖励", 0, "！"));
-				doc = DocUtil.clickURL(DocUtil.getTextUrl(temp, "领取奖励"));
+				doc = DocUtil.clickTextUrl(temp, "领取奖励");
 			}
 			// 启动护送
 			if (doc.text().contains("护送押镖"))
@@ -35,14 +33,14 @@ public class 镖行天下 extends 乐斗项目 {
 					message.put("护送状态", "您正在护送押镖中哦！");
 					return;
 				}
-			Document doc1 = DocUtil.clickURL(DocUtil.getTextUrl(doc, "护送押镖"));
+			Document doc1 = DocUtil.clickTextUrl(doc, "护送押镖");
 			int flushNum = Integer.parseInt(doc1.text().charAt(
 					doc1.text().indexOf("免费刷新次数：") + 7)
 					+ "");
 			if (flushNum > 0) {
-				DocUtil.clickURL(DocUtil.getTextUrl(doc1, "刷新押镖"));
+				DocUtil.clickTextUrl(doc1, "刷新押镖");
 			}
-			if (DocUtil.clickURL(DocUtil.getTextUrl(doc1, "启程护送")).text()
+			if (DocUtil.clickTextUrl(doc1, "启程护送").text()
 					.contains("今天没有护送次数了"))
 				message.put("护送状态", "今天没有护送次数了!");
 			else {
@@ -61,7 +59,7 @@ public class 镖行天下 extends 乐斗项目 {
 		try {
 			if (!mainDoc.text().contains("镖行天下"))
 				return;
-			doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
+			doc = DocUtil.clickTextUrl(mainDoc, "镖行天下");
 			int num = Integer.parseInt(doc.text().charAt(
 					doc.text().indexOf("剩余拦截次数") + 7)
 					+ "");
@@ -71,9 +69,15 @@ public class 镖行天下 extends 乐斗项目 {
 			}
 			String result = "";
 			while (num > 0) {
-				Document doc1 = DocUtil.clickURL(DocUtil.getTextUrl(doc, "刷新"));
-				Document doc2 = DocUtil
-						.clickURL(DocUtil.getTextUrl(doc1, "拦截"));
+				Document doc1 = DocUtil.clickTextUrl(doc, "刷新");
+				int j = 0;
+				while(doc1.text().contains("过于频繁")) {  //出现繁忙情况，重试3次
+					Thread.sleep(300);
+					doc1 = DocUtil.clickTextUrl(doc, "刷新");
+					j++;
+					if(j > 2) break;
+				}
+				Document doc2 = DocUtil.clickTextUrl(doc1, "拦截");
 				result = DocUtil.substring(doc2.text(), "威望商店", 4, "护送");
 				message.put("劫镖奖励" + num, "劫镖奖励：" + result);
 				num = Integer.parseInt(doc2.text().charAt(
@@ -82,6 +86,8 @@ public class 镖行天下 extends 乐斗项目 {
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
@@ -95,8 +101,7 @@ public class 镖行天下 extends 乐斗项目 {
 		try {
 			if (!mainDoc.text().contains("镖行天下"))
 				return 0;
-			Document doc = DocUtil
-					.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "镖行天下");
 			int minutes = Integer.parseInt(DocUtil.substring(doc.text(),
 					"剩余时间：", 5, "分"));
 			int seconds = Integer.parseInt(DocUtil.substring(doc.text(), "分",
@@ -119,8 +124,7 @@ public class 镖行天下 extends 乐斗项目 {
 		try {
 			if (!mainDoc.text().contains("镖行天下"))
 				return 0;
-			Document doc = DocUtil
-					.clickURL(DocUtil.getTextUrl(mainDoc, "镖行天下"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "镖行天下");
 			int num = Integer.parseInt(doc.text().charAt(
 					doc.text().indexOf("剩余护送次数") + 7)
 					+ "");

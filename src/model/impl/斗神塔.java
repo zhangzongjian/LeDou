@@ -19,7 +19,7 @@ public class 斗神塔 extends 乐斗项目 {
 			// 斗神塔主页面
 			Document doc = DocUtil.clickTextUrl(mainDoc, "斗神塔");
 			int j = 0;
-			while(doc.text().contains("繁忙")) {  //出现繁忙情况，重试3次
+			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
 				doc = DocUtil.clickTextUrl(mainDoc, "斗神塔");
 				j++;
 				if(j > 2) break;
@@ -50,6 +50,12 @@ public class 斗神塔 extends 乐斗项目 {
 			DocUtil.clickURL(mainDoc.getElementsByAttributeValueMatching(
 					"href", "towerfight").attr("href"));
 			Document doc = DocUtil.clickTextUrl(mainDoc, "企鹅动态");
+			int j = 0;
+			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
+				doc = DocUtil.clickTextUrl(mainDoc, "企鹅动态");
+				j++;
+				if(j > 2) break;
+			}
 			String result = doc.text().substring(doc.text().indexOf("1:") + 2,
 					doc.text().indexOf("今天"));
 			if (result.contains("斗神塔"))

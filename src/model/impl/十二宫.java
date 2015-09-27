@@ -22,7 +22,7 @@ public class 十二宫 extends 乐斗项目 {
 				message.put("挑战情况", "未开启十二宫功能");
 				return;
 			}
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "十二宫");
 			// 1005为处女宫，1000为白羊宫
 			Elements elements = doc.getElementsByAttributeValueMatching("href",
 					"scene_id=1000");
@@ -59,7 +59,7 @@ public class 十二宫 extends 乐斗项目 {
 				message.put("挑战情况", "未开启十二宫功能");
 				return;
 			}
-			Document doc = DocUtil.clickURL(DocUtil.getTextUrl(mainDoc, "十二宫"));
+			Document doc = DocUtil.clickTextUrl(mainDoc, "十二宫");
 			Elements elements = doc.getElementsByAttributeValueMatching("href",
 					"scene_id=1000");
 			int i = 0;

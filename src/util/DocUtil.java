@@ -39,24 +39,6 @@ public class DocUtil {
 	}
 	
 	/**
-	 * 获取选中页面指定文本下的超链接
-	 * @param URL
-	 * @return
-	 * @throws IOException 
-	 */
-	public static String getTextUrl(Document doc, String text){
-		//获取含有指定文本的元素节点
-				Elements elements = doc.getElementsContainingOwnText(text);
-				for(int i=0; i<elements.size(); i++) {
-					if(!elements.get(i).hasAttr("href")) //去掉非超链接元素
-						elements.remove(i);
-					else if(!text.equals(elements.get(i).html())) //去掉文本不完全匹配但包含该文本的元素
-						elements.remove(i);
-				}
-		return elements.attr("href"); 
-	}
-	
-	/**
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，默认点击第一个
 	 * @return
 	 * @throws IOException 
