@@ -11,6 +11,9 @@ import org.jsoup.select.Elements;
 
 public class DocUtil {
 	
+	//Jsoup访问超时时间。
+	private static int time_out = 5000;
+	
 	/**
 	 * 全局免登陆链接，当前选择的链接
 	 */
@@ -23,7 +26,7 @@ public class DocUtil {
 	 * @throws IOException
 	 */
 	public static Document clickURL(String URL) throws IOException {
-		Document doc = Jsoup.connect(URL).timeout(5000).get();
+		Document doc = Jsoup.connect(URL).timeout(time_out).get();
 		return doc;
 	}
 	/**
@@ -33,7 +36,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 */
 	public static String getTextUrl(String URL, String text) throws IOException{
-		Document doc = Jsoup.connect(URL).get();
+		Document doc = Jsoup.connect(URL).timeout(time_out).get();
 	    Elements elements = doc.getElementsContainingOwnText(text);
 		return elements.attr("href"); 
 	}
@@ -63,7 +66,7 @@ public class DocUtil {
 				list.add(elements.get(i));
 			}
 		}
-		Document doc1 = Jsoup.connect(list.get(index).attr("href")).get();
+		Document doc1 = Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
 		return doc1;
 	}
 

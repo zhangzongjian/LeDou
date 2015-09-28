@@ -8,7 +8,6 @@ import java.util.Map;
 import java.util.Set;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JPanel;
@@ -102,31 +101,5 @@ public class MainUI_init extends MainUI{
 			e.printStackTrace();
 		}
 		return taskPanel;
-	}
-	
-	// 创建日程表面板
-	//放各种报名的倒计时
-	public static JLabel 结拜赛 = new JLabel("结拜赛报名：周一12点开始");
-//	public static JLabel 武林大会 = new JLabel("武林大会报名：每天13点开始");
-	public static JPanel createSchedulePanel() {
-		schedulePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		schedulePanel.add(结拜赛);
-//		schedulePanel.add(武林大会);
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				int time = 10;
-				while (time > 0) {
-					time--;
-					try {
-						结拜赛.setText("结拜赛报名：" + time);
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		t.start();
-		return schedulePanel;
 	}
 }

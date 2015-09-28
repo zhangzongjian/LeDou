@@ -85,7 +85,6 @@ public class MainUI {
 		tabs = new JTabbedPane(); //选项卡
 		tabs.setBounds(7, 190, 379, 200);
 		tabs.addTab("乐斗选项", MainUI_init.createTaskPanel());
-		tabs.addTab("日程表",MainUI_init.createSchedulePanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		tabs.addTab("计时器", timePanel);
 		
