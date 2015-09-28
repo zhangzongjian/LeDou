@@ -38,6 +38,8 @@ public class 副本 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

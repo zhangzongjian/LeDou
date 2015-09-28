@@ -45,6 +45,8 @@ public class 好友乐斗 extends 乐斗项目 {
 			// TODO Auto-generated catch block
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

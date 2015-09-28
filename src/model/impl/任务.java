@@ -28,8 +28,12 @@ public class 任务 extends 乐斗项目 {
 			}
 			if(doc.text().contains("好友切磋 替换任务") || doc.text().contains("挑战陌生人 替换任务")) {
 				Document temp = DocUtil.clickTextUrl(mainDoc, "斗友");
-				for(int i=0; i<7; i++)
-					DocUtil.clickTextUrl(temp, "乐斗", i);
+				if (doc.text().contains("好友切磋 替换任务"))
+					for (int i = 0; i < 7; i++)
+						DocUtil.clickTextUrl(temp, "乐斗", i);
+				if (doc.text().contains("挑战陌生人 替换任务"))
+					for (int i = 0; i < 3; i++)
+						DocUtil.clickTextUrl(temp, "乐斗", i);
 			}
 			if(doc.text().contains("查看好友资料 替换任务")) {
 				Document temp = DocUtil.clickTextUrl(mainDoc, "好友");
@@ -81,6 +85,8 @@ public class 任务 extends 乐斗项目 {
 							+ "/3）");
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -62,6 +62,8 @@ public class 助阵 extends 乐斗项目 {
 			message.put("提升助阵情况", "成功提升助阵3次！");
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

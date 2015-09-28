@@ -1,12 +1,10 @@
 package model.impl;
 
 import java.io.IOException;
-import java.util.Random;
 
 import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -16,17 +14,15 @@ public class 历练 extends 乐斗项目 {
 		super(mainURL);
 	}
 
-	// 随机挑战
-	public void 挑战() {
+	public void 挑战(String name) {
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "历练");
 			// 活力值
-			Elements elements = doc.getElementsByAttributeValueMatching("href",
-					"mapid");
-			int size = elements.size();
-			Random random = new Random();
-			Document doc1 = DocUtil.clickURL(elements.get(random.nextInt(size))
-					.attr("href"));
+			if(!doc.text().contains(name)) {
+				message.put("历练情况", "未开启该历练场景，请换一个试试！");
+				return;
+			}
+			Document doc1 = DocUtil.clickTextUrl(doc, name);
 			int num = Integer.parseInt(doc1.text().substring(
 					doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
 			if (num < 10) {
@@ -48,6 +44,8 @@ public class 历练 extends 乐斗项目 {
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

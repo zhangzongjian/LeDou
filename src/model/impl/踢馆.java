@@ -1,7 +1,6 @@
 package model.impl;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import model.乐斗项目;
 
@@ -15,8 +14,6 @@ public class 踢馆 extends 乐斗项目 {
 		super(mainURL);
 	}
 	
-	private int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1; // 周日为0
-
 	public void 挑战() {
 		if (!mainDoc.text().contains("踢馆")) {
 			message.put("挑战结束", "未开启踢馆功能！");
@@ -77,6 +74,8 @@ public class 踢馆 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -101,6 +100,8 @@ public class 踢馆 extends 乐斗项目 {
 			message.put("领奖情况1", "踢馆排行领奖："+DocUtil.substring(doc.text(), "领取奖励", 4, "！"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

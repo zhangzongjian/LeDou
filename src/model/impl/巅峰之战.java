@@ -1,7 +1,6 @@
 package model.impl;
 
 import java.io.IOException;
-import java.util.Calendar;
 
 import model.乐斗项目;
 
@@ -14,8 +13,6 @@ public class 巅峰之战 extends 乐斗项目 {
 	public 巅峰之战(Document mainURL) {
 		super(mainURL);
 	}
-
-	private int day = Calendar.getInstance().get(Calendar.DAY_OF_WEEK) - 1; // 周日为0
 
 	/**
 	 * 返回剩余挑战次数
@@ -67,14 +64,19 @@ public class 巅峰之战 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	// 周一领奖+报名，执行时间在调用的时候控制
 	public void 领奖和报名() {
 		try {
 			if (!mainDoc.text().contains("巅峰之战进行中")) {
-				message.put("挑战情况", "未开启巅峰之战功能！");
+				message.put("报名情况", "未开启巅峰之战功能！");
+				return;
+			}
+			if (day != 1 && day != 2) {
+				message.put("报名情况", "不在报名时间内！");
 				return;
 			}
 			Document doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
@@ -83,28 +85,28 @@ public class 巅峰之战 extends 乐斗项目 {
 			String result = DocUtil.substring(doc.text(), "【巅峰之战】", 6, "领奖");
 			message.put("领奖情况", "领奖：" + result);
 			// 报名
-			if (!doc.text().contains("选择阵营加入")) {
-				message.put("报名情况", "报名情况：已经报过名了!");
+			if (doc.text().contains("所属：南派") || doc.text().contains("所属：北派")) {
+				message.put("报名情况", "报名情况：已参赛状态!");
 				return;
 			}
 			Document temp = Jsoup.parse(DocUtil.substring(doc.toString(),
 					"选择阵营加入", 0, "额外战功奖励"));
-			if (result.contains("南派")) { // 上次南派胜利，则报名北派
-				temp = DocUtil.clickTextUrl(temp, "北派");
-				temp = DocUtil.clickTextUrl(temp, "确定");
-				if (temp.text().contains("挑战书不足")) {
-					message.put("报名情况", "报名情况：挑战书不足！");
-					return;
-				}
-				message.put("报名情况", "报名情况：成功报名北派");
-			} else if (result.contains("北派")) {
+			if (result.contains("上届所在的南派在巅峰之战中惜败") || result.contains("上届所在的北派在巅峰之战中取得胜利")) { // 上次南派跪了，则报名南派
 				temp = DocUtil.clickTextUrl(temp, "南派");
 				temp = DocUtil.clickTextUrl(temp, "确定");
 				if (temp.text().contains("挑战书不足")) {
 					message.put("报名情况", "报名情况：挑战书不足！");
 					return;
 				}
-				message.put("报名情况", "报名情况：成功报名南派");
+				message.put("报名情况", "报名情况：成功报名南派！");
+			} else if (result.contains("上届所在的北派在巅峰之战中惜败") || result.contains("上届所在的南派在巅峰之战中取得胜利")) {
+				temp = DocUtil.clickTextUrl(temp, "北派");
+				temp = DocUtil.clickTextUrl(temp, "确定");
+				if (temp.text().contains("挑战书不足")) {
+					message.put("报名情况", "报名情况：挑战书不足！");
+					return;
+				}
+				message.put("报名情况", "报名情况：成功报名北派！");
 			} else {
 				temp = DocUtil.clickTextUrl(temp, "随机加入");
 				temp = DocUtil.clickTextUrl(temp, "确定");
@@ -112,10 +114,12 @@ public class 巅峰之战 extends 乐斗项目 {
 					message.put("报名情况", "报名情况：挑战书不足！");
 					return;
 				}
-				message.put("报名情况", "报名情况：成功报名,随机加入");
+				message.put("报名情况", "报名情况：成功报名,随机加入！");
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -144,6 +148,8 @@ public class 巅峰之战 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return lastTime;
 	}
@@ -169,6 +175,8 @@ public class 巅峰之战 extends 乐斗项目 {
 			return num;
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return 0;

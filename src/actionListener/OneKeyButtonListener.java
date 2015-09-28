@@ -4,14 +4,44 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import model.Task;
-import model.impl.*;
+import model.impl.乐斗boss;
+import model.impl.任务;
+import model.impl.传功;
+import model.impl.供奉;
+import model.impl.分享;
+import model.impl.副本;
+import model.impl.助阵;
+import model.impl.十二宫;
+import model.impl.历练;
+import model.impl.回流好友召回;
+import model.impl.好友乐斗;
+import model.impl.巅峰之战;
+import model.impl.帮战奖励;
+import model.impl.抢地盘;
+import model.impl.掠夺;
+import model.impl.斗神塔;
+import model.impl.武林大会;
+import model.impl.每日领奖;
+import model.impl.活跃度;
+import model.impl.矿洞;
+import model.impl.竞技场;
+import model.impl.答题;
+import model.impl.结拜赛;
+import model.impl.许愿;
+import model.impl.踢馆;
+import model.impl.锦标赛;
+import model.impl.镖行天下;
+import model.impl.门派大战;
 
 import org.jsoup.nodes.Document;
 
@@ -47,7 +77,7 @@ public class OneKeyButtonListener implements ActionListener {
 				e.printStackTrace();
 			}
 		} else {
-			// 一个小号执行的时候，用一个线程开始，比不用线程体验要好得多
+			// 一个小号执行的时候，在子线程执行，比在主线程执行体验要好得多
 			Thread t = new Thread(new Runnable() {
 				public void run() {
 					String mainURL = DocUtil.mainURL;
@@ -59,6 +89,7 @@ public class OneKeyButtonListener implements ActionListener {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	public void oneKeyLeDou(String mainURL) {
 		if (mainURL == null) {
 			MainUI.textArea.append("【系统消息】\n");
@@ -69,13 +100,13 @@ public class OneKeyButtonListener implements ActionListener {
 			final Document mainDoc = DocUtil.clickURL(mainURL);
 			final String username = UserUtil.getUsername(mainURL);
 			if (tasks.contains(Task.巅峰之战)) {
-				// 巅峰之战 m = new 巅峰之战(mainDoc);
-				// m.领奖和报名(); //周一6点钟之后执行
-				// MainUI.textArea.append("【巅峰之战】\n");
-				// for (Object o : m.getMessage().values()) {
-				// MainUI.textArea.append("    " + o.toString() +
-				// "\n");MainUI.textArea.setCaretPosition(MainUI.textArea.getText().length());
-				// }
+				 巅峰之战 m = new 巅峰之战(mainDoc);
+				 m.领奖和报名(); //周一6点钟之后执行
+				 MainUI.textArea.append("【巅峰之战】\n");
+				 for (Object o : m.getMessage().values()) {
+				 MainUI.textArea.append("    " + o.toString() +
+				 "\n");MainUI.textArea.setCaretPosition(MainUI.textArea.getText().length());
+				 }
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
 						JLabel showTime = new JLabel();
@@ -270,7 +301,7 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.历练)) {
 				历练 m = new 历练(mainDoc);
-				m.挑战();
+				m.挑战("洞庭湖");
 				MainUI.textArea.append("【历练】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
@@ -314,8 +345,7 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.十二宫)) {
 				十二宫 m = new 十二宫(mainDoc);
-				// m.挑战();
-				m.扫荡();
+				m.挑战("双子宫");
 				MainUI.textArea.append("【十二宫】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
@@ -350,15 +380,30 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.结拜赛)) {
-				结拜赛 m = new 结拜赛(mainDoc);
-				m.报名(); // 周一12点开始
+				final 结拜赛 m = new 结拜赛(mainDoc);
+				//12:00:05执行报名，预留5秒防止延迟
+				long lastTime = ((12 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
+				Timer timer = new Timer();
+				if (m.getDay() == 1) {
+					if(lastTime > 0) {
+						MainUI.textArea.append("【结拜赛】\n");
+						MainUI.textArea.append("    结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）\n");
+					}
+					timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							m.报名(); // 周一12点开始
+							MainUI.textArea.append("【结拜赛】\n");
+							MainUI.textArea.append("    "
+									+ m.getMessage().get("报名情况") + "\n");
+						}
+					}, lastTime < 0 ? 0 : lastTime);
+				}
 				m.助威(); // 助威周四0点开始，
 				m.助威领奖(); // 领奖周六0点开始
 				MainUI.textArea.append("【结拜赛】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
-					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
-							.length());
 					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
 							.length());
 				}
@@ -388,14 +433,27 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.武林大会)) {
-				武林大会 m = new 武林大会(mainDoc);
-				m.报名(); // 每天13点开始
-				MainUI.textArea.append("【武林大会】\n");
-				for (Object o : m.getMessage().values()) {
-					MainUI.textArea.append("    " + o.toString() + "\n");
-					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
-							.length());
+				final 武林大会 m = new 武林大会(mainDoc);
+				//13:00:05执行报名，预留5秒防止延迟
+				long lastTime = ((13 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
+				Timer timer = new Timer();
+				if (lastTime > 0) {
+					MainUI.textArea.append("【武林大会】\n");
+					MainUI.textArea
+							.append("   武林大会将在13:00:05自动报名！（退出工具则不能自动报名）\n");
 				}
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						m.报名(); // 每天13点开始
+						MainUI.textArea.append("【武林大会】\n");
+						for (Object o : m.getMessage().values()) {
+							MainUI.textArea.append("    " + o.toString() + "\n");
+							MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+									.length());
+						}
+					}
+				}, lastTime < 0 ? 0 : lastTime);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.掠夺)) {

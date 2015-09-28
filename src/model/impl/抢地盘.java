@@ -32,6 +32,8 @@ public class 抢地盘 extends 乐斗项目 {
 			message.put("抢地盘情况", "成功抢了2次地盘！");
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

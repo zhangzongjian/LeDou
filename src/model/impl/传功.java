@@ -38,6 +38,8 @@ public class 传功 extends 乐斗项目 {
 			message.put("传功情况", "成功传功了12次！");
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -50,23 +50,26 @@ public class 十二宫 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
-	public void 挑战() {
+	public void 挑战(String name) {
 		try {
 			if (!mainDoc.text().contains("十二宫")) {
 				message.put("挑战情况", "未开启十二宫功能");
 				return;
 			}
 			Document doc = DocUtil.clickTextUrl(mainDoc, "十二宫");
-			Elements elements = doc.getElementsByAttributeValueMatching("href",
-					"scene_id=1000");
+			if(!doc.text().contains(name)) {
+				message.put("挑战情况", "未开启该十二宫，请换一个试试！");
+				return;
+			}
+			Document doc1 = DocUtil.clickTextUrl(doc, name);
 			int i = 0;
-			Document doc1;
 			while (true) {
-				doc1 = DocUtil.clickTextUrl(
-						DocUtil.clickURL(elements.get(0).attr("href")), "挑战");
+				doc1 = DocUtil.clickTextUrl(doc1, "挑战");
 				if (doc1.text().contains("挑战次数不足")) {
 					message.put("挑战情况", "挑战次数不足");
 					return;
@@ -94,6 +97,8 @@ public class 十二宫 extends 乐斗项目 {
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

@@ -16,7 +16,7 @@ public class 结拜赛 extends 乐斗项目 {
 		super(mainURL);
 	}
 
-	// 每周一 13点开始
+	// 每周一 12点开始
 	public void 报名() {
 		try {
 			if (!mainDoc.text().contains("结拜")) {
@@ -60,12 +60,18 @@ public class 结拜赛 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
 	 public void 助威() {
 		 if (!mainDoc.text().contains("结拜")) {
 			 message.put("报名情况", "未开启结拜功能！");
+			 return;
+		 }
+		 if (day != 4) {
+			 message.put("助威情况", "助威：非助威时间！");
 			 return;
 		 }
 		 try {
@@ -89,6 +95,8 @@ public class 结拜赛 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	 }
 
@@ -96,6 +104,10 @@ public class 结拜赛 extends 乐斗项目 {
 	public void 助威领奖() {
 		if (!mainDoc.text().contains("结拜")) {
 			message.put("领奖情况", "助威领奖：未开启结拜功能！");
+			return;
+		}
+		if (day != 6 && day != 0) {
+			message.put("领奖情况", "助威领奖：非领奖时间！");
 			return;
 		}
 		try {
@@ -115,6 +127,8 @@ public class 结拜赛 extends 乐斗项目 {
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

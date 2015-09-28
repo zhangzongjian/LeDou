@@ -50,6 +50,8 @@ public class 镖行天下 extends 乐斗项目 {
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -89,6 +91,8 @@ public class 镖行天下 extends 乐斗项目 {
 			e.printStackTrace();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -109,6 +113,8 @@ public class 镖行天下 extends 乐斗项目 {
 			return minutes * 60 + seconds;
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return 0;
@@ -131,6 +137,8 @@ public class 镖行天下 extends 乐斗项目 {
 			return num;
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return 0;
