@@ -468,14 +468,27 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.锦标赛)) {
-				锦标赛 m = new 锦标赛(mainDoc);
-				m.赞助(); // 每天12点开始
-				MainUI.textArea.append("【锦标赛】\n");
-				for (Object o : m.getMessage().values()) {
-					MainUI.textArea.append("    " + o.toString() + "\n");
-					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
-							.length());
+				final 锦标赛 m = new 锦标赛(mainDoc);
+				//12:00:05执行报名，预留5秒防止延迟
+				long lastTime = ((12 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
+				Timer timer = new Timer();
+				if (lastTime > 0) {
+					MainUI.textArea.append("【锦标赛】\n");
+					MainUI.textArea
+							.append("   锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）\n");
 				}
+				timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						m.赞助(); // 每天12点开始
+						MainUI.textArea.append("【锦标赛】\n");
+						for (Object o : m.getMessage().values()) {
+							MainUI.textArea.append("    " + o.toString() + "\n");
+							MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+									.length());
+						}
+					}
+				}, lastTime < 0 ? 0 : lastTime);
 			}
 			// /////////////////////////////////////////////////////////
 			if (tasks.contains(Task.供奉)) {
