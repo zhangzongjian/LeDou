@@ -40,6 +40,10 @@ public class 矿洞 extends 乐斗项目 {
 				return;
 			}
 			while (num > 0) {
+				if(doc.text().contains("副本未开启")) {
+					message.put("挑战情况", "副本未开启！");
+					return;
+				}
 				Document doc1 = DocUtil.clickTextUrl(doc, "挑战");
 				message.put("挑战情况" + num, DocUtil.substring(doc1.text(),
 						"矿石商店", 4, "== 副本挑战中 =="));

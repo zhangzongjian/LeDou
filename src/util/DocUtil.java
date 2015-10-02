@@ -1,6 +1,7 @@
 package util;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,8 +46,9 @@ public class DocUtil {
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，默认点击第一个
 	 * @return
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Document doc, String text) throws IOException{
+	public static Document clickTextUrl(Document doc, String text) throws IOException, InterruptedException{
 		return clickTextUrl(doc, text, 0);
 	}
 	
@@ -54,8 +56,9 @@ public class DocUtil {
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个
 	 * @return
 	 * @throws IOException 
+	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Document doc, String text, int index) throws IOException{
+	public static Document clickTextUrl(Document doc, String text, int index) throws IOException, InterruptedException{
 		//获取含有指定文本的元素节点
 		Elements elements = doc.getElementsContainingOwnText(text);
 		List<Element> list = new ArrayList<Element>();
@@ -66,8 +69,19 @@ public class DocUtil {
 				list.add(elements.get(i));
 			}
 		}
-		Document doc1 = Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
-		return doc1;
+		try {
+			return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+		} catch(SocketTimeoutException e) {
+			e.printStackTrace();
+			Thread.sleep(2000);  //一次超时异常，缓两秒，再试一次
+			try {
+				return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+			} catch(SocketTimeoutException e1) {
+				e1.printStackTrace();
+				Thread.sleep(1000);	//再次超时异常，缓一秒，再试一次
+				return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+			}
+		}
 	}
 
 	/**

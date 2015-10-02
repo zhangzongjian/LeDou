@@ -36,7 +36,7 @@ public class 锦标赛 extends 乐斗项目 {
 				if (!"赞助".equals(elements.get(i).html())) // 去掉文本不完全匹配但包含该文本的元素
 					elements.remove(i);
 			}
-			int size = elements.size();
+			int size = 5;
 			Random random = new Random();
 			DocUtil.clickURL(elements.get(random.nextInt(size)).attr("href"));
 			doc = DocUtil.clickURL(elements.get(random.nextInt(size)).attr(
