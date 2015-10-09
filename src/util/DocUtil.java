@@ -72,7 +72,6 @@ public class DocUtil {
 		try {
 			return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
 		} catch(SocketTimeoutException e) {
-			e.printStackTrace();
 			Thread.sleep(2000);  //一次超时异常，缓两秒，再试一次
 			try {
 				return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();

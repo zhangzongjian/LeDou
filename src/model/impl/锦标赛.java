@@ -6,7 +6,6 @@ import java.util.Random;
 import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
-import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -29,18 +28,16 @@ public class 锦标赛 extends 乐斗项目 {
 						DocUtil.substring(doc.text(), "【百米锦标赛】", 7, "领取奖励"));
 				doc = DocUtil.clickTextUrl(doc, "领取奖励");
 			}
-			Elements elements = doc.getElementsContainingOwnText("赞助");
-			for (int i = 0; i < elements.size(); i++) {
-				if (!elements.get(i).hasAttr("href")) // 去掉非超链接元素
-					elements.remove(i);
-				if (!"赞助".equals(elements.get(i).html())) // 去掉文本不完全匹配但包含该文本的元素
-					elements.remove(i);
+			int j = 0;
+			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
+				doc = DocUtil.clickTextUrl(mainDoc, "锦标赛");
+				j++;
+				if(j > 2) break;
 			}
 			int size = 5;
 			Random random = new Random();
-			DocUtil.clickURL(elements.get(random.nextInt(size)).attr("href"));
-			doc = DocUtil.clickURL(elements.get(random.nextInt(size)).attr(
-					"href"));
+			DocUtil.clickTextUrl(doc, "赞助", random.nextInt(size));
+			doc = DocUtil.clickTextUrl(doc, "赞助", random.nextInt(size));
 			message.put("赞助情况",
 					DocUtil.substring(doc.text(), "=本届已赞助=", 0, "积分排行"));
 		} catch (IOException e) {
