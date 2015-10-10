@@ -14,6 +14,7 @@ import util.DocUtil;
 
 public class 助阵 extends 乐斗项目 {
 
+	public static String object = "以柔克刚3";
 	public 助阵(Document mainURL) {
 		super(mainURL);
 	}
@@ -23,9 +24,9 @@ public class 助阵 extends 乐斗项目 {
 	 * @param name 助阵组合
 	 * @param index 组合内第index个技能，从1开始
 	 */
-	public void doit(String name, int index){
-		name = "以柔克刚";
-		index = 1;
+	public void doit(){
+		int index = Integer.parseInt(object.charAt(object.length()-1)+"");
+		String name = object.substring(0,object.length()-1);
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
 			if(doc.text().contains("16.[3/3]")) {
@@ -39,7 +40,7 @@ public class 助阵 extends 乐斗项目 {
 			}
 			doc = DocUtil.clickTextUrl(doc, name);
 			if(doc.getElementsByTag("anchor").size() < index) {
-				message.put("提升助阵情况", "暂未激活该技能！");
+				message.put("提升助阵情况", "暂未激活该助阵技能！");
 				return;
 			}
 			Element button = doc.getElementsByTag("anchor").get(index-1);  //第index个"提升"按钮，该按钮提交表单

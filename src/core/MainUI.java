@@ -20,8 +20,6 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
-import util.DocUtil;
-
 import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
 import actionListener.OneKeyButtonListener;
@@ -42,9 +40,13 @@ public class MainUI {
 	public static Container container = jFrame.getContentPane();
 	public static JTabbedPane tabs;  //选项卡
 	public static JTextArea textArea; //文本框
-	public static JTextField input;  //输入框
+	public static JTextField input;  //小号链接输入框
+	public static JTextField input1;  //供奉物品输入框
 	public static JMenuBar userBar;  //小号菜单
 	public static JMenu userSelect;	 //小号菜单选项
+	public static JMenu 十二宫Select = null;
+	public static JMenu 历练Select = null;
+	public static JMenu 助阵Select = null;
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();
 	public static JCheckBox allUsers = new JCheckBox("所有小号");
 	
@@ -85,7 +87,7 @@ public class MainUI {
 		timePanelScroll.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
 		//选项卡
 		tabs = new JTabbedPane(); //选项卡
-		tabs.setBounds(7, 190, 379, 200);
+		tabs.setBounds(7, 190, 379, 230);
 		tabs.addTab("乐斗选项", MainUI_init.createTaskPanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		tabs.addTab("计时器", timePanel);
@@ -105,7 +107,7 @@ public class MainUI {
 		
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
-		jFrame.setSize(400, 430); // 设置窗体大小
+		jFrame.setSize(400, 450); // 设置窗体大小
 		jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 //		test();
 	}

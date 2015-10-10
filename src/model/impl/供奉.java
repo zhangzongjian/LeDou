@@ -4,12 +4,14 @@ import java.io.IOException;
 
 import model.乐斗项目;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
 
 public class 供奉 extends 乐斗项目 {
 
+	public static String thing = "还魂丹"; //供奉物品
 	public 供奉(Document mainURL) {
 		super(mainURL);
 	}
@@ -29,17 +31,16 @@ public class 供奉 extends 乐斗项目 {
 			}
 			doc = DocUtil.clickTextUrl(doc, "供奉");
 			do {
-				// 3089还魂丹
-				if (doc.toString().contains("3089")) {
-					DocUtil.clickURL(doc.getElementsByAttributeValueMatching(
-							"href", "3089").attr("href"));
+				String docString = doc.toString();
+				if(doc.toString().contains(thing)) {
+					DocUtil.clickTextUrl(Jsoup.parse(docString.substring(docString.indexOf(thing))), "供奉");
 					message.put("供奉情况", "供奉成功！");
 					return;
 				} else if (doc.text().contains("下页")) {
 					doc = DocUtil.clickTextUrl(doc, "下页");
 				}
 				if (!doc.text().contains("下页")) {
-					message.put("供奉情况", "供奉失败，背包里木有还魂丹！");
+					message.put("供奉情况", "供奉失败，背包里木有"+thing+"！");
 					return;
 				}
 			} while (doc.text().contains("下页"));

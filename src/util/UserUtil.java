@@ -86,6 +86,7 @@ public class UserUtil {
 		Map<String, Object> map = null;
 		try {
 			map = (Map<String, Object>) in.readObject();
+			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}

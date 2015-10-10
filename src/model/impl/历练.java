@@ -10,12 +10,14 @@ import util.DocUtil;
 
 public class 历练 extends 乐斗项目 {
 
+	public static String object = "洞庭湖(37~40级)";
 	public 历练(Document mainURL) {
 		super(mainURL);
 	}
 
-	public void 挑战(String name) {
+	public void 挑战() {
 		try {
+			String name = object.substring(0,object.indexOf("("));
 			Document doc = DocUtil.clickTextUrl(mainDoc, "历练");
 			// 活力值
 			if(!doc.text().contains(name)) {

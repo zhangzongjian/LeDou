@@ -33,14 +33,11 @@ public class 许愿 extends 乐斗项目 {
 				message.put("许愿情况", "首胜后才能许愿！");
 				return;
 			}
-			DocUtil.clickTextUrl(
+			doc = DocUtil.clickTextUrl(
 					DocUtil.clickURL(doc
 							.getElementsByAttributeValueMatching("href",
 									"sub=4").get(0).attr("href")), "向月敏上香许愿");
-			int num = Integer.parseInt(doc.text().charAt(
-					doc.text().indexOf("连续许愿3天") + 7)
-					+ "");
-			if (num == 3) {
+			if(doc.text().contains("（3/3）")) {
 				DocUtil.clickTextUrl(doc, "领取");
 				message.put("连续3天许愿奖励", "获得魂珠碎片宝箱*1");
 			}

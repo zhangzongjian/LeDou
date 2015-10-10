@@ -246,7 +246,7 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.助阵)) {
 				助阵 m = new 助阵(mainDoc);
-				m.doit("以柔克刚", 1);
+				m.doit();
 				MainUI.textArea.append("【助阵】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
@@ -301,7 +301,7 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.历练)) {
 				历练 m = new 历练(mainDoc);
-				m.挑战("洞庭湖");
+				m.挑战();
 				MainUI.textArea.append("【历练】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
@@ -345,7 +345,7 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.十二宫)) {
 				十二宫 m = new 十二宫(mainDoc);
-				m.挑战("双子宫");
+				m.挑战();
 				MainUI.textArea.append("【十二宫】\n");
 				for (Object o : m.getMessage().values()) {
 					MainUI.textArea.append("    " + o.toString() + "\n");
