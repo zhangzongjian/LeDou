@@ -20,6 +20,8 @@ import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.WindowConstants;
 
+import util.DocUtil;
+
 import actionListener.AddUserButtonListener;
 import actionListener.ClearButtonListener;
 import actionListener.OneKeyButtonListener;
@@ -105,12 +107,20 @@ public class MainUI {
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 430); // 设置窗体大小
 		jFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+//		test();
 	}
 	
 	public void test() {
-		for(int i = 0;i<100; i++) {
-			timePanel.add(new JLabel(i+" "));
-		}
+		
+		final OneKeyButtonListener o = new OneKeyButtonListener();
+		OneKeyButtonListener.tasks = o.saveTask();
+		Thread t = new Thread(new Runnable() {
+			public void run() {
+				String mainURL = DocUtil.mainURL;
+				o.oneKeyLeDou(mainURL);
+			}
+		});
+		t.start();
 	}
 	
 }

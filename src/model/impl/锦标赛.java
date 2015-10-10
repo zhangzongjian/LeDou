@@ -23,16 +23,15 @@ public class 锦标赛 extends 乐斗项目 {
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "锦标赛");
+			if (doc.text().contains("=本届已赞助=")) {
+				message.put("赞助情况",
+						DocUtil.substring(doc.text(), "=本届已赞助=", 0, "积分排行"));
+				return;
+			}
 			if (doc.text().contains("领取奖励")) {
 				message.put("领奖情况",
 						DocUtil.substring(doc.text(), "【百米锦标赛】", 7, "领取奖励"));
 				doc = DocUtil.clickTextUrl(doc, "领取奖励");
-			}
-			int j = 0;
-			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
-				doc = DocUtil.clickTextUrl(mainDoc, "锦标赛");
-				j++;
-				if(j > 2) break;
 			}
 			int size = 5;
 			Random random = new Random();

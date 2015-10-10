@@ -26,13 +26,16 @@ public class 任务 extends 乐斗项目 {
 			if(doc.text().contains("炼丹 替换任务")) {
 				DocUtil.clickTextUrl(DocUtil.clickTextUrl(mainDoc, "炼丹"),"炼制");
 			}
-			if(doc.text().contains("好友切磋 替换任务") || doc.text().contains("挑战陌生人 替换任务")) {
+			if(doc.text().contains("好友切磋 替换任务") || doc.text().contains("挑战陌生人 替换任务") || doc.text().contains("挑战好友 替换任务")) {
 				Document temp = DocUtil.clickTextUrl(mainDoc, "斗友");
 				if (doc.text().contains("好友切磋 替换任务"))
 					for (int i = 0; i < 7; i++)
 						DocUtil.clickTextUrl(temp, "乐斗", i);
 				if (doc.text().contains("挑战陌生人 替换任务"))
 					for (int i = 0; i < 3; i++)
+						DocUtil.clickTextUrl(temp, "乐斗", i);
+				if (doc.text().contains("挑战好友 替换任务"))
+					for (int i = 0; i < 4; i++)
 						DocUtil.clickTextUrl(temp, "乐斗", i);
 			}
 			if(doc.text().contains("查看好友资料 替换任务")) {

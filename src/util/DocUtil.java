@@ -49,7 +49,14 @@ public class DocUtil {
 	 * @throws InterruptedException 
 	 */
 	public static Document clickTextUrl(Document doc, String text) throws IOException, InterruptedException{
-		return clickTextUrl(doc, text, 0);
+		Document result = clickTextUrl(doc, text, 0);
+		int j = 0;
+		while(result.text().contains("系统繁忙")) {  //出现繁忙情况，重试5次
+			result = DocUtil.clickTextUrl(doc, text, 0);
+			j++;
+			if(j > 4) break;
+		}
+		return result;
 	}
 	
 	/**
