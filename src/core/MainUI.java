@@ -110,17 +110,10 @@ public class MainUI {
 //		test();
 	}
 	
-	public void test() {
-		
+	public void test() {  //打开窗口马上执行一键乐斗
+		allUsers.setSelected(true);
 		final OneKeyButtonListener o = new OneKeyButtonListener();
-		OneKeyButtonListener.tasks = o.saveTask();
-		Thread t = new Thread(new Runnable() {
-			public void run() {
-				String mainURL = DocUtil.mainURL;
-				o.oneKeyLeDou(mainURL);
-			}
-		});
-		t.start();
+		o.actionPerformed(null);
 	}
 	
 }

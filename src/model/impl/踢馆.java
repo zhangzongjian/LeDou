@@ -96,7 +96,12 @@ public class 踢馆 extends 乐斗项目 {
 			message.put("领奖情况",
 					"踢馆领奖：" + DocUtil.substring(doc.text(), "功勋商店", 4, "！"));
 			doc = DocUtil.clickTextUrl(doc, "排行奖励");
-			doc = DocUtil.clickTextUrl(doc,"领取奖励");
+			int i = 0;
+			while(true) {
+				doc = DocUtil.clickTextUrl(doc,"领取奖励");
+				if(doc.text().contains("！")) break;
+				if(i>10) break; //防止死循环
+			}
 			message.put("领奖情况1", "踢馆排行领奖："+DocUtil.substring(doc.text(), "领取奖励", 4, "！"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
