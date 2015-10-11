@@ -23,12 +23,7 @@ public class 供奉 extends 乐斗项目 {
 				message.put("供奉情况", "今日已经供奉过了！");
 				return;
 			}
-			int j = 0;
-			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
-				doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
-				j++;
-				if(j > 2) break;
-			}
+			thing = "".equals(thing) ? "还魂丹":thing;
 			doc = DocUtil.clickTextUrl(doc, "供奉");
 			do {
 				String docString = doc.toString();

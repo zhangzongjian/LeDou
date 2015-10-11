@@ -106,8 +106,16 @@ public class MainUI_init extends MainUI{
 					task.setSelected(true);
 				taskPanel.add(task); // 放到面板上。
 				taskList.add(task); // 加入到数组中。
+				
 				if (taskName.equals(Task.供奉)) {
-					input1 = new JTextField("还魂丹",4);
+					Object object = UserUtil.getSettingByKey("供奉");
+					if(null == object) {
+						UserUtil.addSetting("供奉", "还魂丹");
+						UserUtil.saveSetting();
+						input1 = new JTextField("还魂丹",4);
+					} else {
+						input1 = new JTextField(object.toString(),4);
+					}
 					taskPanel.add(input1);
 				}
 			}

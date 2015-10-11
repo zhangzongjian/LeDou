@@ -575,6 +575,9 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			UserUtil.addSetting("任务列表", tasks);
 			UserUtil.saveSetting();
+			供奉.thing = MainUI.input1.getText();
+			UserUtil.addSetting("供奉", MainUI.input1.getText());
+			UserUtil.saveSetting();
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
