@@ -23,7 +23,7 @@ public class 锦标赛 extends 乐斗项目 {
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "锦标赛");
-			if (doc.text().contains("=本届已赞助=")) {
+			if (doc.text().contains("免费赞助：0")) {
 				message.put("赞助情况",
 						DocUtil.substring(doc.text(), "=本届已赞助=", 0, "积分排行"));
 				return;

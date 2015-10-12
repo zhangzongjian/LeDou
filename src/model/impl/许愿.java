@@ -39,7 +39,7 @@ public class 许愿 extends 乐斗项目 {
 									"sub=4").get(0).attr("href")), "向月敏上香许愿");
 			if(doc.text().contains("（3/3）")) {
 				DocUtil.clickTextUrl(doc, "领取");
-				message.put("连续3天许愿奖励", "获得魂珠碎片宝箱*1");
+				message.put("连续3天许愿奖励", "连续3天许愿，获得魂珠碎片宝箱*1");
 			}
 			message.put("许愿情况", "许愿成功！");
 		} catch (IOException e) {
