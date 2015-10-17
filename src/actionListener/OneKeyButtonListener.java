@@ -352,7 +352,7 @@ public class OneKeyButtonListener implements ActionListener {
 					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
 							.length());
 				}
-				MainUI.jPanel.repaint();
+				MainUI.main_jPanel.repaint();
 			}
 			// //////////////////////////////////////////////////////////
 			// 许愿必须得放在好友乐斗之后执行

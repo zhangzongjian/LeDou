@@ -32,8 +32,8 @@ public class MainUI {
 	}
 	
 	//UI 组件，需要随时获取信息的，设置成全局静态变量
-	public static JFrame jFrame = new JFrame("一键乐斗小工具"); 
-	public static JPanel jPanel = new JPanel(); //总面板
+	public static JFrame jFrame = new JFrame("一键乐斗小工具");
+	public static JPanel main_jPanel = new JPanel(); //主界面
 	public static JPanel taskPanel = new JPanel(); //乐斗任务选项面板
 	public static JPanel schedulePanel = new JPanel(); //挑战时间表面板，日程表面板
 	public static JPanel timePanel = new JPanel(); //计时结果面板
@@ -66,7 +66,7 @@ public class MainUI {
 		// 文本框，JScorllPane：文本框设置滚动条
 		textArea = new JTextArea();
 		JScrollPane textArea1 = new JScrollPane(textArea);
-		textArea1.setBounds(7, 65, 380, 120);
+		textArea1.setBounds(7, 65, 380, 195);
 		// 按钮
 		JButton oneKeyButton = new JButton("一键乐斗");
 		oneKeyButton.setBounds(204, 33, 115, 23);
@@ -87,24 +87,30 @@ public class MainUI {
 		timePanelScroll.setBorder(BorderFactory.createLineBorder(Color.blue, 2));
 		//选项卡
 		tabs = new JTabbedPane(); //选项卡
-		tabs.setBounds(7, 190, 379, 230);
-		tabs.addTab("乐斗选项", MainUI_init.createTaskPanel());
+		tabs.setBounds(7, 262, 379, 130);
+//		tabs.addTab("乐斗选项", MainUI_init.createTaskPanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		tabs.addTab("计时器", timePanel);
+		tabs.addTab("押镖、巅峰倒计时", timePanel);
 		
-		jPanel.setLayout(null);  //设置面板为无布局形式，即手动指定组件位置尺寸
-		jPanel.add(tag);
-		jPanel.add(input);
-		jPanel.add(addUserButton);
-		jPanel.add(userBar);
-		jPanel.add(oneKeyButton);
-		jPanel.add(clearButton);
-		jPanel.add(textArea1);
-		jPanel.add(tabs);
-		
+		main_jPanel.setLayout(null);  //设置面板为无布局形式，即手动指定组件位置尺寸
+		main_jPanel.add(tag);
+		main_jPanel.add(input);
+		main_jPanel.add(addUserButton);
+		main_jPanel.add(userBar);
+		main_jPanel.add(oneKeyButton);
+		main_jPanel.add(clearButton);
+		main_jPanel.add(textArea1);
+		main_jPanel.add(tabs);
 		allUsers.setBounds(125, 33, 78, 23);
-		jPanel.add(allUsers);
+		main_jPanel.add(allUsers);
 		
+		JPanel jPanel = new JPanel();  //总窗口面板
+		jPanel.setLayout(null);
+		JTabbedPane main_tabs = new JTabbedPane();
+		main_tabs.setBounds(0,0,400,450);
+		main_tabs.addTab("每日必斗",main_jPanel);
+		main_tabs.addTab("设置", MainUI_init.createTaskPanel());
+		jPanel.add(main_tabs);
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视
 		jFrame.setSize(400, 450); // 设置窗体大小
