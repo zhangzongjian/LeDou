@@ -17,16 +17,20 @@ public class 乐斗boss extends 乐斗项目 {
 	}
 
 	public void 一键挑战() {
-		// 好友boss
 		try {
+			// 好友boss
 			Document doc = DocUtil.clickTextUrl(mainDoc, "好友");
 			// 若当前页面不是首页，则跳到首页
 			if (doc.text().contains("首页 末页")) {
 				doc = DocUtil.clickTextUrl(doc, "首页");
 			}
-			// 第二个才是使用贡献药水的链接
-			Elements elements = doc.getElementsByAttributeValueMatching("href",
-					"3038");
+			// 挑战前先吞贡献药水
+			if (doc.text().contains("贡献药水 速购 使用 剩0次"))
+				for (int i = 0; i < 4; i++) {
+					DocUtil.clickTextUrl(doc, "使用", 5);
+					message.put("使用贡献药水", "自动使用贡献药水4瓶！");
+				}
+			
 			Document temp = Jsoup.parse(DocUtil.substring(doc.toString(), "侠：",
 					2, "1："));
 			Elements boss = temp.getElementsContainingOwnText("乐斗");
@@ -36,21 +40,15 @@ public class 乐斗boss extends 乐斗项目 {
 			boss.removeAll(temp.getElementsContainingOwnText("已乐斗"));
 			boss.removeAll(temp.getElementsByTag("body"));
 			int size = boss.size();
-			// 挑战前先吞贡献药水
-			if (doc.text().contains("贡献药水 速购 使用 剩0次"))
-				for (int i = 0; i < 4; i++) {
-					DocUtil.clickURL(elements.get(1).attr("href"));
-					message.put("使用贡献药水", "自动使用贡献药水4瓶！");
-				}
 			if (size == 0)
 				message.put("好友boss乐斗情况", "所有好友boss已斗！");
 			for (int i = 0; i < size; i++) {
 				Document d = DocUtil.clickURL(boss.get(i).attr("href"));
-				if (d.text().contains("侠侣") && d.text().contains("查看乐斗过程")) {
+				if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 					message.put("乐斗结果" + i,
-							DocUtil.substring(d.text(), "侠侣", 2, "查看乐斗过程"));
+							DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));
 				} else {
-					message.put("乐斗结果" + i, "未找到结果！");
+					message.put("乐斗结果" + i,  d.text().substring(7));
 				}
 			}
 			// 帮派boss
@@ -70,11 +68,11 @@ public class 乐斗boss extends 乐斗项目 {
 					message.put("帮派boss乐斗情况", "所有帮派boss已斗！");
 				for (int i = 0; i < size1; i++) {
 					Document d = DocUtil.clickURL(boss1.get(i).attr("href"));
-					if (d.text().contains("侠侣") && d.text().contains("查看乐斗过程")) {
+					if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 						message.put("乐斗结果_" + i,
-								DocUtil.substring(d.text(), "侠侣", 2, "查看乐斗过程"));
+								DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));
 					} else {
-						message.put("乐斗结果_" + i, "未找到结果！");
+						message.put("乐斗结果_" + i, d.text().substring(7));
 					}
 				}
 			}
@@ -94,11 +92,13 @@ public class 乐斗boss extends 乐斗项目 {
 				message.put("侠侣boss乐斗情况", "所有侠侣boss已斗！");
 			for (int i = 0; i < size2; i++) {
 				Document d = DocUtil.clickURL(boss2.get(i).attr("href"));
-				if (d.text().contains("侠侣") && d.text().contains("查看乐斗过程")) {
+				if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 					message.put("乐斗结果-" + i,
-							DocUtil.substring(d.text(), "侠侣", 2, "查看乐斗过程"));
+							DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));
+				} else if(d.text().contains("您还没有结婚")) {
+					message.put("乐斗结果-" + i, "您还没有结婚，不能打该boss！");
 				} else {
-					message.put("乐斗结果-" + i, "未找到结果！");
+					message.put("乐斗结果-" + i, d.text().substring(7));
 				}
 			}
 		} catch (IOException e) {

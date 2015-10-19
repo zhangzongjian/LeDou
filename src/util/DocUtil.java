@@ -27,8 +27,14 @@ public class DocUtil {
 	 * @throws IOException
 	 */
 	public static Document clickURL(String URL) throws IOException {
-		Document doc = Jsoup.connect(URL).timeout(time_out).get();
-		return doc;
+		Document result = Jsoup.connect(URL).timeout(time_out).get();
+		int j = 0;
+		while(result.text().contains("系统繁忙")) {  //出现繁忙情况，重试5次
+			result = Jsoup.connect(URL).timeout(time_out).get();
+			j++;
+			if(j > 4) break;
+		}
+		return result;
 	}
 	/**
 	 * 获取选中页面指定文本下的超链接

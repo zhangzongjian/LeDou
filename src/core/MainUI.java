@@ -66,7 +66,8 @@ public class MainUI {
 		// 文本框，JScorllPane：文本框设置滚动条
 		textArea = new JTextArea();
 		JScrollPane textArea1 = new JScrollPane(textArea);
-		textArea1.setBounds(7, 65, 380, 195);
+//		textArea1.setBounds(7, 65, 380, 195);
+		textArea1.setBounds(7, 65, 380, 327);
 		// 按钮
 		JButton oneKeyButton = new JButton("一键乐斗");
 		oneKeyButton.setBounds(204, 33, 115, 23);
@@ -88,7 +89,6 @@ public class MainUI {
 		//选项卡
 		tabs = new JTabbedPane(); //选项卡
 		tabs.setBounds(7, 262, 379, 130);
-//		tabs.addTab("乐斗选项", MainUI_init.createTaskPanel());
 		timePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		tabs.addTab("押镖、巅峰倒计时", timePanel);
 		
@@ -100,7 +100,7 @@ public class MainUI {
 		main_jPanel.add(oneKeyButton);
 		main_jPanel.add(clearButton);
 		main_jPanel.add(textArea1);
-		main_jPanel.add(tabs);
+//		main_jPanel.add(tabs);
 		allUsers.setBounds(125, 33, 78, 23);
 		main_jPanel.add(allUsers);
 		
@@ -109,7 +109,8 @@ public class MainUI {
 		JTabbedPane main_tabs = new JTabbedPane();
 		main_tabs.setBounds(0,0,400,450);
 		main_tabs.addTab("每日必斗",main_jPanel);
-		main_tabs.addTab("设置", MainUI_init.createTaskPanel());
+		main_tabs.addTab("乐斗设置", MainUI_init.createTaskPanel());
+		main_tabs.addTab("押镖、巅峰倒计时", timePanel);
 		jPanel.add(main_tabs);
 		container.add(jPanel);
 		jFrame.setVisible(true); // 使窗体可视

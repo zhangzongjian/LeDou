@@ -127,7 +127,6 @@ public class OneKeyButtonListener implements ActionListener {
 										+ m.getMessage().get("挑战结束") + "\n");
 								break;
 							}
-							MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
 							MainUI.textArea.append("【巅峰之战】\n");
 							for (Object o : m.getMessage().values()) {
 								MainUI.textArea.append("    " + o.toString()
@@ -177,7 +176,6 @@ public class OneKeyButtonListener implements ActionListener {
 							users.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
-						MainUI.tabs.setSelectedIndex(1); // 切换选项卡到计时器面板
 						while (num > 0) {
 							m.护送押镖();
 							// 若正在护送，次数不减
