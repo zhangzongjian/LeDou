@@ -18,12 +18,6 @@ public class 副本 extends 乐斗项目 {
 		try {
 			// 副本主页面
 			Document doc = DocUtil.clickTextUrl(mainDoc, "副本");
-			int j = 0;
-			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
-				doc = DocUtil.clickTextUrl(mainDoc, "副本");
-				j++;
-				if(j > 2) break;
-			}
 			int num1 = Integer.parseInt(doc.text().substring(
 					doc.text().indexOf("今天剩余次数") + 7, doc.text().indexOf("/")));
 			// 未组队

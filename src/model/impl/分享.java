@@ -17,12 +17,6 @@ public class 分享 extends 乐斗项目 {
 	public void 一键分享() {
 		try {
 			Document doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
-			int j = 0;
-			while(doc.text().contains("系统繁忙")) {  //出现繁忙情况，重试3次
-				doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
-				j++;
-				if(j > 2) break;
-			}
 			doc = DocUtil.clickTextUrl(doc, "分享");
 			doc = DocUtil.clickTextUrl(doc, "一键分享");
 			message.put("分享情况",

@@ -29,7 +29,7 @@ public class DocUtil {
 	public static Document clickURL(String URL) throws IOException {
 		Document result = Jsoup.connect(URL).timeout(time_out).get();
 		int j = 0;
-		while(result.text().contains("系统繁忙")) {  //出现繁忙情况，重试50次
+		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试50次
 			System.out.println(j+" "+result.text());////////////
 			try {
 				Thread.sleep(1500);
@@ -63,7 +63,7 @@ public class DocUtil {
 	public static Document clickTextUrl(Document doc, String text) throws IOException, InterruptedException{
 		Document result = clickTextUrl(doc, text, 0);
 		int j = 0;
-		while(result.text().contains("系统繁忙")) {  //出现繁忙情况，重试5次
+		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试5次
 			System.out.println(j+" "+text+" "+result.text());////////////
 			try {
 				Thread.sleep(1500);

@@ -14,6 +14,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import model.Task;
+import model.活动集合;
 import model.impl.乐斗boss;
 import model.impl.任务;
 import model.impl.传功;
@@ -551,6 +552,22 @@ public class OneKeyButtonListener implements ActionListener {
 				MainUI.textArea.append("    未选择任何操作！\n");
 			}
 			// //////////////////////////////////////////////////////////
+			//测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
+//			if (true) {
+//				活动集合 m = new 活动集合(mainDoc);
+//				m.打豆豆();
+//				m.我要许愿();
+//				m.乐斗菜单();
+//				m.补偿礼包();
+//				MainUI.textArea.append("【活动】\n");
+//				for (Object o : m.getMessage().values()) {
+//					MainUI.textArea.append("    " + o.toString() + "\n");
+//					MainUI.textArea.setCaretPosition(MainUI.textArea.getText()
+//							.length());
+//				}
+//			}
+			// //////////////////////////////////////////////////////////
+			
 			MainUI.textArea.append("\n");
 		} catch (IllegalArgumentException e) {
 			MainUI.textArea.append("【系统消息】\n");
