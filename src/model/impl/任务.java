@@ -49,8 +49,12 @@ public class 任务 extends 乐斗项目 {
 			
 			
 			// 帮派任务
-			Document doc2 = DocUtil.clickTextUrl(doc, "帮派任务");
 			Document 帮派首页 = DocUtil.clickTextUrl(mainDoc, "我的帮派");
+			if (帮派首页.text().contains("尚未加入任何帮派")) {
+				message.put("帮派任务完成情况", "尚未加入任何帮派");
+				return;
+			}
+			Document doc2 = DocUtil.clickTextUrl(帮派首页, "任务");
 			if(doc2.text().contains("帮友强化 未完成")) {
 				Elements es = DocUtil.clickTextUrl(DocUtil.clickTextUrl(mainDoc, "炼丹"),"帮友丹炉").getElementsByAttributeValueMatching("href", "subtype=4");
 				for(int i=0; i<5; i++)
