@@ -10,7 +10,9 @@ import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
 import util.UserUtil;
-import core.MainUI;
+import core.乐斗面板;
+import core.小号菜单;
+import core.设置面板;
 
 public class AddUserButtonListener implements ActionListener {
 
@@ -19,7 +21,7 @@ public class AddUserButtonListener implements ActionListener {
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		try {
-			String mainURL = MainUI.input.getText();
+			String mainURL = 设置面板.input.getText();
 			username = UserUtil.getUsername(mainURL);
 			//保存(小号昵称--URL)
 			if(UserUtil.getSettingByKey("小号") == null) {
@@ -28,19 +30,19 @@ public class AddUserButtonListener implements ActionListener {
 				UserUtil.addSetting("小号", map); 
 				UserUtil.saveSetting();
 				if(this.addUserToMenu() == false) return;
-				MainUI.textArea.append("【系统消息】\n");
-				MainUI.textArea.append("    添加小号："+username+"\n");
+				乐斗面板.textArea.append("【系统消息】\n");
+				乐斗面板.textArea.append("    添加小号："+username+"\n");
 			}
 			else {
 				((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, mainURL);
 				UserUtil.saveSetting();
 				if(this.addUserToMenu() == false) return;
-				MainUI.textArea.append("【系统消息】\n");
-				MainUI.textArea.append("    添加小号："+username+"\n");
+				乐斗面板.textArea.append("【系统消息】\n");
+				乐斗面板.textArea.append("    添加小号："+username+"\n");
 			}
 		} catch (IllegalArgumentException e) {
-			MainUI.textArea.append("【系统消息】\n");
-			MainUI.textArea.append("    无效的链接！\n");
+			乐斗面板.textArea.append("【系统消息】\n");
+			乐斗面板.textArea.append("    无效的链接！\n");
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -52,10 +54,10 @@ public class AddUserButtonListener implements ActionListener {
 	 */
 	public boolean addUserToMenu() {
 		if(username == null) return false;
-		for(int i = 0; i<MainUI.userSelect.getItemCount(); i++) {
-			if(MainUI.userSelect.getItem(i).getName().equals(username)) {
-				MainUI.textArea.append("【系统消息】\n");
-				MainUI.textArea.append("    小号已存在，不需重复添加！\n");
+		for(int i = 0; i<小号菜单.userSelect.getItemCount(); i++) {
+			if(小号菜单.userSelect.getItem(i).getName().equals(username)) {
+				乐斗面板.textArea.append("【系统消息】\n");
+				乐斗面板.textArea.append("    小号已存在，不需重复添加！\n");
 				return false;
 			}
 		}
@@ -67,9 +69,9 @@ public class AddUserButtonListener implements ActionListener {
 		userMenu.setName(username);
 		userMenu.add(select);
 		userMenu.add(delete);
-		MainUI.userSelect.add(userMenu); // 菜单选项
-		if(MainUI.userSelect.getItemCount() == 1) {
-			MainUI.userSelect.setText("切换小号："+username);
+		小号菜单.userSelect.add(userMenu); // 菜单选项
+		if(小号菜单.userSelect.getItemCount() == 1) {
+			小号菜单.userSelect.setText("切换小号："+username);
 		}
 		return true;
 	}

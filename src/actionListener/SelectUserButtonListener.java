@@ -5,8 +5,8 @@ import java.awt.event.ActionListener;
 
 import util.DocUtil;
 import util.UserUtil;
-
-import core.MainUI;
+import core.乐斗面板;
+import core.小号菜单;
 
 public class SelectUserButtonListener implements ActionListener{
 	
@@ -18,9 +18,9 @@ public class SelectUserButtonListener implements ActionListener{
 	
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		MainUI.userSelect.setText("切换小号："+username);
+		小号菜单.userSelect.setText("切换小号："+username);
 		DocUtil.mainURL = UserUtil.getMainURLByUsrname(username);
-		MainUI.textArea.append("【系统消息】\n");
-		MainUI.textArea.append("    切换小号：" + username + "\n");
+		乐斗面板.textArea.append("【系统消息】\n");
+		乐斗面板.textArea.append("    切换小号：" + username + "\n");
 	}
 }
