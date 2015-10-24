@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.Task;
+import model.impl.供奉;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
 import actionListener.SelectAllTaskListener;
@@ -95,6 +96,26 @@ public class 设置面板 {
 	@SuppressWarnings("unchecked")
 	private List<String> getTaskData() throws IOException {
 		return (List<String>) UserUtil.getSettingByKey("任务列表");
+	}
+	
+	//持久化数据（保存任务选项）
+	public static List<String> saveTask() {
+		try {
+			List<String> tasks = new ArrayList<String>();
+			for (JCheckBox j : 设置面板.taskList) {
+				if (j.isSelected())
+					tasks.add(j.getText());
+			}
+			UserUtil.addSetting("任务列表", tasks);
+			UserUtil.saveSetting();
+			供奉.thing = 设置面板.input1.getText();
+			UserUtil.addSetting("供奉", 设置面板.input1.getText());
+			UserUtil.saveSetting();
+			return tasks;
+		} catch (IOException e1) {
+			e1.printStackTrace();
+		}
+		return null;
 	}
 	
 	private JTextField getInput() {

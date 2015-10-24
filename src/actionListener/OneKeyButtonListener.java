@@ -10,7 +10,6 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import javax.swing.JCheckBox;
 import javax.swing.JLabel;
 
 import model.Task;
@@ -46,6 +45,7 @@ import model.impl.门派大战;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
+import util.PrintUtil;
 import util.UserUtil;
 import core.乐斗面板;
 import core.计时面板;
@@ -55,19 +55,18 @@ import core.设置面板;
 public class OneKeyButtonListener implements ActionListener {
 
 	// 存放线程名列表,（多小号多线程押镖）
-	public static List<String> users = new ArrayList<String>();
+	private List<String> users = new ArrayList<String>();
 	// 存放线程名列表1,（巅峰复活线程）
-	public static List<String> users1 = new ArrayList<String>();
+	private List<String> users1 = new ArrayList<String>();
 	// 乐斗任务列表，只执行列表中的任务，为null时表示没有任务
-	public static List<String> tasks;
+	private List<String> tasks;
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent paramActionEvent) {
-		tasks = saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
+		tasks = 设置面板.saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
 		if (乐斗面板.allUsersCheckBox.isSelected()) {
 			try {
-				for (final Object s : ((Map<String, Object>) UserUtil
-						.getSetting().get("小号")).values()) {
+				for (final Object s : ((Map<String, Object>) UserUtil.getSetting().get("小号")).values()) {
 					Thread t = new Thread(new Runnable() {
 						public void run() {
 							oneKeyLeDou(s.toString());
@@ -79,7 +78,7 @@ public class OneKeyButtonListener implements ActionListener {
 				e.printStackTrace();
 			}
 		} else {
-			// 一个小号执行的时候，在子线程执行，比在主线程执行体验要好得多
+			/* 一个小号，新建子线程执行，可以即时输出到TextArea文本框中，若在主线程中执行，需要等全部任务执行完了才输出。 */
 			Thread t = new Thread(new Runnable() {
 				public void run() {
 					String mainURL = DocUtil.mainURL;
@@ -94,8 +93,7 @@ public class OneKeyButtonListener implements ActionListener {
 	@SuppressWarnings("deprecation")
 	public void oneKeyLeDou(String mainURL) {
 		if (mainURL == null) {
-			乐斗面板.textArea.append("【系统消息】\n");
-			乐斗面板.textArea.append("    未选择小号！\n");
+			PrintUtil.printTitleInfo("系统消息", "未选择小号！");
 			return;
 		}
 		try {
@@ -104,19 +102,14 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(mainDoc);
 				 m.领奖和报名(); //周一6点钟之后执行
-				 乐斗面板.textArea.append("【巅峰之战】\n");
-				 for (Object o : m.getMessage().values()) {
-				 乐斗面板.textArea.append("    " + o.toString() +
-				 "\n");乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText().length());
-				 }
-				Thread thread1 = new Thread(new Runnable() {
+				 PrintUtil.printAllMessages(m, username);
+				 Thread thread1 = new Thread(new Runnable() {
 					public void run() {
 						JLabel showTime = new JLabel();
 						计时面板.timePanel.add(showTime);
 						巅峰之战 m = new 巅峰之战(mainDoc);
 						if (!m.is挑战时间()) {
-							乐斗面板.textArea.append("【巅峰之战】\n");
-							乐斗面板.textArea.append("    非挑战时间！\n");
+							PrintUtil.printMessage(m, "非挑战时间！", username);
 							users1.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
@@ -124,16 +117,10 @@ public class OneKeyButtonListener implements ActionListener {
 						while (true) {
 							m.挑战();
 							if (null != m.getMessage().get("挑战结束")) {
-								乐斗面板.textArea.append("【巅峰之战】\n");
-								乐斗面板.textArea.append("    "
-										+ m.getMessage().get("挑战结束") + "\n");
+								PrintUtil.printMessageByKey(m, "挑战结束", username);
 								break;
 							}
-							乐斗面板.textArea.append("【巅峰之战】\n");
-							for (Object o : m.getMessage().values()) {
-								乐斗面板.textArea.append("    " + o.toString()
-										+ "\n");
-							}
+							PrintUtil.printAllMessages(m, username);
 							lastTime = m.getLastTime();
 							while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
@@ -163,18 +150,12 @@ public class OneKeyButtonListener implements ActionListener {
 						JLabel showTime = new JLabel();
 						计时面板.timePanel.add(showTime);
 						m.劫镖();
-						乐斗面板.textArea.append("【镖行天下】\n");
-						for (Object o : m.getMessage().values()) {
-							乐斗面板.textArea.append("    " + o.toString() + "\n");
-							乐斗面板.textArea.setCaretPosition(乐斗面板.textArea
-									.getText().length());
-						}
+						PrintUtil.printAllMessages(m, username);
 						// 计时多次送镖
 						int lastTime;
 						int num = m.getNum();
 						if (num == 0) {
-							乐斗面板.textArea.append("【镖行天下】\n");
-							乐斗面板.textArea.append("    护送次数已用完！\n");
+							PrintUtil.printMessage(m, "护送次数已用完！", username);
 							users.remove(username); // 结束了就从线程列表中移除
 							return;
 						}
@@ -184,9 +165,7 @@ public class OneKeyButtonListener implements ActionListener {
 							if (!m.getMessage().get("护送状态")
 									.equals("您正在护送押镖中哦！"))
 								num--;
-							乐斗面板.textArea.append("【镖行天下】\n");
-							乐斗面板.textArea.append("    "
-									+ m.getMessage().get("护送状态") + "\n");
+							PrintUtil.printMessageByKey(m, "护送状态", username);
 							lastTime = m.getLastTime();
 							while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
@@ -213,169 +192,94 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.答题)) {
 				答题 m = new 答题(mainDoc);
 				m.answer();
-				乐斗面板.textArea.append("【答题】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.斗神塔)) {
 				斗神塔 m = new 斗神塔(mainDoc);
 				m.挑战();
 				m.查看掉落情况();
-				乐斗面板.textArea.append("【斗神塔】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.副本)) {
 				副本 m = new 副本(mainDoc);
 				m.挑战();
-				乐斗面板.textArea.append("【副本】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.助阵)) {
 				助阵 m = new 助阵(mainDoc);
 				m.doit();
-				乐斗面板.textArea.append("【助阵】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(mainDoc);
 				m.挑战();
-				乐斗面板.textArea.append("【竞技场】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.矿洞)) {
 				矿洞 m = new 矿洞(mainDoc);
 				m.挑战();
-				乐斗面板.textArea.append("【矿洞】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.传功)) {
 				传功 m = new 传功(mainDoc);
 				m.doit();
-				乐斗面板.textArea.append("【传功】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.乐斗boss)) {
 				乐斗boss m = new 乐斗boss(mainDoc);
 				m.一键挑战();
-				乐斗面板.textArea.append("【乐斗boss】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.历练)) {
 				历练 m = new 历练(mainDoc);
 				m.挑战();
-				乐斗面板.textArea.append("【历练】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.抢地盘)) {
 				抢地盘 m = new 抢地盘(mainDoc);
 				m.doit();
-				乐斗面板.textArea.append("【抢地盘】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.好友乐斗)) {
 				好友乐斗 m = new 好友乐斗(mainDoc);
 				m.doit();
-				乐斗面板.textArea.append("【好友乐斗】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.每日领奖)) {
 				每日领奖 m = new 每日领奖(mainDoc);
 				m.领取();
-				乐斗面板.textArea.append("【领取每日奖励】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.十二宫)) {
 				十二宫 m = new 十二宫(mainDoc);
 				m.挑战();
-				乐斗面板.textArea.append("【十二宫】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			// 许愿必须得放在好友乐斗之后执行
 			if (tasks.contains(Task.许愿)) {
 				许愿 m = new 许愿(mainDoc);
 				m.xuYuan();
-				乐斗面板.textArea.append("【许愿】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.门派大战)) {
 				门派大战 m = new 门派大战(mainDoc);
 				m.报名(); // 周三6点开始
 				m.领奖(); // 周一6点开始
-				乐斗面板.textArea.append("【门派大战】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.结拜赛)) {
@@ -385,50 +289,32 @@ public class OneKeyButtonListener implements ActionListener {
 				Timer timer = new Timer();
 				if (m.getDay() == 1) {
 					if(lastTime > 0) {
-						乐斗面板.textArea.append("【结拜赛】\n");
-						乐斗面板.textArea.append("    结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）\n");
+						PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
 					}
 					timer.schedule(new TimerTask() {
 						@Override
 						public void run() {
 							m.报名(); // 周一12点开始
-							乐斗面板.textArea.append("【结拜赛】\n");
-							乐斗面板.textArea.append("    "
-									+ m.getMessage().get("报名情况") + "\n");
+							PrintUtil.printMessageByKey(m, "报名情况", username);
 						}
 					}, lastTime < 0 ? 0 : lastTime);
 				}
 				m.助威(); // 助威周四0点开始，
 				m.助威领奖(); // 领奖周六0点开始
-				乐斗面板.textArea.append("【结拜赛】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.回流好友召回)) {
 				回流好友召回 m = new 回流好友召回(mainDoc);
 				m.doit();
-				乐斗面板.textArea.append("【回流好友召回】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.踢馆)) {
 				踢馆 m = new 踢馆(mainDoc);
 				m.领奖和报名(); // 周六0点开始
 				m.挑战(); // 周五6点开始
-				乐斗面板.textArea.append("【踢馆】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.武林大会)) {
@@ -437,20 +323,13 @@ public class OneKeyButtonListener implements ActionListener {
 				long lastTime = ((13 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
 				Timer timer = new Timer();
 				if (lastTime > 0) {
-					乐斗面板.textArea.append("【武林大会】\n");
-					乐斗面板.textArea
-							.append("   武林大会将在13:00:05自动报名！（退出工具则不能自动报名）\n");
+					PrintUtil.printMessage(m, "武林大会将在13:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
 				timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						m.报名(); // 每天13点开始
-						乐斗面板.textArea.append("【武林大会】\n");
-						for (Object o : m.getMessage().values()) {
-							乐斗面板.textArea.append("    " + o.toString() + "\n");
-							乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-									.length());
-						}
+						PrintUtil.printAllMessages(m, username);
 					}
 				}, lastTime < 0 ? 0 : lastTime);
 			}
@@ -458,12 +337,7 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.掠夺)) {
 				掠夺 m = new 掠夺(mainDoc);
 				m.领奖(); // 周三6点开始
-				乐斗面板.textArea.append("【掠夺】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.锦标赛)) {
@@ -472,20 +346,13 @@ public class OneKeyButtonListener implements ActionListener {
 				long lastTime = ((12 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
 				Timer timer = new Timer();
 				if (lastTime > 0) {
-					乐斗面板.textArea.append("【锦标赛】\n");
-					乐斗面板.textArea
-							.append("   锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）\n");
+					PrintUtil.printMessage(m, "锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
 				timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						m.赞助(); // 每天12点开始
-						乐斗面板.textArea.append("【锦标赛】\n");
-						for (Object o : m.getMessage().values()) {
-							乐斗面板.textArea.append("    " + o.toString() + "\n");
-							乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-									.length());
-						}
+						PrintUtil.printAllMessages(m, username);
 					}
 				}, lastTime < 0 ? 0 : lastTime);
 			}
@@ -493,63 +360,37 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.供奉)) {
 				供奉 m = new 供奉(mainDoc);
 				m.一键供奉();
-				乐斗面板.textArea.append("【供奉】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.分享)) {
 				分享 m = new 分享(mainDoc);
 				m.一键分享();
-				乐斗面板.textArea.append("【分享】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.帮战奖励)) {
 				帮战奖励 m = new 帮战奖励(mainDoc);
 				m.领奖(); // 周六6点开始
-				乐斗面板.textArea.append("【帮战奖励】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			// 完成任务要放到最后执行
 			if (tasks.contains(Task.任务)) {
 				任务 m = new 任务(mainDoc);
 				m.finish();
-				乐斗面板.textArea.append("【任务】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			// 活跃度要放到更后面执行
 			if (tasks.contains(Task.活跃度)) {
 				活跃度 m = new 活跃度(mainDoc);
 				m.领取();
-				乐斗面板.textArea.append("【活跃度】\n");
-				for (Object o : m.getMessage().values()) {
-					乐斗面板.textArea.append("    " + o.toString() + "\n");
-					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-							.length());
-				}
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks == null || tasks.isEmpty()) {
-				乐斗面板.textArea.append("【系统消息】\n");
-				乐斗面板.textArea.append("    未选择任何操作！\n");
+				PrintUtil.printTitleInfo("系统消息", "未选择任何操作！", username);
 			}
 			// //////////////////////////////////////////////////////////
 			//测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
@@ -567,35 +408,13 @@ public class OneKeyButtonListener implements ActionListener {
 //				}
 //			}
 			// //////////////////////////////////////////////////////////
-			
-			乐斗面板.textArea.append("\n");
+			PrintUtil.printInfo("\n");
 		} catch (IllegalArgumentException e) {
-			乐斗面板.textArea.append("【系统消息】\n");
-			乐斗面板.textArea.append("    访问失败，请重试！\n");
+			PrintUtil.printTitleInfo("系统消息", "访问失败，请重试！", "John");
 			e.printStackTrace();
 		} catch (IOException e) {
-			乐斗面板.textArea.append("【系统消息】\n");
-			乐斗面板.textArea.append("    连接超时，请重试！\n");
+			PrintUtil.printTitleInfo("系统消息", "连接超时，请重试！", "John");
 			e.printStackTrace();
 		}
-	}
-
-	// 保存任务选项
-	public List<String> saveTask() {
-		try {
-			tasks = new ArrayList<String>();
-			for (JCheckBox j : 设置面板.taskList) {
-				if (j.isSelected())
-					OneKeyButtonListener.tasks.add(j.getText());
-			}
-			UserUtil.addSetting("任务列表", tasks);
-			UserUtil.saveSetting();
-			供奉.thing = 设置面板.input1.getText();
-			UserUtil.addSetting("供奉", 设置面板.input1.getText());
-			UserUtil.saveSetting();
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		return tasks;
 	}
 }
