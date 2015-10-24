@@ -13,6 +13,7 @@ import java.util.TimerTask;
 import javax.swing.JLabel;
 
 import model.Task;
+import model.活动集合;
 import model.impl.乐斗boss;
 import model.impl.任务;
 import model.impl.传功;
@@ -125,7 +126,7 @@ public class OneKeyButtonListener implements ActionListener {
 							while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
 								try {
-									showTime.setText("巅峰等待中：" + lastTime + "秒");
+									showTime.setText("  【"+username+"】巅峰等待中：" + lastTime + "秒");
 									Thread.sleep(1000);
 								} catch (InterruptedException e) {
 									e.printStackTrace();
@@ -170,7 +171,7 @@ public class OneKeyButtonListener implements ActionListener {
 							while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
 								try {
-									showTime.setText("护送押镖(" + num + "/3)："
+									showTime.setText("  【"+username+"】护送押镖(" + num + "/3)："
 											+ lastTime + "秒");
 									Thread.sleep(1000);
 								} catch (InterruptedException e) {
@@ -389,24 +390,21 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.活动集合)) {
+				活动集合 m = new 活动集合(mainDoc);
+				m.打豆豆();
+				m.我要许愿();
+				m.乐斗菜单();
+				m.补偿礼包();
+				m.周周礼包();
+				m.登录100QB好礼();
+				m.大宝树();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks == null || tasks.isEmpty()) {
 				PrintUtil.printTitleInfo("系统消息", "未选择任何操作！", username);
 			}
-			// //////////////////////////////////////////////////////////
-			//测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试测试
-//			if (true) {
-//				活动集合 m = new 活动集合(mainDoc);
-//				m.打豆豆();
-//				m.我要许愿();
-//				m.乐斗菜单();
-//				m.补偿礼包();
-//				乐斗面板.textArea.append("【活动】\n");
-//				for (Object o : m.getMessage().values()) {
-//					乐斗面板.textArea.append("    " + o.toString() + "\n");
-//					乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-//							.length());
-//				}
-//			}
 			// //////////////////////////////////////////////////////////
 			PrintUtil.printInfo("\n");
 		} catch (IllegalArgumentException e) {

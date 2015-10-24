@@ -32,4 +32,5 @@ public class Task {
 	public static final String 帮战奖励 = "帮战奖励";
 	public static final String 回流好友召回 = "回流好友召回";
 	public static final String 传功 = "传功";
+	public static final String 活动集合 = "活动集合";
 }

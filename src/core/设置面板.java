@@ -89,6 +89,7 @@ public class 设置面板 {
 		list.add(Task.每日领奖);
 		list.add(Task.好友乐斗);
 		list.add(Task.帮战奖励);
+		list.add(Task.活动集合);
 		return list;
 	}
 	

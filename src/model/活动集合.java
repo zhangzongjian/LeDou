@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -153,9 +154,89 @@ public class 活动集合 extends 乐斗项目 {
 			e.printStackTrace();
 		}
 	}
+
+	//周周礼包
+	public void 周周礼包() {
+		try {
+			if (!mainDoc.text().contains("周周礼包")) {
+				message.put("周周礼包", "非活动时间！");
+				return;
+			}
+			Document doc = DocUtil.clickTextUrl(mainDoc, "周周礼包");
+			Elements 领取 = doc.getElementsContainingOwnText("领取");
+			int count = 0;
+			Document result;
+			for(int i=0; i<领取.size(); i++) {
+				if(领取.get(i).hasAttr("href")) {
+					count++;
+					result = DocUtil.clickURL(领取.get(i).attr("href"));
+					message.put("周周礼包"+i, "礼包"+count+"："+DocUtil.substring(result.text(), "【周周有礼】", 6, "活动时间"));
+				}
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//登录100QB好礼
+	public void 登录100QB好礼() {
+		try {
+			if (!mainDoc.text().contains("登录100QB好礼")) {
+				message.put("登录100QB好礼", "非活动时间！");
+				return;
+			}
+			Document doc = DocUtil.clickTextUrl(mainDoc, "登录100QB好礼");
+			Elements 领取 = doc.getElementsContainingOwnText("领取");
+			for(int i=0; i<领取.size(); i++) {
+				if(领取.get(i).hasAttr("href")) {
+					Document result = DocUtil.clickURL(领取.get(i).attr("href"));
+					message.put("登录100QB好礼"+i, DocUtil.substring(result.text(), "【100QB登录好礼】", 11, "。"));
+					return; //领取了就结束
+				}
+			}
+			//doc没有领取链接
+			message.put("登录100QB好礼", "今天已经领取过了，明天再来哦！");
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//大宝树
+	public void 大宝树() {
+		try {
+			if (!mainDoc.text().contains("大宝树")) {
+				message.put("大宝树", "非活动时间！");
+				return;
+			}
+			Document doc = DocUtil.clickTextUrl(mainDoc, "大宝树");
+			if(doc.text().contains("我选定的种子：无")) {
+				DocUtil.clickTextUrl(doc, "黄金卷轴");
+				message.put("选定种子", "播种成功！");
+			}
+			Document 浇水 = DocUtil.clickTextUrl(doc, "浇水");
+			message.put("浇水", DocUtil.substring(浇水.text(), "【乐斗大宝树】", 7, "1.选择一个你喜爱的种子"));
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public static void main(String[] args) throws IOException {
-		Document doc = Jsoup.connect("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=985488587&B_UID=0&sid=d9G0RkJR6fdploFdvQb/jxLw3y4iXe7q3abd5ccb0201==&channel=0&g_ut=2&cmd=menuact").get();
-		doc = Jsoup.parse(DocUtil.substring(doc.toString(), "套餐四", 0, "套餐五"));
-		System.out.println(DocUtil.isHref(doc, "点单"));
+		Document doc = Jsoup.connect("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=447721727&B_UID=447721727&sid=Ac_9eIykC6KdfNmsG-kfxJKd&channel=0&g_ut=1&cmd=newAct&subtype=43").get();
+		Elements 领取 = doc.getElementsContainingOwnText("领取");
+		for(int i = 0; i<领取.size(); i++) {
+			if(领取.get(i).hasAttr("href")) {
+				System.out.println(i);
+			}
+		}
+		System.out.println(领取);
 	}
 }
