@@ -1,5 +1,8 @@
 package util;
 
+import java.util.HashSet;
+import java.util.Set;
+
 import model.乐斗项目;
 import core.乐斗面板;
 
@@ -25,6 +28,16 @@ public class PrintUtil {
 			乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
 					.length());
 		}
+		
+		//执行当前打印函数的时候，同时更新进度条
+		updateProgress("【"+get乐斗项目名(model)+"】【"+username+"】");
+	}
+	
+	public static Set<String> printTask = new HashSet<String>();
+	private static void updateProgress(String string) {
+		//添加成功，不存在重复的，就执行更新进度条
+		if(printTask.add(string))
+			乐斗面板.updateProgress();
 	}
 	
 	/**
@@ -36,6 +49,9 @@ public class PrintUtil {
 	public static void printMessage(乐斗项目 model, String message, String username) {
 		乐斗面板.textArea.append("【"+get乐斗项目名(model)+"】【"+username+"】\n");
 		乐斗面板.textArea.append("    "+message+"\n");
+		
+		//执行当前打印函数的时候，同时更新进度条
+		updateProgress("【"+get乐斗项目名(model)+"】【"+username+"】");
 	}
 	
 	/**

@@ -65,6 +65,7 @@ public class OneKeyButtonListener implements ActionListener {
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(ActionEvent paramActionEvent) {
 		tasks = 设置面板.saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
+		乐斗面板.initProgressBar(); //初始化进度条
 		if (乐斗面板.allUsersCheckBox.isSelected()) {
 			try {
 				for (final Object s : ((Map<String, Object>) UserUtil.getSetting().get("小号")).values()) {
@@ -296,7 +297,7 @@ public class OneKeyButtonListener implements ActionListener {
 						@Override
 						public void run() {
 							m.报名(); // 周一12点开始
-							PrintUtil.printMessageByKey(m, "报名情况", username);
+							PrintUtil.printAllMessages(m, username);
 						}
 					}, lastTime < 0 ? 0 : lastTime);
 				}
