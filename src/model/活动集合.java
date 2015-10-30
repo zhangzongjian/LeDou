@@ -18,9 +18,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 打豆豆() {
 		try {
 			if(! mainDoc.text().contains("乐斗作战")) {
-				message.put("乐斗作战", "非活动时间！");
+				message.put("乐斗作战", null);
 				return;
 			}
+			message.put("活动1", "【打豆豆】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "乐斗作战");
 			Document 领取 = DocUtil.clickTextUrl(doc, "领取");
 			Document 打豆豆 = DocUtil.clickTextUrl(领取, "打豆豆", 0);
@@ -47,9 +48,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 我要许愿() {
 		try {
 			if(! mainDoc.text().contains("我要许愿")) {
-				message.put("我要许愿", "非活动时间！");
+				message.put("我要许愿", null);
 				return;
 			}
+			message.put("活动2", "【我要许愿】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "我要许愿");
 			//传功符奖励
 			if(! doc.text().contains("虔诚度：7/7   许愿   传功符")) {
@@ -109,9 +111,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 乐斗菜单() {
 		try {
 			if (!mainDoc.text().contains("乐斗菜单")) {
-				message.put("乐斗菜单", "非活动时间！");
+				message.put("乐斗菜单", null);
 				return;
 			}
+			message.put("活动3", "【乐斗菜单】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "乐斗菜单");
 			Document[] 套餐 = new Document[5];
 			//套餐优先级为数组下标
@@ -141,9 +144,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 补偿礼包() {
 		try {
 			if (!mainDoc.text().contains("补偿礼包")) {
-				message.put("补偿礼包", "非活动时间！");
+				message.put("补偿礼包", null);
 				return;
 			}
+			message.put("活动4", "【补偿礼包】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "补偿礼包");
 			Document result = DocUtil.clickTextUrl(doc, "领取补偿礼包");
 			message.put("补偿礼包", DocUtil.substring(result.text(), "【补偿礼包】", 6, "领取时间"));
@@ -159,9 +163,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 周周礼包() {
 		try {
 			if (!mainDoc.text().contains("周周礼包")) {
-				message.put("周周礼包", "非活动时间！");
+				message.put("周周礼包", null);
 				return;
 			}
+			message.put("活动5", "【周周礼包】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "周周礼包");
 			Elements 领取 = doc.getElementsContainingOwnText("领取");
 			int count = 0;
@@ -185,9 +190,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 登录100QB好礼() {
 		try {
 			if (!mainDoc.text().contains("登录100QB好礼")) {
-				message.put("登录100QB好礼", "非活动时间！");
+				message.put("登录100QB好礼", null);
 				return;
 			}
+			message.put("活动6", "【登录100QB好礼】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "登录100QB好礼");
 			Elements 领取 = doc.getElementsContainingOwnText("领取");
 			for(int i=0; i<领取.size(); i++) {
@@ -211,9 +217,10 @@ public class 活动集合 extends 乐斗项目 {
 	public void 大宝树() {
 		try {
 			if (!mainDoc.text().contains("大宝树")) {
-				message.put("大宝树", "非活动时间！");
+				message.put("大宝树", null);		//非活动时间
 				return;
 			}
+			message.put("活动7", "【大宝树】");
 			Document doc = DocUtil.clickTextUrl(mainDoc, "大宝树");
 			if(doc.text().contains("我选定的种子：无")) {
 				DocUtil.clickTextUrl(doc, "黄金卷轴");
@@ -229,14 +236,43 @@ public class 活动集合 extends 乐斗项目 {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Document doc = Jsoup.connect("http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=447721727&B_UID=447721727&sid=Ac_9eIykC6KdfNmsG-kfxJKd&channel=0&g_ut=1&cmd=newAct&subtype=43").get();
-		Elements 领取 = doc.getElementsContainingOwnText("领取");
-		for(int i = 0; i<领取.size(); i++) {
-			if(领取.get(i).hasAttr("href")) {
-				System.out.println(i);
+	//大宝箱
+	public void 大宝箱() {
+		try {
+			if (!mainDoc.text().contains("大宝箱")) {
+				message.put("大宝箱", null);		//非活动时间
+				return;
 			}
+			message.put("活动8", "【大宝箱】");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "大宝箱");
+			if(doc.text().contains("未激活")) {
+				if(doc.text().contains("我的累积进度：100%")) {
+					DocUtil.clickTextUrl(doc, "激活宝箱");
+					Document result = DocUtil.clickTextUrl(doc, "打开宝箱");
+					message.put("打开宝箱", "打开宝箱："+DocUtil.substring(result.text(), "【乐斗大宝箱】", 7, "规则说明"));
+					return;
+				} 
+				else {
+					message.put("打开宝箱", "打开宝箱："+DocUtil.substring1(doc.text(), "我的累积进度", 0, "未激活", 3));
+					return;
+				}
+			}
+			else {
+				Document result = DocUtil.clickTextUrl(doc, "打开宝箱");
+				message.put("打开宝箱", "打开宝箱："+DocUtil.substring(result.text(), "【乐斗大宝箱】", 7, "规则说明"));
+				return;
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		System.out.println(领取);
+	}
+	
+	public static void main(String[] args) throws IOException {
+		Document doc = Jsoup.connect("http://fight.pet.qq.com/cgi-bin/petpk?cmd=weiduan2&gb_id=49")
+								.get();
+		System.out.println(doc);
 	}
 }

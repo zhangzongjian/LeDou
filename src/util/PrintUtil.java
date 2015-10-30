@@ -24,9 +24,11 @@ public class PrintUtil {
 	public static void printAllMessages(乐斗项目 model, String username) {
 		乐斗面板.textArea.append("【"+get乐斗项目名(model)+"】【"+username+"】\n");
 		for (Object o : model.getMessage().values()) {
-			乐斗面板.textArea.append("    " + o.toString() + "\n");
-			乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
-					.length());
+			if(o != null) {
+				乐斗面板.textArea.append("    " + o.toString() + "\n");
+				乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
+						.length());
+			}
 		}
 		
 		//执行当前打印函数的时候，同时更新进度条

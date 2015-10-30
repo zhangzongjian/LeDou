@@ -400,6 +400,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.周周礼包();
 				m.登录100QB好礼();
 				m.大宝树();
+				m.大宝箱();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
