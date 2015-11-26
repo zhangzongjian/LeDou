@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -18,7 +20,9 @@ import actionListener.SelectAllTaskListener;
 
 public class 设置面板 {
 	
-	public static JTextField input;  //小号链接输入框
+	public static JTextField inputQQ;  
+	public static JTextField inputPassword; 
+	public static JTextField inputVerifyCode;
 	public static JTextField input1;  //供奉物品输入框
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();//任务复选框组
 	
@@ -28,8 +32,14 @@ public class 设置面板 {
 		try {
 			//taskPanel面板布局设置
 			taskPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-			taskPanel.add(getInput());
+			taskPanel.add(new JLabel("QQ"));
+			taskPanel.add(getInputQQ());
+			taskPanel.add(new JLabel("密码"));
+			taskPanel.add(getInputPassword());
 			taskPanel.add(getAddUserButton());
+			taskPanel.add(new JLabel("验证码"));
+			taskPanel.add(getInputVerifyCode());
+			taskPanel.add(new JLabel(new ImageIcon("resources/VerifyCode.jpg")));
 			taskPanel.add(十二宫菜单.create());
 			taskPanel.add(助阵菜单.create());
 			taskPanel.add(历练菜单.create());
@@ -119,10 +129,19 @@ public class 设置面板 {
 		return null;
 	}
 	
-	private JTextField getInput() {
-		input = new JTextField(28);
-		input.setText("添加小号-请复制免登陆链接到这里！");
-		return input;
+	private JTextField getInputQQ() {
+		inputQQ = new JTextField(11);
+		return inputQQ;
+	}
+	
+	private JTextField getInputPassword() {
+		inputPassword = new JTextField(12);
+		return inputPassword;
+	}
+	
+	private JTextField getInputVerifyCode() {
+		inputVerifyCode = new JTextField(11);
+		return inputVerifyCode;
 	}
 	
 	private JButton getAddUserButton() {

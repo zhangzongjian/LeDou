@@ -8,9 +8,11 @@ import org.jsoup.nodes.Document;
 
 public class 乐斗项目 {
 	protected Document mainDoc;
+	protected Map<String, String> userKey;
 
-	public 乐斗项目(Document mainURL) {
+	public 乐斗项目(Map<String, String> userKey, Document mainURL) {
 		this.mainDoc = mainURL;
+		this.userKey = userKey;
 	}
 
 	protected Map<String, Object> message = new LinkedHashMap<String, Object>();

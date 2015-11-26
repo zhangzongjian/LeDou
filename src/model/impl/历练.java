@@ -2,7 +2,7 @@ package model.impl;
 
 import java.io.IOException;
 
-import model.乐斗项目;
+import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
 
@@ -11,20 +11,20 @@ import util.DocUtil;
 public class 历练 extends 乐斗项目 {
 
 	public static String object = "洞庭湖(37~40级)";
-	public 历练(Document mainURL) {
-		super(mainURL);
+	public 历练(Map<String, String> userKey, Document mainURL) {
+		super(userKey, mainURL);
 	}
 
 	public void 挑战() {
 		try {
 			String name = object.substring(0,object.indexOf("("));
-			Document doc = DocUtil.clickTextUrl(mainDoc, "历练");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
 			// 活力值
 			if(!doc.text().contains(name)) {
 				message.put("历练情况", "未开启该历练场景，请换一个试试！");
 				return;
 			}
-			Document doc1 = DocUtil.clickTextUrl(doc, name);
+			Document doc1 = DocUtil.clickTextUrl(userKey, doc, name);
 			int num = Integer.parseInt(doc1.text().substring(
 					doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
 			if (num < 10) {
@@ -32,7 +32,7 @@ public class 历练 extends 乐斗项目 {
 				return;
 			}
 			while (num >= 10) {
-				Document doc2 = DocUtil.clickTextUrl(doc1, "乐斗");
+				Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "乐斗");
 				if (doc2.text().contains("获得了")
 						&& doc2.text().contains("查看乐斗过程")) {
 					message.put("历练情况" + num,

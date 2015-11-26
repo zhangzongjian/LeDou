@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -16,9 +17,14 @@ public class DocUtil {
 	private static int time_out = 5000;
 	
 	/**
-	 * 全局免登陆链接，当前选择的链接
+	 * 全局cookie，当前选择的小号cookie
 	 */
-	public static String mainURL;
+	public static Map<String, String> userKey;
+	
+	/**
+	 * 大乐斗首页链接
+	 */
+	public static String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
 	
 	/**
 	 * get方式点击指定链接
@@ -26,8 +32,8 @@ public class DocUtil {
 	 * @return 
 	 * @throws IOException
 	 */
-	public static Document clickURL(String URL) throws IOException {
-		Document result = Jsoup.connect(URL).timeout(time_out).get();
+	public static Document clickURL(Map<String, String> userKey, String URL) throws IOException {
+		Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 		int j = 0;
 		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试50次
 			System.out.println(j+" "+result.text());////////////
@@ -36,7 +42,7 @@ public class DocUtil {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			result = Jsoup.connect(URL).timeout(time_out).get();
+			result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 			j++;
 //			if(j > 4) break;
 		}
@@ -49,7 +55,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 */
 	public static String getTextUrl(String URL, String text) throws IOException{
-		Document doc = Jsoup.connect(URL).timeout(time_out).get();
+		Document doc = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 	    Elements elements = doc.getElementsContainingOwnText(text);
 		return elements.attr("href"); 
 	}
@@ -60,8 +66,8 @@ public class DocUtil {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Document doc, String text) throws IOException, InterruptedException{
-		Document result = clickTextUrl(doc, text, 0);
+	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text) throws IOException, InterruptedException{
+		Document result = clickTextUrl(userKey, doc, text, 0);
 		int j = 0;
 		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试5次
 			System.out.println(j+" "+text+" "+result.text());////////////
@@ -70,7 +76,7 @@ public class DocUtil {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			result = DocUtil.clickTextUrl(doc, text, 0);
+			result = DocUtil.clickTextUrl(userKey, doc, text, 0);
 			j++;
 //			if(j > 4) break;
 		}
@@ -83,7 +89,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Document doc, String text, int index) throws IOException, InterruptedException{
+	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text, int index) throws IOException, InterruptedException{
 		//获取含有指定文本的元素节点
 		Elements elements = doc.getElementsContainingOwnText(text);
 		List<Element> list = new ArrayList<Element>();
@@ -95,15 +101,15 @@ public class DocUtil {
 			}
 		}
 		try {
-			return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+			return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 		} catch(SocketTimeoutException e) {
 			Thread.sleep(2000);  //一次超时异常，缓两秒，再试一次
 			try {
-				return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+				return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 			} catch(SocketTimeoutException e1) {
 				e1.printStackTrace();
 				Thread.sleep(1000);	//再次超时异常，缓一秒，再试一次
-				return Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
+				return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 			}
 		}
 	}

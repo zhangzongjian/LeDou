@@ -40,7 +40,7 @@ public class 小号菜单 {
 			userMenu.add(delete);
 			userSelect.add(userMenu); // 添加到菜单列表
 			userSelect.setText("切换小号："+username);
-			DocUtil.mainURL = usersMap.get(username).toString();
+			DocUtil.userKey = (Map<String, String>) usersMap.get(username);
 		}
 		userBar.add(userSelect);
 	}

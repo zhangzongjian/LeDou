@@ -19,7 +19,7 @@ public class SelectUserButtonListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		小号菜单.userSelect.setText("切换小号："+username);
-		DocUtil.mainURL = UserUtil.getMainURLByUsrname(username);
+		DocUtil.userKey = UserUtil.getUserKeyByUsrname(username);
 		乐斗面板.textArea.append("【系统消息】\n");
 		乐斗面板.textArea.append("    切换小号：" + username + "\n");
 	}

@@ -1,8 +1,9 @@
 package model.impl;
 
 import java.io.IOException;
+import java.util.Map;
 
-import model.乐斗项目;
+import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
 
@@ -10,14 +11,14 @@ import util.DocUtil;
 
 public class 帮战奖励 extends 乐斗项目 {
 
-	public 帮战奖励(Document mainURL) {
-		super(mainURL);
+	public 帮战奖励(Map<String, String> userKey, Document mainURL) {
+		super(userKey, mainURL);
 	}
 
 	public void 领奖() {
 		try {
-			Document doc = DocUtil.clickTextUrl(mainDoc, "帮战");
-			doc = DocUtil.clickTextUrl(doc, "领取奖励");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "帮战");
+			doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
 			int j = 0;
 			while(doc.text().contains("系统繁忙，请稍后重试！")) { 
 				System.out.println(j+" 领取奖励 "+doc.text());////////////
@@ -26,7 +27,7 @@ public class 帮战奖励 extends 乐斗项目 {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				doc = DocUtil.clickTextUrl(doc, "领取奖励");
+				doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
 				j++;
 			}
 			if (doc.text().contains("只能领取一次")) {

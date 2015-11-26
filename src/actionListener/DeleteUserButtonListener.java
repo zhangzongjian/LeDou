@@ -46,7 +46,7 @@ public class DeleteUserButtonListener implements ActionListener {
 		//全部删除了
 		if(小号菜单.userSelect.getItemCount() == 0) {
 			小号菜单.userSelect.setText("切换小号：（未添加）");
-			DocUtil.mainURL = null;
+			DocUtil.userKey = null;
 		}
 	}
 }

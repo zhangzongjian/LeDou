@@ -94,12 +94,16 @@ public class UserUtil {
 	}
 	
 	/**
-	 * 从免登陆链接页面中，获取用户昵称
+	 * 从大乐斗首页中，获取用户昵称
 	 * @return
 	 * @throws IOException 
 	 */
-	public static String getUsername(String mainURL) throws IOException, StringIndexOutOfBoundsException {
-		Document doc = Jsoup.connect(mainURL).timeout(5000).get();
+	public static String getUsername(Map<String, String> userKey) throws IOException, StringIndexOutOfBoundsException {
+		String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
+		Document doc = Jsoup.connect(mainURL)
+							.cookies(userKey)
+							.timeout(5000)
+							.get();
 		String username = "";
 		if(doc.text().contains("开通达人")) {
 			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
@@ -112,35 +116,22 @@ public class UserUtil {
 	}
 
 	/**
-	 * 获取小号对应的免登陆链接
+	 * 获取小号对应的userKey
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public static String getMainURLByUsrname(String username) {
-		String mainURL = null;
+	public static Map<String, String> getUserKeyByUsrname(String username) {
+		Map<String, String> userInfo = null;
 		try {
-			mainURL = ((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).get(username).toString();
-			return mainURL;
+			userInfo = (Map<String, String>) ((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).get(username);
+			return userInfo;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return mainURL;
+		return userInfo;
 	}
 	
-	//重置设置数据
-	/*private static void resetSetting() {
-		try {
-			setting = new LinkedHashMap<String, Object>();
-			//放入设置关键字，以及对应的数据类型，免得等到用该设置的时候再去判断是否存在关键字
-			setting.put("小号", new LinkedHashMap<String, Object>());
-			setting.put("任务列表", new ArrayList<String>());
-			File file = new File(settingFile);
-			ObjectOutputStream out = new ObjectOutputStream(
-					new FileOutputStream(file));
-			out.writeObject(setting);
-			out.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
+	public static void main(String[] args) throws IOException {
+		System.out.println(UserUtil.getSetting());
+	}
 }
