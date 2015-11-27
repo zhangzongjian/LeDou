@@ -12,6 +12,7 @@ import javax.swing.JMenuItem;
 
 import QQLogin.Login;
 
+import util.PrintUtil;
 import util.UserUtil;
 import core.乐斗面板;
 import core.小号菜单;
@@ -20,6 +21,7 @@ import core.设置面板;
 public class AddUserButtonListener implements ActionListener {
 
 	private String username;
+	private Map<String, String> userKey;
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
@@ -27,11 +29,16 @@ public class AddUserButtonListener implements ActionListener {
 			//qq登录，获取登录cookies
 			String qq = 设置面板.inputQQ.getText();
 			String password = 设置面板.inputPassword.getText();
-			Login.login(qq, password, "");
+			String vcode = 设置面板.inputVerifyCode.getText();
+			
+			Login.login(qq, password, vcode);
+
 			//uin, skey
-			Map<String, String> userKey = new HashMap<String, String>();
+			userKey = new HashMap<String, String>();
 			userKey.put("uin", Login.cookies.get("uin"));
 			userKey.put("skey", Login.cookies.get("skey"));
+			userKey.put("QQ", qq);
+			userKey.put("password", password);
 			
 			username = UserUtil.getUsername(userKey);
 			//保存(小号昵称--URL)
@@ -41,19 +48,16 @@ public class AddUserButtonListener implements ActionListener {
 				UserUtil.addSetting("小号", map); 
 				UserUtil.saveSetting();
 				if(this.addUserToMenu() == false) return;
-				乐斗面板.textArea.append("【系统消息】\n");
-				乐斗面板.textArea.append("    添加小号："+username+"\n");
+				PrintUtil.printTitleInfo("系统消息", "添加小号："+username+"");
 			}
 			else {
 				((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
 				UserUtil.saveSetting();
 				if(this.addUserToMenu() == false) return;
-				乐斗面板.textArea.append("【系统消息】\n");
-				乐斗面板.textArea.append("    添加小号："+username+"\n");
+				PrintUtil.printTitleInfo("系统消息", "添加小号："+username+"");
 			}
 		} catch (IllegalArgumentException e) {
-			乐斗面板.textArea.append("【系统消息】\n");
-			乐斗面板.textArea.append("    添加失败！(登录验证失败！)\n");
+			PrintUtil.printTitleInfo("系统消息", "添加失败！(登录验证失败！)");
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -62,13 +66,16 @@ public class AddUserButtonListener implements ActionListener {
 	
 	/**
 	 * 添加小号进选项列表
+	 * @throws IOException 
 	 */
-	public boolean addUserToMenu() {
+	@SuppressWarnings("unchecked")
+	public boolean addUserToMenu() throws IOException {
 		if(username == null) return false;
 		for(int i = 0; i<小号菜单.userSelect.getItemCount(); i++) {
 			if(小号菜单.userSelect.getItem(i).getName().equals(username)) {
-				乐斗面板.textArea.append("【系统消息】\n");
-				乐斗面板.textArea.append("    小号已存在，不需重复添加！\n");
+				((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
+				UserUtil.saveSetting();
+				PrintUtil.printTitleInfo("系统消息", "更新小号："+username+"");
 				return false;
 			}
 		}

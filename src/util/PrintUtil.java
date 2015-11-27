@@ -75,7 +75,7 @@ public class PrintUtil {
 	 * @param username 用户名
 	 */
 	public static void printTitleInfo(String title, String message, String username) {
-		乐斗面板.textArea.append("【"+title+"】【"+username+"】\n");
+		乐斗面板.textArea.append("【"+title+"】\n");
 		乐斗面板.textArea.append("    "+message+"\n");
 	}
 	

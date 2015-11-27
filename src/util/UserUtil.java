@@ -7,11 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+
+import QQLogin.Login;
 
 
 public class UserUtil {
@@ -98,7 +101,7 @@ public class UserUtil {
 	 * @return
 	 * @throws IOException 
 	 */
-	public static String getUsername(Map<String, String> userKey) throws IOException, StringIndexOutOfBoundsException {
+	public static String getUsername(Map<String, String> userKey) throws IOException {
 		String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
 		Document doc = Jsoup.connect(mainURL)
 							.cookies(userKey)
@@ -108,8 +111,18 @@ public class UserUtil {
 		if(doc.text().contains("开通达人")) {
 			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
 		}
-		else { 
+		else if(doc.text().contains("续费达人")){ 
 			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "续费达人   等级");
+		}
+		else {
+			//若获取不到username，表示skey已失效，重新获取
+			Login.login(userKey.get("QQ"), userKey.get("password"), "");
+			userKey.put("uin", Login.cookies.get("uin"));
+			userKey.put("skey", Login.cookies.get("skey"));
+			username = getUsername(userKey);
+			((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
+			UserUtil.saveSetting();
+			return username;
 		}
 		//获取到的昵称前后会带一个空格，去掉
 		return username.substring(1, username.length()-1);
@@ -133,5 +146,9 @@ public class UserUtil {
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println(UserUtil.getSetting());
+//		Map<String, String> m = new HashMap<String, String>();
+//		m.put("skey", "sdf");m.put("uin", "o0763247388");m.put("QQ", "763247388");m.put("password", "qq3510534");
+//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("Have it all、", m);
+//		UserUtil.saveSetting();
 	}
 }

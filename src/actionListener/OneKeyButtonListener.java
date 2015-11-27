@@ -99,8 +99,8 @@ public class OneKeyButtonListener implements ActionListener {
 			return;
 		}
 		try {
-			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
 			final String username = UserUtil.getUsername(userKey);
+			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(userKey, mainDoc);
 				 m.领奖和报名(); //周一6点钟之后执行
@@ -409,11 +409,14 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			PrintUtil.printInfo("\n");
+		} catch (StringIndexOutOfBoundsException e) {
+			PrintUtil.printTitleInfo("系统消息", "skey失效！");
+			e.printStackTrace();
 		} catch (IllegalArgumentException e) {
-			PrintUtil.printTitleInfo("系统消息", "访问失败，请重试！", "");
+			PrintUtil.printTitleInfo("系统消息", "访问失败，请重试！");
 			e.printStackTrace();
 		} catch (IOException e) {
-			PrintUtil.printTitleInfo("系统消息", "连接超时，请重试！", "");
+			PrintUtil.printTitleInfo("系统消息", "连接超时，请重试！");
 			e.printStackTrace();
 		}
 	}

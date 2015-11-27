@@ -26,6 +26,9 @@ public class 设置面板 {
 	public static JTextField input1;  //供奉物品输入框
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();//任务复选框组
 	
+	private static JLabel codeTip = new JLabel("验证码");
+	private static JLabel codeImge = new JLabel(new ImageIcon("resources/VerifyCode.jpg"));
+	
 	public JPanel taskPanel = new JPanel(); //乐斗设置面板
 	
 	private 设置面板() {
@@ -37,9 +40,12 @@ public class 设置面板 {
 			taskPanel.add(new JLabel("密码"));
 			taskPanel.add(getInputPassword());
 			taskPanel.add(getAddUserButton());
-			taskPanel.add(new JLabel("验证码"));
+			
+			taskPanel.add(codeTip);
 			taskPanel.add(getInputVerifyCode());
-			taskPanel.add(new JLabel(new ImageIcon("resources/VerifyCode.jpg")));
+			taskPanel.add(codeImge);
+			showVerifyCode(false);
+			
 			taskPanel.add(十二宫菜单.create());
 			taskPanel.add(助阵菜单.create());
 			taskPanel.add(历练菜单.create());
@@ -127,6 +133,18 @@ public class 设置面板 {
 			e1.printStackTrace();
 		}
 		return null;
+	}
+	
+	/**
+	 * 设置验证码模块是否可见
+	 * @param isShow
+	 */
+	public static void showVerifyCode(boolean isShow) {
+		codeTip.setVisible(isShow);
+		inputVerifyCode.setVisible(isShow);
+//		codeImge = new JLabel(new ImageIcon("resources/VerifyCode.jpg"));
+		codeImge.repaint();
+		codeImge.setVisible(isShow);
 	}
 	
 	private JTextField getInputQQ() {
