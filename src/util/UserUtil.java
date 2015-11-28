@@ -7,13 +7,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import QQLogin.LoginUtil;
+import QQLogin.QQLogin;
 
 
 public class UserUtil {
@@ -125,8 +126,8 @@ public class UserUtil {
 				PrintUtil.printTitleInfo("系统消息", "skey失效，请重新录入小号(需验证码)！", username);
 				return null;
 			}
-			userKey.put("uin", LoginUtil.cookies.get("uin"));
-			userKey.put("skey", LoginUtil.cookies.get("skey"));
+			userKey.put("uin", QQLogin.cookies.get("uin"));
+			userKey.put("skey", QQLogin.cookies.get("skey"));
 			username = getUsername(userKey);
 			((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
 			UserUtil.saveSetting();
@@ -153,10 +154,10 @@ public class UserUtil {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		Map<String, String> m = new HashMap<String, String>();
-//		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
-//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
-//		UserUtil.saveSetting();
+		Map<String, String> m = new HashMap<String, String>();
+		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
+		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
+		UserUtil.saveSetting();
 		System.out.println(UserUtil.getSetting());
 	}
 }

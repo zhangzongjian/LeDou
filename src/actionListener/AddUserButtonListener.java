@@ -10,9 +10,10 @@ import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import util.LoginUtil;
 import util.PrintUtil;
 import util.UserUtil;
-import QQLogin.LoginUtil;
+import QQLogin.QQLogin;
 import core.小号菜单;
 import core.设置面板;
 
@@ -49,8 +50,8 @@ public class AddUserButtonListener implements ActionListener {
 
 			//uin, skey
 			userKey = new HashMap<String, String>();
-			userKey.put("uin", LoginUtil.cookies.get("uin"));
-			userKey.put("skey", LoginUtil.cookies.get("skey"));
+			userKey.put("uin", QQLogin.cookies.get("uin"));
+			userKey.put("skey", QQLogin.cookies.get("skey"));
 			userKey.put("QQ", qq);
 			userKey.put("password", password);
 			
