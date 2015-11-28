@@ -7,14 +7,13 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import QQLogin.Login;
+import QQLogin.LoginUtil;
 
 
 public class UserUtil {
@@ -101,6 +100,7 @@ public class UserUtil {
 	 * @return
 	 * @throws IOException 
 	 */
+	@SuppressWarnings("unchecked")
 	public static String getUsername(Map<String, String> userKey) throws IOException {
 		String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
 		Document doc = Jsoup.connect(mainURL)
@@ -116,9 +116,17 @@ public class UserUtil {
 		}
 		else {
 			//若获取不到username，表示skey已失效，重新获取
-			Login.login(userKey.get("QQ"), userKey.get("password"), "");
-			userKey.put("uin", Login.cookies.get("uin"));
-			userKey.put("skey", Login.cookies.get("skey"));
+			if(0 != LoginUtil.login(userKey.get("QQ"), userKey.get("password"), "")) {
+				LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号");
+				for(String u : map.keySet()) {
+					if(getUserKeyByUsrname(u).get("QQ").equals(userKey.get("QQ")))
+						username = u;
+				}
+				PrintUtil.printTitleInfo("系统消息", "skey失效，请重新录入小号(需验证码)！", username);
+				return null;
+			}
+			userKey.put("uin", LoginUtil.cookies.get("uin"));
+			userKey.put("skey", LoginUtil.cookies.get("skey"));
 			username = getUsername(userKey);
 			((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
 			UserUtil.saveSetting();
@@ -145,10 +153,10 @@ public class UserUtil {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		System.out.println(UserUtil.getSetting());
 //		Map<String, String> m = new HashMap<String, String>();
-//		m.put("skey", "sdf");m.put("uin", "o0763247388");m.put("QQ", "763247388");m.put("password", "qq3510534");
-//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("Have it all、", m);
+//		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
+//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
 //		UserUtil.saveSetting();
+		System.out.println(UserUtil.getSetting());
 	}
 }

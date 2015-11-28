@@ -10,18 +10,18 @@ import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
-import QQLogin.Login;
-
 import util.PrintUtil;
 import util.UserUtil;
-import core.乐斗面板;
+import QQLogin.LoginUtil;
 import core.小号菜单;
 import core.设置面板;
 
 public class AddUserButtonListener implements ActionListener {
 
 	private String username;
+	
 	private Map<String, String> userKey;
+	
 	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
@@ -31,12 +31,26 @@ public class AddUserButtonListener implements ActionListener {
 			String password = 设置面板.inputPassword.getText();
 			String vcode = 设置面板.inputVerifyCode.getText();
 			
-			Login.login(qq, password, vcode);
+			int status = LoginUtil.login(qq, password, vcode);
+			switch (status) {
+			case 0:
+				PrintUtil.printTitleInfo("系统消息", "登录成功！");
+				LoginUtil.checkResult = ""; //登录完成后，账号check状态清空掉
+				break;
+			case 1:
+				PrintUtil.printTitleInfo("系统消息", "需要输入验证码登录！");
+				break;
+			case -1:
+				PrintUtil.printTitleInfo("系统消息", "验证码错误！");
+				break;
+			default:
+				break;
+			}
 
 			//uin, skey
 			userKey = new HashMap<String, String>();
-			userKey.put("uin", Login.cookies.get("uin"));
-			userKey.put("skey", Login.cookies.get("skey"));
+			userKey.put("uin", LoginUtil.cookies.get("uin"));
+			userKey.put("skey", LoginUtil.cookies.get("skey"));
 			userKey.put("QQ", qq);
 			userKey.put("password", password);
 			

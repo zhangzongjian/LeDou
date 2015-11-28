@@ -100,6 +100,8 @@ public class OneKeyButtonListener implements ActionListener {
 		}
 		try {
 			final String username = UserUtil.getUsername(userKey);
+			//若username获取不到，说明skey过期，且需要验证码，得重新手动录入。若不需验证码，则可自动重新录入
+			if(username == null) return;
 			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(userKey, mainDoc);

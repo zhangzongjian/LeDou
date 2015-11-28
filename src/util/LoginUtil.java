@@ -1,4 +1,4 @@
-package QQLogin;
+package util;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,13 +16,68 @@ import javax.script.ScriptException;
 import org.jsoup.Connection.Response;
 import org.jsoup.Jsoup;
 
-import util.PrintUtil;
-
-import core.乐斗面板;
 import core.设置面板;
 
-public class Login {
+public class LoginUtil {
 
+	public static String checkResult = "";
+	public static String sig = "";
+	
+	/**
+	 * 登录入口
+	 * @param uin
+	 * @param password
+	 * @param vcode
+	 * @return 
+	 * @throws IOException
+	 */
+	public static int login(String uin, String password, String vcode) throws IOException {
+		String checkStatus = ""; //login接口参数pt_vcode_v1，对应check接口的0,1状态
+		String verifycode = ""; //login接口参数
+		String verifysession = ""; //login接口参数
+		String p = ""; //login接口参数
+		if(vcode.length() == 0) {
+			checkResult = check(uin);
+		}
+		if("0".equals(checkResult.charAt(14)+"")) {
+			System.out.println("无需验证码登录！");
+			checkStatus = "0";
+			verifycode = checkResult.split(",")[1].replaceAll("\'", "");
+			verifysession = checkResult.split(",")[3].replaceAll("\'", "");
+			p = encryptPassword(uin, password, verifycode);
+			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
+			System.out.println(login_result.split(",")[4].replaceAll("\'", ""));
+			return 0;
+		}
+		else {
+			System.out.println("需要输入验证码登录！。");
+			checkStatus = "1";
+			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
+			if(vcode.length() == 0) {
+				sig = getSig(uin, cap_cd);
+				//获取并输入验证码
+				getVerifyCode(uin, sig);
+				设置面板.showVerifyCode(true);
+				return 1;
+			}
+			String body = getVerifysession(uin, vcode, sig);
+			verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
+			verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
+			
+			if(!body.contains("rcode:0") && vcode.length() > 0) {
+				sig = refreshSig(uin, sig);
+				getVerifyCode(uin, sig);
+				设置面板.showVerifyCode(true);
+				return -1;
+			}
+			p = encryptPassword(uin, password, verifycode);
+			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
+			System.out.println(login_result.split(",")[4].replaceAll("\'", ""));
+			return 0;
+		}
+	}
+	
+	
 	/*
 	  http://ptlogin2.qq.com/login？....
 	     模拟登录流程分析以及login接口重要参数分析：
@@ -44,58 +99,6 @@ public class Login {
 	     login(u,verifycode,pt_vcode_v1,pt_verifysession_v1,p) -> 登录成功cookie
 	  9、若上述各个接口的参数没对上，常见的错误提示是验证码错误！
 	 */
-	
-	/**
-	 * 登录入口
-	 * @param uin
-	 * @param password
-	 * @param vcode
-	 * @throws IOException
-	 */
-	public static void login(String uin, String password, String vcode) throws IOException {
-//		uin = "2099221914";
-//		password = "zzjian";
-		String checkStatus = ""; //login接口参数pt_vcode_v1，对应check接口的0,1状态
-		String verifycode = ""; //login接口参数
-		String verifysession = ""; //login接口参数
-		String p = ""; //login接口参数
-		String checkResult = check(uin);
-		if("0".equals(checkResult.charAt(14)+"")) {
-			System.out.println("无需验证码登录！");
-			checkStatus = "0";
-			verifycode = checkResult.split(",")[1].replaceAll("\'", "");
-			verifysession = checkResult.split(",")[3].replaceAll("\'", "");
-		}
-		else {
-			System.out.println("需要输入验证码登录！。");
-			PrintUtil.printTitleInfo("系统消息", "需要输入验证码登录！");
-			
-			checkStatus = "1";
-			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
-			String sig = getSig(uin, cap_cd);
-			//获取并输入验证码
-			if(vcode.length() == 0)
-				getVerifyCode(uin, sig);
-			设置面板.showVerifyCode(true);
-			String body = getVerifysession(uin, vcode, sig);
-			verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
-			verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
-			
-			if(!body.contains("rcode:0") && vcode.length() != 0) {
-				PrintUtil.printTitleInfo("系统消息", "验证码错误！");
-				sig = refreshSig(uin, sig);
-				getVerifyCode(uin, sig);
-				设置面板.showVerifyCode(true);
-				return;
-//				body = getVerifysession(uin, vcode, sig);
-//				verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
-//				verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
-			}
-		}
-		p = encryptPassword(uin, password, verifycode);
-		String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
-		System.out.println(login_result.split(",")[4].replaceAll("\'", ""));
-	}
 	
 	/**
 	 * qq空间模拟登录 main
@@ -309,7 +312,7 @@ public class Login {
 		try {
 			ScriptEngineManager sem = new ScriptEngineManager();
 			ScriptEngine engine = sem.getEngineByName("js");
-			FileReader fr = new FileReader("src/QQLogin/login.js");
+			FileReader fr = new FileReader("resources/login.js");
 			engine.eval(fr);
 			Invocable inv = (Invocable) engine;
 			p_result = inv.invokeFunction("getEncryption", password,
