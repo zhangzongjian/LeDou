@@ -1,6 +1,8 @@
 package core;
 
 import java.awt.FlowLayout;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -20,6 +22,7 @@ import model.Task;
 import model.impl.供奉;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
+import actionListener.AddUserKeyAdapter;
 import actionListener.ChangeVerifycodeListener;
 import actionListener.SelectAllTaskListener;
 
@@ -81,8 +84,7 @@ public class 设置面板 {
 	private void initVerifyCode() {
 		codeTip= new JLabel("验证码");
 		taskPanel.add(codeTip);
-		inputVerifyCode = new JTextField(11);
-		taskPanel.add(inputVerifyCode);
+		taskPanel.add(getInputVerifyCode());
 		codeImge = new JLabel(new ImageIcon(getImage()));
 		codeImge.addMouseListener(new ChangeVerifycodeListener());
 		taskPanel.add(codeImge);
@@ -176,12 +178,20 @@ public class 设置面板 {
 	
 	private JTextField getInputQQ() {
 		inputQQ = new JTextField(11);
+		inputQQ.addKeyListener(new AddUserKeyAdapter());
 		return inputQQ;
 	}
 	
 	private JTextField getInputPassword() {
 		inputPassword = new JTextField(12);
+		inputPassword.addKeyListener(new AddUserKeyAdapter());
 		return inputPassword;
+	}
+	
+	private JTextField getInputVerifyCode() {
+		inputVerifyCode = new JTextField(11);
+		inputVerifyCode.addKeyListener(new AddUserKeyAdapter());
+		return inputVerifyCode;
 	}
 	
 	private JButton getAddUserButton() {

@@ -23,9 +23,13 @@ public class AddUserButtonListener implements ActionListener {
 	
 	private Map<String, String> userKey;
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public void actionPerformed(ActionEvent paramActionEvent) {
+		doAdd();
+	}
+	
+	@SuppressWarnings("unchecked")
+	public void doAdd() {
 		try {
 			//qq登录，获取登录cookies
 			String qq = 设置面板.inputQQ.getText();

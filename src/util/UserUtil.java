@@ -161,8 +161,10 @@ public class UserUtil {
 	
 	public static void main(String[] args) throws IOException {
 		Map<String, String> m = new HashMap<String, String>();
-		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
-		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
+//		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
+		m.put("skey", "sdf");m.put("uin", "o1105451491");m.put("QQ", "1105451491");m.put("password", "kk258..");
+//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
+		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("二零一伍·", m);
 		UserUtil.saveSetting();
 		System.out.println(UserUtil.getSetting());
 	}
