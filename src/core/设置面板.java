@@ -1,6 +1,10 @@
 package core;
 
 import java.awt.FlowLayout;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +20,7 @@ import model.Task;
 import model.impl.供奉;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
+import actionListener.ChangeVerifycodeListener;
 import actionListener.SelectAllTaskListener;
 
 public class 设置面板 {
@@ -26,8 +31,8 @@ public class 设置面板 {
 	public static JTextField input1;  //供奉物品输入框
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();//任务复选框组
 	
-	private static JLabel codeTip = new JLabel("验证码");
-	public final static JLabel codeImge = new JLabel(new ImageIcon("resources/VerifyCode.jpg"));
+	private static JLabel codeTip;
+	public static JLabel codeImge;
 	
 	public static JPanel taskPanel = new JPanel(); //乐斗设置面板
 	
@@ -40,11 +45,9 @@ public class 设置面板 {
 			taskPanel.add(new JLabel("密码"));
 			taskPanel.add(getInputPassword());
 			taskPanel.add(getAddUserButton());
-
-			taskPanel.add(codeTip);
-			taskPanel.add(getInputVerifyCode());
-			taskPanel.add(codeImge);
-//			showVerifyCode(false);
+			
+			initVerifyCode();
+			showVerifyCode(false);
 			
 			taskPanel.add(十二宫菜单.create());
 			taskPanel.add(助阵菜单.create());
@@ -72,6 +75,17 @@ public class 设置面板 {
 				taskPanel.add(getInput1());
 			}
 		}
+	}
+	
+	//初始化验证码模块
+	private void initVerifyCode() {
+		codeTip= new JLabel("验证码");
+		taskPanel.add(codeTip);
+		inputVerifyCode = new JTextField(11);
+		taskPanel.add(inputVerifyCode);
+		codeImge = new JLabel(new ImageIcon(getImage()));
+		codeImge.addMouseListener(new ChangeVerifycodeListener());
+		taskPanel.add(codeImge);
 	}
 	
 	//获取乐斗选项列表
@@ -141,24 +155,33 @@ public class 设置面板 {
 	 */
 	public static void showVerifyCode(boolean isShow) {
 		codeTip.setVisible(isShow);
+		inputVerifyCode.setText("");
 		inputVerifyCode.setVisible(isShow);
-//		codeImge = new JLabel(new ImageIcon("resources/VerifyCode.jpg"));
+		codeImge.setIcon(new ImageIcon(getImage()));
 		codeImge.setVisible(isShow);
 	}
 	
+	private static byte[] getImage() {
+		byte[] bytes = null;
+		try {
+			FileInputStream in = new FileInputStream(new File("resources/VerifyCode.jpg")) ;
+			bytes = new byte[in.available()];
+			in.read(bytes);
+			in.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return bytes;
+	}
+	
 	private JTextField getInputQQ() {
-		inputQQ = new JTextField("2099221914", 11);
+		inputQQ = new JTextField(11);
 		return inputQQ;
 	}
 	
 	private JTextField getInputPassword() {
-		inputPassword = new JTextField("zzjian", 12);
+		inputPassword = new JTextField(12);
 		return inputPassword;
-	}
-	
-	private JTextField getInputVerifyCode() {
-		inputVerifyCode = new JTextField(11);
-		return inputVerifyCode;
 	}
 	
 	private JButton getAddUserButton() {

@@ -15,6 +15,7 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import QQLogin.QQLogin;
+import core.设置面板;
 
 
 public class UserUtil {
@@ -117,13 +118,18 @@ public class UserUtil {
 		}
 		else {
 			//若获取不到username，表示skey已失效，重新获取
-			if(0 != LoginUtil.login(userKey.get("QQ"), userKey.get("password"), "")) {
+			String QQ = userKey.get("QQ");
+			String password = userKey.get("password");
+			if(0 != LoginUtil.login(QQ, password, "")) {
 				LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号");
 				for(String u : map.keySet()) {
-					if(getUserKeyByUsrname(u).get("QQ").equals(userKey.get("QQ")))
+					if(getUserKeyByUsrname(u).get("QQ").equals(QQ))
 						username = u;
 				}
-				PrintUtil.printTitleInfo("系统消息", "skey失效，请重新录入小号(需验证码)！", username);
+				PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！", username);
+				设置面板.inputQQ.setText(QQ);
+				设置面板.inputPassword.setText(password);
+				设置面板.showVerifyCode(true);
 				return null;
 			}
 			userKey.put("uin", QQLogin.cookies.get("uin"));

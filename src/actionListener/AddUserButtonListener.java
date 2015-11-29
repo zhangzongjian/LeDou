@@ -37,14 +37,20 @@ public class AddUserButtonListener implements ActionListener {
 			case 0:
 				PrintUtil.printTitleInfo("系统消息", "登录成功！");
 				LoginUtil.checkResult = ""; //登录完成后，账号check状态清空掉
+				设置面板.inputQQ.setText("");
+				设置面板.inputPassword.setText("");
+				设置面板.showVerifyCode(false);
 				break;
 			case 1:
 				PrintUtil.printTitleInfo("系统消息", "需要输入验证码登录！");
+				设置面板.showVerifyCode(true);
 				break;
 			case -1:
 				PrintUtil.printTitleInfo("系统消息", "验证码错误！");
+				设置面板.showVerifyCode(true);
 				break;
 			default:
+				PrintUtil.printTitleInfo("系统消息", "QQ或密码输入有误！");
 				break;
 			}
 

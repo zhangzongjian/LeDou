@@ -19,6 +19,7 @@ public class LoginUtil extends QQLogin{
 	 * @throws IOException
 	 */
 	public static int login(String uin, String password, String vcode) throws IOException {
+		if(uin.length() == 0 || password.length() == 0) return 2;
 		String checkStatus = ""; //login接口参数pt_vcode_v1，对应check接口的0,1状态
 		String verifycode = ""; //login接口参数
 		String verifysession = ""; //login接口参数
@@ -34,10 +35,15 @@ public class LoginUtil extends QQLogin{
 			p = encryptPassword(uin, password, verifycode);
 			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
 			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
-			return 0;
+			if(login_result.contains("登录成功")) {
+				return 0;
+			}
+			else {
+				return 2;
+			}
 		}
 		else {
-			System.out.println("需要输入验证码登录！。");
+			System.out.println("需要输入验证码登录！");
 			checkStatus = "1";
 			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
 			if(vcode.length() == 0) {
@@ -62,5 +68,11 @@ public class LoginUtil extends QQLogin{
 			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
 			return 0;
 		}
+	}
+	
+	public static void refreshVerifycode(String uin) throws IOException {
+		sig = refreshSig(uin, sig);
+		getVerifyCode(uin, sig);
+		设置面板.showVerifyCode(true);
 	}
 }
