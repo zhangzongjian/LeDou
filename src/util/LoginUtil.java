@@ -33,7 +33,7 @@ public class LoginUtil extends QQLogin{
 			verifysession = checkResult.split(",")[3].replaceAll("\'", "");
 			p = encryptPassword(uin, password, verifycode);
 			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
-			System.out.println(login_result.split(",")[4].replaceAll("\'", ""));
+			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
 			return 0;
 		}
 		else {
@@ -59,7 +59,7 @@ public class LoginUtil extends QQLogin{
 			}
 			p = encryptPassword(uin, password, verifycode);
 			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
-			System.out.println(login_result.split(",")[4].replaceAll("\'", ""));
+			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
 			return 0;
 		}
 	}
