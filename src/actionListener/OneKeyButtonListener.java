@@ -47,6 +47,7 @@ import org.jsoup.nodes.Document;
 
 import util.DocUtil;
 import util.PrintUtil;
+import util.TimeUtil;
 import util.UserUtil;
 import core.乐斗面板;
 import core.计时面板;
@@ -286,28 +287,6 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.结拜赛)) {
-				final 结拜赛 m = new 结拜赛(userKey, mainDoc);
-				//12:00:05执行报名，预留5秒防止延迟
-				long lastTime = ((12 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
-				Timer timer = new Timer();
-				if (m.getDay() == 1) {
-					if(lastTime > 0) {
-						PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
-					}
-					timer.schedule(new TimerTask() {
-						@Override
-						public void run() {
-							m.报名(); // 周一12点开始
-							PrintUtil.printAllMessages(m, username);
-						}
-					}, lastTime < 0 ? 0 : lastTime);
-				}
-				m.助威(); // 助威周四0点开始，
-				m.助威领奖(); // 领奖周六0点开始
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.回流好友召回)) {
 				回流好友召回 m = new 回流好友召回(userKey, mainDoc);
 				m.doit();
@@ -324,15 +303,49 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.武林大会)) {
 				final 武林大会 m = new 武林大会(userKey, mainDoc);
 				//13:00:05执行报名，预留5秒防止延迟
-				long lastTime = ((13 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
-				Timer timer = new Timer();
+				long lastTime = TimeUtil.getSecond("13:00:05");
 				if (lastTime > 0) {
 					PrintUtil.printMessage(m, "武林大会将在13:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
-				timer.schedule(new TimerTask() {
+				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
 						m.报名(); // 每天13点开始
+						PrintUtil.printAllMessages(m, username);
+					}
+				}, lastTime < 0 ? 0 : lastTime);
+			}// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.结拜赛)) {
+				final 结拜赛 m = new 结拜赛(userKey, mainDoc);
+				//12:00:05执行报名，预留5秒防止延迟
+				long lastTime = TimeUtil.getSecond("12:00:05");
+				if (m.getDay() == 1) {
+					if(lastTime > 0) {
+						PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
+					}
+					TimeUtil.timer.schedule(new TimerTask() {
+						@Override
+						public void run() {
+							m.报名(); // 周一12点开始
+							PrintUtil.printAllMessages(m, username);
+						}
+					}, lastTime < 0 ? 0 : lastTime);
+				}
+				m.助威(); // 助威周四0点开始，
+				m.助威领奖(); // 领奖周六0点开始
+				PrintUtil.printAllMessages(m, username);
+			}// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.锦标赛)) {
+				final 锦标赛 m = new 锦标赛(userKey, mainDoc);
+				//12:00:05执行报名，预留5秒防止延迟
+				long lastTime = TimeUtil.getSecond("12:00:05");
+				if (lastTime > 0) {
+					PrintUtil.printMessage(m, "锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
+				}
+				TimeUtil.timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						m.赞助(); // 每天12点开始
 						PrintUtil.printAllMessages(m, username);
 					}
 				}, lastTime < 0 ? 0 : lastTime);
@@ -342,23 +355,6 @@ public class OneKeyButtonListener implements ActionListener {
 				掠夺 m = new 掠夺(userKey, mainDoc);
 				m.领奖(); // 周三6点开始
 				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.锦标赛)) {
-				final 锦标赛 m = new 锦标赛(userKey, mainDoc);
-				//12:00:05执行报名，预留5秒防止延迟
-				long lastTime = ((12 * 3600 + 00 * 60 + 5 * 1)-(new Date().getHours()*3600+new Date().getMinutes()*60+new Date().getSeconds()))*1000;
-				Timer timer = new Timer();
-				if (lastTime > 0) {
-					PrintUtil.printMessage(m, "锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
-				}
-				timer.schedule(new TimerTask() {
-					@Override
-					public void run() {
-						m.赞助(); // 每天12点开始
-						PrintUtil.printAllMessages(m, username);
-					}
-				}, lastTime < 0 ? 0 : lastTime);
 			}
 			// /////////////////////////////////////////////////////////
 			if (tasks.contains(Task.供奉)) {
@@ -403,6 +399,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.登录100QB好礼();
 				m.大宝树();
 				m.大宝箱();
+				m.大笨钟();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

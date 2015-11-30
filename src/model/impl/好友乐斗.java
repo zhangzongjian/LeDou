@@ -19,9 +19,11 @@ public class 好友乐斗 extends 乐斗项目 {
 	public void doit() {
 		try {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "侠侣");
-			String subStringResult = doc.toString().substring(doc.toString().indexOf("19级") + 231,doc.toString().indexOf("【快速购买】"));
+			String docString = doc.toString();
+			String subStringResult = docString.substring(docString.indexOf("乐斗", docString.indexOf("19级")),docString.indexOf("【快速购买】"));
 			doc = Jsoup.parse(subStringResult);
 			Elements friends = doc.getElementsContainingOwnText("乐斗");
+			//移除含有"乐斗"字样的昵称链接
 			friends.removeAll(doc.getElementsByAttributeValueMatching("href",
 					"totalinfo"));
 			friends.removeAll(doc.getElementsContainingOwnText("已乐斗"));

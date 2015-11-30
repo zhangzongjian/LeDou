@@ -2,6 +2,7 @@ package model.impl;
 
 import java.io.IOException;
 
+import java.util.HashMap;
 import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
@@ -14,6 +15,10 @@ public class 武林大会 extends 乐斗项目 {
 		super(userKey, mainURL);
 	}
 
+	public 武林大会(HashMap<String, String> userKey, Document mainURL) {
+		super(userKey, mainURL);
+	}
+	
 	// 每天13点开始
 	public void 报名() {
 		try {

@@ -1,10 +1,6 @@
 package core;
 
 import java.awt.FlowLayout;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -25,6 +21,7 @@ import actionListener.AddUserButtonListener;
 import actionListener.AddUserKeyAdapter;
 import actionListener.ChangeVerifycodeListener;
 import actionListener.SelectAllTaskListener;
+import actionListener.ShowUsersButtonListener;
 
 public class 设置面板 {
 	
@@ -48,6 +45,7 @@ public class 设置面板 {
 			taskPanel.add(new JLabel("密码"));
 			taskPanel.add(getInputPassword());
 			taskPanel.add(getAddUserButton());
+			taskPanel.add(getShowUsersButton());
 			
 			initVerifyCode();
 			showVerifyCode(false);
@@ -177,13 +175,13 @@ public class 设置面板 {
 	}
 	
 	private JTextField getInputQQ() {
-		inputQQ = new JTextField(11);
+		inputQQ = new JTextField(8);
 		inputQQ.addKeyListener(new AddUserKeyAdapter());
 		return inputQQ;
 	}
 	
 	private JTextField getInputPassword() {
-		inputPassword = new JTextField(12);
+		inputPassword = new JTextField(9);
 		inputPassword.addKeyListener(new AddUserKeyAdapter());
 		return inputPassword;
 	}
@@ -198,6 +196,12 @@ public class 设置面板 {
 		JButton addUserButton = new JButton("添加");
 		addUserButton.addActionListener(new AddUserButtonListener());
 		return addUserButton;
+	}
+	
+	private JButton getShowUsersButton() {
+		JButton showUsersButton = new JButton("查看");
+		showUsersButton.addActionListener(new ShowUsersButtonListener());
+		return showUsersButton;
 	}
 	
 	private JCheckBox getSelectAllCheckBox() {

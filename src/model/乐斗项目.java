@@ -10,6 +10,9 @@ public class 乐斗项目 {
 	protected Document mainDoc;
 	protected Map<String, String> userKey;
 
+	public 乐斗项目(){
+		
+	}
 	public 乐斗项目(Map<String, String> userKey, Document mainURL) {
 		this.mainDoc = mainURL;
 		this.userKey = userKey;

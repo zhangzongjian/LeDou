@@ -13,10 +13,12 @@ public class MainUI {
 		MainUI main = new MainUI();
 		main.createJFrame("一键乐斗小工具");
 	}
+
+	public static JFrame jFrame;
 	
 	//创建窗口
 	public void createJFrame(String title) {
-		JFrame jFrame = new JFrame("一键乐斗小工具");
+		jFrame = new JFrame("一键乐斗小工具");
 		Container container = jFrame.getContentPane();
 		container.add(主面板.create());
 		jFrame.setLocation(0, 200); // 窗口起始位置

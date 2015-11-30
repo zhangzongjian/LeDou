@@ -271,9 +271,40 @@ public class 活动集合 extends 乐斗项目 {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException {
-		Document doc = Jsoup.connect("http://fight.pet.qq.com/cgi-bin/petpk?cmd=weiduan2&gb_id=49")
-								.get();
-		System.out.println(doc);
+	//大笨钟
+	public void 大笨钟() {
+		try {
+			if (!mainDoc.text().contains("大笨钟")) {
+				message.put("大笨钟", null);		//非活动时间
+				return;
+			}
+			message.put("活动8", "【大笨钟】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "大笨钟");
+			if(doc.text().contains("9点至12点前：   领取")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+				message.put("大笨钟领奖", "9点至12点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
+			}
+			else if(doc.text().contains("12点至15点前：   领取")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+				message.put("大笨钟领奖", "12点至15点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
+			}
+			else if(doc.text().contains("15点至18点前：   领取")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+				message.put("大笨钟领奖", "15点至18点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
+			}
+			else if(doc.text().contains("18点至21点前：   领取")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+				message.put("大笨钟领奖", "18点至21点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
+			}
+			else {
+				message.put("大笨钟领奖", "今天大笨钟未开始或已结束！");
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
+	
 }

@@ -35,7 +35,7 @@ public class 乐斗面板 {
 		fight_jPanel.add(getClearButton());
 		fight_jPanel.add(getAllUsersCheckBox());
 		fight_jPanel.add(getScrollTextArea());
-		fight_jPanel.add(getProgressBar());
+		//fight_jPanel.add(getProgressBar());
 	}
 	
 	//普通文本框，转为带滚动条的
