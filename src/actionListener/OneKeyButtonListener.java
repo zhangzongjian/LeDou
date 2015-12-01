@@ -27,6 +27,7 @@ import model.impl.巅峰之战;
 import model.impl.帮战奖励;
 import model.impl.抢地盘;
 import model.impl.掠夺;
+import model.impl.探险;
 import model.impl.斗神塔;
 import model.impl.武林大会;
 import model.impl.每日领奖;
@@ -363,6 +364,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.分享)) {
 				分享 m = new 分享(userKey, mainDoc);
 				m.一键分享();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.探险)) {
+				探险 m = new 探险(userKey, mainDoc);
+				m.doit();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
