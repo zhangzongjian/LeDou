@@ -4,10 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JLabel;
@@ -93,7 +91,6 @@ public class OneKeyButtonListener implements ActionListener {
 
 	}
 
-	@SuppressWarnings("deprecation")
 	public void oneKeyLeDou(final Map<String, String> userKey) {
 		if (userKey == null) {
 			PrintUtil.printTitleInfo("系统消息", "未选择小号！");
@@ -400,6 +397,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.大宝树();
 				m.大宝箱();
 				m.大笨钟();
+				m.九宫宝库();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

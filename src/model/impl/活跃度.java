@@ -45,11 +45,22 @@ public class 活跃度 extends 乐斗项目 {
 							DocUtil.substring(temp1.text(), "】", 1, "1."));
 				}
 			}
+			//佣兵签到
+			佣兵位签到();
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void 佣兵位签到() throws IOException, InterruptedException {
+		Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "佣兵");
+		if(doc.text().contains("增加 免费激活")) {
+			doc = DocUtil.clickTextUrl(userKey, doc, "免费激活");
+			doc = DocUtil.clickTextUrl(userKey, doc, "签到");
+			message.put("佣兵签到", "佣兵签到："+DocUtil.substring(doc.text(), "【免费激活佣兵携带位】", 11, "1.20级以上玩家"));
 		}
 	}
 }

@@ -35,8 +35,10 @@ public class 锦标赛 extends 乐斗项目 {
 			}
 			int size = 5;
 			Random random = new Random();
-			DocUtil.clickTextUrl(userKey, doc, "赞助", random.nextInt(size));
-			doc = DocUtil.clickTextUrl(userKey, doc, "赞助", random.nextInt(size));
+			while(true) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "赞助", random.nextInt(size));
+				if(doc.text().contains("没有足够的赞助券")) break;
+			}
 			message.put("赞助情况",
 					DocUtil.substring(doc.text(), "=本届已赞助=", 0, "积分排行"));
 		} catch (IOException e) {

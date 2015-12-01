@@ -120,16 +120,24 @@ public class UserUtil {
 			//若获取不到username，表示skey已失效，重新获取
 			String QQ = userKey.get("QQ");
 			String password = userKey.get("password");
-			if(0 != LoginUtil.login(QQ, password, "")) {
+			int loginStatus = LoginUtil.login(QQ, password, "");
+			if(0 != loginStatus) {
 				LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号");
 				for(String u : map.keySet()) {
 					if(getUserKeyByUsrname(u).get("QQ").equals(QQ))
 						username = u;
 				}
-				PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！", username);
+				if(2 == loginStatus) {
+					PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！", username);
+				}
+				else {
+					PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！", username);
+				}
 				设置面板.inputQQ.setText(QQ);
 				设置面板.inputPassword.setText(password);
-				设置面板.showVerifyCode(true);
+				if(1 == loginStatus || -1 == loginStatus) {
+					设置面板.showVerifyCode(true);
+				}
 				return null;
 			}
 			userKey.put("uin", QQLogin.cookies.get("uin"));
@@ -160,12 +168,12 @@ public class UserUtil {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		Map<String, String> m = new HashMap<String, String>();
-//		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
-		m.put("skey", "sdf");m.put("uin", "o1105451491");m.put("QQ", "1105451491");m.put("password", "kk258..");
-//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
-		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("二零一伍·", m);
-		UserUtil.saveSetting();
+//		Map<String, String> m = new HashMap<String, String>();
+////		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
+//		m.put("skey", "sdf");m.put("uin", "o1105451491");m.put("QQ", "1105451491");m.put("password", "akk258..");
+////		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
+//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("二零一伍·", m);
+//		UserUtil.saveSetting();
 		System.out.println(UserUtil.getSetting());
 	}
 }

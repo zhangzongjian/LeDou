@@ -35,7 +35,7 @@ public class DocUtil {
 	public static Document clickURL(Map<String, String> userKey, String URL) throws IOException {
 		Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 		int j = 0;
-		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试50次
+		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
 			System.out.println(j+" "+result.text());////////////
 			try {
 				Thread.sleep(1500);
@@ -44,7 +44,7 @@ public class DocUtil {
 			}
 			result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 			j++;
-//			if(j > 4) break;
+			if(j > 100) break; //防止死循环
 		}
 		return result;
 	}
@@ -69,7 +69,7 @@ public class DocUtil {
 	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text) throws IOException, InterruptedException{
 		Document result = clickTextUrl(userKey, doc, text, 0);
 		int j = 0;
-		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试5次
+		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
 			System.out.println(j+" "+text+" "+result.text());////////////
 			try {
 				Thread.sleep(1500);
@@ -78,13 +78,13 @@ public class DocUtil {
 			}
 			result = DocUtil.clickTextUrl(userKey, doc, text, 0);
 			j++;
-//			if(j > 4) break;
+			if(j > 100) break; //防止死循环
 		}
 		return result;
 	}
 	
 	/**
-	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个
+	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个。-1表示倒数第一个
 	 * @return
 	 * @throws IOException 
 	 * @throws InterruptedException 
@@ -101,6 +101,7 @@ public class DocUtil {
 			}
 		}
 		try {
+			if(index < 0) index = list.size()+index;  // 负数，表示倒数
 			return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 		} catch(SocketTimeoutException e) {
 			Thread.sleep(2000);  //一次超时异常，缓两秒，再试一次

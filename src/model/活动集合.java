@@ -2,6 +2,7 @@ package model;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.Random;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -278,7 +279,7 @@ public class 活动集合 extends 乐斗项目 {
 				message.put("大笨钟", null);		//非活动时间
 				return;
 			}
-			message.put("活动8", "【大笨钟】");
+			message.put("活动9", "【大笨钟】");
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "大笨钟");
 			if(doc.text().contains("9点至12点前：   领取")) {
 				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
@@ -298,6 +299,80 @@ public class 活动集合 extends 乐斗项目 {
 			}
 			else {
 				message.put("大笨钟领奖", "今天大笨钟未开始或已结束！");
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//九宫宝库
+	public void 九宫宝库() {
+		try {
+			if (!mainDoc.text().contains("九宫宝库")) {
+				message.put("九宫宝库", null);		//非活动时间
+				return;
+			}
+			message.put("活动10", "【九宫宝库】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "九宫宝库");
+			String type = doc.text();
+			int num = 0;
+			while(true) {
+				//进入时，界面为转盘
+				if(type.contains("转动轮盘")) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "转动轮盘");
+					if(doc.text().contains("开始寻宝")) {
+						doc = DocUtil.clickTextUrl(userKey, doc, "开始寻宝");
+						Random random = new Random();
+						//开三次石棺
+						for(int i=0; i<3; i++) {
+							doc = DocUtil.clickTextUrl(userKey, doc, "石棺", random.nextInt(9-i));
+							if(doc.text().contains("抽奖卡不足")) {
+								message.put(num+"石棺抽奖"+i, "抽奖卡不足!");
+								return;
+							}
+							else {
+								message.put(num+"石棺抽奖"+i, "石棺："+DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));
+								System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));////////
+							}
+						}
+						doc = DocUtil.clickTextUrl(userKey, doc, "退出宝库");
+					}
+					else if(doc.text().contains("剩余抽奖卡：0")) {
+						message.put("转动轮盘"+num, "抽奖卡不足！");
+						return;
+					}
+					else {
+						message.put("转动轮盘"+num, "转盘："+DocUtil.substring(doc.text(), "活动规则", 4, "活动时间"));
+						System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "活动时间"));////
+					}
+				}
+				
+				//进入时，界面为石棺
+				else if(type.contains("石棺")) {
+					Random random = new Random();
+					//最多开三次石棺
+					int a = 3;
+					if(type.contains("消耗0张抽奖卡")) a = 0;
+					if(type.contains("消耗1张抽奖卡")) a = 1;
+					if(type.contains("消耗2张抽奖卡")) a = 2;
+					for(int i=0; i<3-a; i++) {
+						doc = DocUtil.clickTextUrl(userKey, doc, "石棺", random.nextInt(9-a));
+						if(doc.text().contains("抽奖卡不足")) {
+							message.put(num+"石棺抽奖"+i, "抽奖卡不足!");
+							return;
+						}
+						else {
+							message.put(num+"石棺抽奖"+i, "石棺："+DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));
+							System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));////
+						}
+					}
+					doc = DocUtil.clickTextUrl(userKey, doc, "退出宝库");
+				}
+				type = doc.text();
+				num++;
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

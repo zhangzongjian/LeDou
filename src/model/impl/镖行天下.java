@@ -3,8 +3,9 @@ package model.impl;
 import java.io.IOException;
 import java.util.Map;
 
-import java.util.Map;import model.乐斗项目;
+import model.乐斗项目;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
@@ -56,6 +57,7 @@ public class 镖行天下 extends 乐斗项目 {
 		}
 	}
 
+	//只劫 温良恭
 	public void 劫镖() {
 		// 劫镖主页面，护送时间：10分钟
 		Document doc;
@@ -74,11 +76,16 @@ public class 镖行天下 extends 乐斗项目 {
 			while (num > 0) {
 				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 				int j = 0;
-				while(doc1.text().contains("过于频繁")) {  //出现繁忙情况，重试3次
-					Thread.sleep(300);
+				while(doc1.text().contains("过于频繁") || !doc1.text().contains("温良恭")) {  //出现繁忙 或者 没刷出温良恭
+					System.out.println(j+" 劫镖刷新  没刷出温良恭！");////////////
+					Thread.sleep(1500);
 					doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 					j++;
-					if(j > 2) break;
+					if(j > 100) break;
+				}
+				if(doc1.text().contains("温良恭")) {
+					System.out.println(" 劫镖刷新  刷出温良恭！");
+					doc1 = Jsoup.parse(DocUtil.substring(doc1.toString(), "温良恭", 3, "返回大乐斗首页"));
 				}
 				Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "拦截");
 				result = DocUtil.substring(doc2.text(), "威望商店", 4, "护送");
