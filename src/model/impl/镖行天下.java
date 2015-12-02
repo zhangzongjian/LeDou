@@ -77,7 +77,7 @@ public class 镖行天下 extends 乐斗项目 {
 				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 				int j = 0;
 				while(doc1.text().contains("过于频繁") || !doc1.text().contains("温良恭")) {  //出现繁忙 或者 没刷出温良恭
-					System.out.println(j+" 劫镖刷新  没刷出温良恭！");////////////
+					System.out.println(j+" 劫镖刷新");////////////
 					Thread.sleep(1500);
 					doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 					j++;
@@ -89,6 +89,7 @@ public class 镖行天下 extends 乐斗项目 {
 				}
 				Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "拦截");
 				result = DocUtil.substring(doc2.text(), "威望商店", 4, "护送");
+				System.out.println(result);
 				message.put("劫镖奖励" + num, "劫镖奖励：" + result);
 				num = Integer.parseInt(doc2.text().charAt(
 						doc2.text().indexOf("剩余拦截次数") + 7)

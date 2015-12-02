@@ -366,7 +366,6 @@ public class 活动集合 extends 乐斗项目 {
 						}
 						else {
 							message.put(num+"石棺抽奖"+i, "石棺："+DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));
-							System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));////
 						}
 					}
 					doc = DocUtil.clickTextUrl(userKey, doc, "退出宝库");

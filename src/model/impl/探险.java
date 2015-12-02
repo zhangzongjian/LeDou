@@ -9,8 +9,6 @@ import model.乐斗项目;
 import org.jsoup.nodes.Document;
 import org.jsoup.select.Elements;
 
-import com.sun.org.apache.bcel.internal.generic.NEW;
-
 import util.DocUtil;
 
 public class 探险 extends 乐斗项目 {
@@ -60,9 +58,13 @@ public class 探险 extends 乐斗项目 {
 					message.put("探险情况"+(i++), DocUtil.substring(doc.text(), "【斗神遗宝】", 6, "继续探险").replaceAll("查看过程", ""));
 					doc = DocUtil.clickTextUrl(userKey, doc, "继续探险");
 				}
-				else if(doc.text().contains("复活")) {
+				else if(doc.text().contains("复活") && !doc.text().contains("还魂丹不足，无法复活")) {
 					message.put("探险情况"+(i++), DocUtil.substring(doc.text(), "【斗神遗宝】", 6, "结束").replaceAll("查看过程", ""));
 					doc = DocUtil.clickTextUrl(userKey, doc, "复活");
+				}
+				else if(doc.text().contains("还魂丹不足，无法复活")) {
+					message.put("探险情况"+(i++), " 还魂丹不足，无法复活。");
+					return;
 				}
 				// 结束领奖
 				else if(doc.text().contains("抵达终点")) {

@@ -361,12 +361,6 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.分享)) {
-				分享 m = new 分享(userKey, mainDoc);
-				m.一键分享();
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.探险)) {
 				探险 m = new 探险(userKey, mainDoc);
 				m.doit();
@@ -383,6 +377,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.任务)) {
 				任务 m = new 任务(userKey, mainDoc);
 				m.finish();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.分享)) {
+				分享 m = new 分享(userKey, mainDoc);
+				m.一键分享();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

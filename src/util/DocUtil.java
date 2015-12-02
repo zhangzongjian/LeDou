@@ -34,6 +34,10 @@ public class DocUtil {
 	 */
 	public static Document clickURL(Map<String, String> userKey, String URL) throws IOException {
 		Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
+		//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
+		if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
+			result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
+		}
 		int j = 0;
 		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
 			System.out.println(j+" "+result.text());////////////
@@ -68,6 +72,10 @@ public class DocUtil {
 	 */
 	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text) throws IOException, InterruptedException{
 		Document result = clickTextUrl(userKey, doc, text, 0);
+		//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
+		if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
+			result = clickTextUrl(userKey, doc, text, 0);
+		}
 		int j = 0;
 		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
 			System.out.println(j+" "+text+" "+result.text());////////////
