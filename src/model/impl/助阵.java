@@ -34,6 +34,10 @@ public class 助阵 extends 乐斗项目 {
 				return;
 			}
 			doc = DocUtil.clickTextUrl(userKey, doc, "提升助阵属性");
+			//精选助阵活动时
+			if(doc.text().contains("精选助阵")) {
+				doc = Jsoup.parse(DocUtil.substring(doc.toString(), "助阵组合列表", 6, "【助阵属性】"));
+			}
 			if(!DocUtil.isHref(doc, name)) {
 				message.put("提升助阵情况", "暂未开启该助阵组合！");
 				return;
