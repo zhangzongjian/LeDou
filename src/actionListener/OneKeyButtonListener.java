@@ -311,7 +311,7 @@ public class OneKeyButtonListener implements ActionListener {
 						m.报名(); // 每天13点开始
 						PrintUtil.printAllMessages(m, username);
 					}
-				}, lastTime < 0 ? 0 : lastTime);
+				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.结拜赛)) {
 				final 结拜赛 m = new 结拜赛(userKey, mainDoc);
@@ -327,7 +327,7 @@ public class OneKeyButtonListener implements ActionListener {
 							m.报名(); // 周一12点开始
 							PrintUtil.printAllMessages(m, username);
 						}
-					}, lastTime < 0 ? 0 : lastTime);
+					}, lastTime < 0 ? 0 : lastTime*1000 );
 				}
 				m.助威(); // 助威周四0点开始，
 				m.助威领奖(); // 领奖周六0点开始
@@ -346,7 +346,7 @@ public class OneKeyButtonListener implements ActionListener {
 						m.赞助(); // 每天12点开始
 						PrintUtil.printAllMessages(m, username);
 					}
-				}, lastTime < 0 ? 0 : lastTime);
+				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.掠夺)) {
@@ -405,6 +405,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.大宝箱();
 				m.大笨钟();
 				m.九宫宝库();
+				m.登录商店();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

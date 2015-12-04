@@ -335,7 +335,6 @@ public class 活动集合 extends 乐斗项目 {
 							}
 							else {
 								message.put(num+"石棺抽奖"+i, "石棺："+DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));
-								System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "本次打开石棺"));////////
 							}
 						}
 						doc = DocUtil.clickTextUrl(userKey, doc, "退出宝库");
@@ -346,7 +345,6 @@ public class 活动集合 extends 乐斗项目 {
 					}
 					else {
 						message.put("转动轮盘"+num, "转盘："+DocUtil.substring(doc.text(), "活动规则", 4, "活动时间"));
-						System.out.println(DocUtil.substring(doc.text(), "活动规则", 4, "活动时间"));////
 					}
 				}
 				
@@ -372,6 +370,38 @@ public class 活动集合 extends 乐斗项目 {
 				}
 				type = doc.text();
 				num++;
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 登录商店
+	public void 登录商店() {
+		try {
+			if (!mainDoc.text().contains("登录商店")) {
+				message.put("登录商店", null); // 非活动时间
+				return;
+			}
+			message.put("活动11", "【登录商店】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "登录商店");
+			doc = Jsoup.parse(DocUtil.substring(doc.toString(), "黄金卷轴", 4, "返回大乐斗首页"));
+			int i = 0;
+			while(true) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "兑换");
+				if(doc.text().contains("兑换积分不足")) {
+					message.put("兑换"+i, "抱歉，您的兑换积分不足！");
+					return;
+				} 
+				else if(doc.text().contains("恭喜您兑换成功")) {
+					message.put("兑换"+i, DocUtil.substring(doc.text(), "恭喜您", 0, "中体力"));
+				}
+				i++;
+				//防止死循环
+				if(i > 50) break;
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

@@ -89,7 +89,6 @@ public class 镖行天下 extends 乐斗项目 {
 				}
 				Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "拦截");
 				result = DocUtil.substring(doc2.text(), "威望商店", 4, "护送");
-				System.out.println(result);
 				message.put("劫镖奖励" + num, "劫镖奖励：" + result);
 				num = Integer.parseInt(doc2.text().charAt(
 						doc2.text().indexOf("剩余拦截次数") + 7)

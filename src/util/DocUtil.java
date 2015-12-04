@@ -120,6 +120,12 @@ public class DocUtil {
 				Thread.sleep(1000);	//再次超时异常，缓一秒，再试一次
 				return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 			}
+		////////////////////待测试，indexoutof
+		} catch(IndexOutOfBoundsException e) {
+			System.out.println("clickTextUrl:");
+			System.out.println("text: "+text+" index: "+index+" list: "+list);
+			e.printStackTrace();
+			return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 		}
 	}
 
@@ -131,9 +137,17 @@ public class DocUtil {
 	 * @return
 	 */
 	public static String substring(String doc, String begin,int beginLength, String end) {
-		String result = "";
-		result = doc.substring(doc.indexOf(begin)+beginLength, doc.indexOf(end));
-		return result;
+		try {
+			String result = "";
+			result = doc.substring(doc.indexOf(begin)+beginLength, doc.indexOf(end));
+			return result;
+		////////////////////待测试，indexoutof
+		} catch(IndexOutOfBoundsException e) {
+			System.out.println("DocUtil.substring: ");
+			System.out.println("begin: "+begin+" end: "+end+" doc: "+doc);
+			e.printStackTrace();
+			return "";
+		}
 	}
 	
 	public static String substring1(String doc, String begin,int beginLength, String end, int endLength) {
