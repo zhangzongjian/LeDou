@@ -32,26 +32,41 @@ public class DocUtil {
 	 * @return 
 	 * @throws IOException
 	 */
-	public static Document clickURL(Map<String, String> userKey, String URL) throws IOException {
-		Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
-		//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
-		if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
-			result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
-		}
-		int j = 0;
-		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
-			System.out.println(j+" "+result.text());////////////
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+	public static Document clickURL(Map<String, String> userKey, String URL)
+			throws IOException {
+		try {
+			Document result = Jsoup.connect(URL).cookies(userKey)
+					.timeout(time_out).get();
+			// QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
+			if (result.text().contains("使用明文密码")) { // 奇葩滴冒出这种情况，重试一次
+				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
+						.get();
 			}
-			result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
-			j++;
-			if(j > 100) break; //防止死循环
+			int j = 0;
+			while (result.text().contains("系统繁忙，请稍后再试")) { // 出现繁忙情况，重试
+				System.out.println(j + " " + result.text());// //////////
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
+						.get();
+				j++;
+				if (j > 100)
+					break; // 防止死循环
+			}
+			return result;
+		} catch (SocketTimeoutException e) {
+			System.out.println((count1++) + " 链接超时！！！！！！");
+			if (count1 > 50)
+				throw e;
+			return clickURL(userKey, URL);
+		} finally {
+			count1 = 0;
 		}
-		return result;
 	}
+	
 	/**
 	 * 获取选中页面指定文本下的超链接
 	 * @param URL
@@ -72,24 +87,11 @@ public class DocUtil {
 	 */
 	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text) throws IOException, InterruptedException{
 		Document result = clickTextUrl(userKey, doc, text, 0);
-		//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
-		if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
-			result = clickTextUrl(userKey, doc, text, 0);
-		}
-		int j = 0;
-		while(result.text().contains("很抱歉，系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
-			System.out.println(j+" "+text+" "+result.text());////////////
-			try {
-				Thread.sleep(1500);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
-			result = DocUtil.clickTextUrl(userKey, doc, text, 0);
-			j++;
-			if(j > 100) break; //防止死循环
-		}
 		return result;
 	}
+	
+	private static int count = 0;
+	private static int count1 = 0;
 	
 	/**
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个。-1表示倒数第一个
@@ -109,23 +111,35 @@ public class DocUtil {
 			}
 		}
 		try {
-			if(index < 0) index = list.size()+index;  // 负数，表示倒数
-			return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
-		} catch(SocketTimeoutException e) {
-			Thread.sleep(2000);  //一次超时异常，缓两秒，再试一次
-			try {
-				return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
-			} catch(SocketTimeoutException e1) {
-				e1.printStackTrace();
-				Thread.sleep(1000);	//再次超时异常，缓一秒，再试一次
-				return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
+			if(index < 0) { 
+				index = list.size()+index;  // 负数，表示倒数
 			}
-		////////////////////待测试，indexoutof
-		} catch(IndexOutOfBoundsException e) {
-			System.out.println("clickTextUrl:");
-			System.out.println("text: "+text+" index: "+index+" list: "+list);
-			e.printStackTrace();
-			return Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
+			Document result = Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
+			
+			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
+			if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
+				result = clickTextUrl(userKey, doc, text, index);
+			}
+			int j = 0;
+			while(result.text().contains("系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
+				System.out.println(j+" "+text+" "+result.text());////////////
+				try {
+					Thread.sleep(1500);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				result = DocUtil.clickTextUrl(userKey, doc, text, 0);
+				j++;
+				if(j > 100) break; //防止死循环
+			}
+			return result;
+		} catch(SocketTimeoutException e) {
+			System.out.println((count++) + " 链接超时！！！！！！");
+			Thread.sleep(1000);
+			if(count > 50) throw e;
+			return clickTextUrl(userKey, doc, text, index);
+		} finally {
+			count = 0;
 		}
 	}
 
@@ -136,18 +150,10 @@ public class DocUtil {
 	 * @param end
 	 * @return
 	 */
-	public static String substring(String doc, String begin,int beginLength, String end) {
-		try {
-			String result = "";
-			result = doc.substring(doc.indexOf(begin)+beginLength, doc.indexOf(end));
-			return result;
-		////////////////////待测试，indexoutof
-		} catch(IndexOutOfBoundsException e) {
-			System.out.println("DocUtil.substring: ");
-			System.out.println("begin: "+begin+" end: "+end+" doc: "+doc);
-			e.printStackTrace();
-			return "";
-		}
+	public static String substring(String doc, String begin, int beginLength, String end) {
+		String result = "";
+		result = doc.substring(doc.indexOf(begin) + beginLength, doc.indexOf(end));
+		return result;
 	}
 	
 	public static String substring1(String doc, String begin,int beginLength, String end, int endLength) {

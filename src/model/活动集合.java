@@ -388,10 +388,9 @@ public class 活动集合 extends 乐斗项目 {
 			}
 			message.put("活动11", "【登录商店】");
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "登录商店");
-			doc = Jsoup.parse(DocUtil.substring(doc.toString(), "黄金卷轴", 4, "返回大乐斗首页"));
 			int i = 0;
 			while(true) {
-				doc = DocUtil.clickTextUrl(userKey, doc, "兑换");
+				doc = DocUtil.clickTextUrl(userKey, doc, "兑换", 2);
 				if(doc.text().contains("兑换积分不足")) {
 					message.put("兑换"+i, "抱歉，您的兑换积分不足！");
 					return;

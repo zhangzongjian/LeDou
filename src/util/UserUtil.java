@@ -1,5 +1,6 @@
 package util;
 
+import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -7,7 +8,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.HashMap;
+import java.net.SocketTimeoutException;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -93,6 +94,9 @@ public class UserUtil {
 			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
+		} catch (EOFException e) {
+			System.out.println("EOF....");
+			e.printStackTrace();
 		}
 		return map;
 	}
@@ -104,51 +108,55 @@ public class UserUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String getUsername(Map<String, String> userKey) throws IOException {
-		String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
-		Document doc = Jsoup.connect(mainURL)
-							.cookies(userKey)
-							.timeout(5000)
-							.get();
-		String username = "";
-		if(doc.text().contains("开通达人")) {
-			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
-		}
-		else if(doc.text().contains("续费达人")){ 
-			username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "续费达人   等级");
-		}
-		else {
-			//若获取不到username，表示skey已失效，重新获取
-			String QQ = userKey.get("QQ");
-			String password = userKey.get("password");
-			int loginStatus = LoginUtil.login(QQ, password, "");
-			if(0 != loginStatus) {
-				LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号");
-				for(String u : map.keySet()) {
-					if(getUserKeyByUsrname(u).get("QQ").equals(QQ))
-						username = u;
+		try {
+			String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
+			Document doc = Jsoup.connect(mainURL).cookies(userKey)
+					.timeout(5000).get();
+			String username = "";
+			if (doc.text().contains("开通达人")) {
+				username = DocUtil.substring(doc.text(), "帮友|侠侣", 5, "开通达人");
+			} else if (doc.text().contains("续费达人")) {
+				username = DocUtil.substring(doc.text(), "帮友|侠侣", 5,
+						"续费达人   等级");
+			} else {
+				// 若获取不到username，表示skey已失效，重新获取
+				String QQ = userKey.get("QQ");
+				String password = userKey.get("password");
+				int loginStatus = LoginUtil.login(QQ, password, "");
+				if (0 != loginStatus) {
+					LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) UserUtil
+							.getSettingByKey("小号");
+					for (String u : map.keySet()) {
+						if (getUserKeyByUsrname(u).get("QQ").equals(QQ))
+							username = u;
+					}
+					if (2 == loginStatus) {
+						PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！",
+								username);
+					} else {
+						PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！",
+								username);
+					}
+					设置面板.inputQQ.setText(QQ);
+					设置面板.inputPassword.setText(password);
+					if (1 == loginStatus || -1 == loginStatus) {
+						设置面板.showVerifyCode(true);
+					}
+					return null;
 				}
-				if(2 == loginStatus) {
-					PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！", username);
-				}
-				else {
-					PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！", username);
-				}
-				设置面板.inputQQ.setText(QQ);
-				设置面板.inputPassword.setText(password);
-				if(1 == loginStatus || -1 == loginStatus) {
-					设置面板.showVerifyCode(true);
-				}
-				return null;
+				userKey.put("uin", QQLogin.cookies.get("uin"));
+				userKey.put("skey", QQLogin.cookies.get("skey"));
+				username = getUsername(userKey);
+				((LinkedHashMap<String, Object>) UserUtil.getSettingByKey("小号"))
+						.put(username, userKey);
+				UserUtil.saveSetting();
+				return username;
 			}
-			userKey.put("uin", QQLogin.cookies.get("uin"));
-			userKey.put("skey", QQLogin.cookies.get("skey"));
-			username = getUsername(userKey);
-			((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
-			UserUtil.saveSetting();
-			return username;
+			// 获取到的昵称前后会带一个空格，去掉
+			return username.substring(1, username.length() - 1);
+		} catch (SocketTimeoutException e) {
+			return getUsername(userKey);
 		}
-		//获取到的昵称前后会带一个空格，去掉
-		return username.substring(1, username.length()-1);
 	}
 
 	/**

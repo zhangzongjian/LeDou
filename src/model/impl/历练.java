@@ -52,9 +52,7 @@ public class 历练 extends 乐斗项目 {
 				} else {
 					message.put("历练情况" + num, "未找到结果！");
 				}
-				num = Integer.parseInt(doc1.text().substring(
-						doc1.text().indexOf("活力值") + 4,
-						doc1.text().indexOf("/")));
+				num = Integer.parseInt(DocUtil.substring(doc1.text(), "活力值：", 4, "/"));
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
@@ -86,6 +84,7 @@ public class 历练 extends 乐斗项目 {
 				message.put("历练情况" + num,
 						DocUtil.substring(doc2.text(), "获得了", 0, "查看乐斗过程"));
 			} else {
+				System.out.println("历练未找到结果： "+doc2.text());
 				message.put("历练情况" + num, "未找到结果！");
 			}
 			num = Integer.parseInt(doc2.text().substring(
