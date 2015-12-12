@@ -95,8 +95,8 @@ public class UserUtil {
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		} catch (EOFException e) {
-			System.out.println("EOF....");
-			e.printStackTrace();
+			//不知何原因导致的EOF异常，偶尔出现的，重试。。。
+			loadSetting();
 		}
 		return map;
 	}
@@ -182,6 +182,12 @@ public class UserUtil {
 ////		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
 //		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("二零一伍·", m);
 //		UserUtil.saveSetting();
+		System.out.println(UserUtil.getSetting());
+		Map<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSetting().get("小号");
+		for(Object o : map.values()) {
+			((Map<String, Object>)o).put("skey", "ee");
+		}
+		UserUtil.saveSetting();
 		System.out.println(UserUtil.getSetting());
 	}
 }

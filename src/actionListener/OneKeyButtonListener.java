@@ -406,6 +406,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.大笨钟();
 				m.九宫宝库();
 				m.登录商店();
+				m.摇摇乐();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

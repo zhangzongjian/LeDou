@@ -410,4 +410,35 @@ public class 活动集合 extends 乐斗项目 {
 		}
 	}
 	
+	// 摇摇乐
+	public void 摇摇乐() {
+		try {
+			if (!mainDoc.text().contains("摇摇乐")) {
+				message.put("摇摇乐", null); // 非活动时间
+				return;
+			}
+			message.put("活动12", "【摇摇乐】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "摇摇乐");
+			int i = 0;
+			while (true) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "转动");
+				if (doc.text().contains("转动次数不足")) {
+					message.put("转动" + i, "转动次数不足，不能领取！");
+					return;
+				} else if(doc.text().contains("恭喜你")) {
+					message.put("转动" + i,
+							DocUtil.substring(doc.text(), "恭喜你", 0, "1.活动时间"));
+				}
+				i++;
+				// 防止死循环
+				if (i > 50)
+					break;
+			}
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

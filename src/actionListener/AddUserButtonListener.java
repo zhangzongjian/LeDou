@@ -40,7 +40,7 @@ public class AddUserButtonListener implements ActionListener {
 			switch (status) {
 			case 0:
 				PrintUtil.printTitleInfo("系统消息", "登录成功！");
-				LoginUtil.checkResult = ""; //登录完成后，账号check状态清空掉
+				LoginUtil.checkResultMap.put(qq, ""); //登录完成后，账号check状态清空掉
 				设置面板.inputQQ.setText("");
 				设置面板.inputPassword.setText("");
 				设置面板.showVerifyCode(false);
