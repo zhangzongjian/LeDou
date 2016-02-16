@@ -53,6 +53,7 @@ public class 设置面板 {
 			taskPanel.add(十二宫菜单.create());
 			taskPanel.add(助阵菜单.create());
 			taskPanel.add(历练菜单.create());
+			taskPanel.add(幻境菜单.create());
 			taskPanel.add(getSelectAllCheckBox());
 			initTaskCheckBox();
 		} catch (IOException e) {
@@ -121,6 +122,8 @@ public class 设置面板 {
 		list.add(Task.好友乐斗);
 		list.add(Task.帮战奖励);
 		list.add(Task.活动集合);
+		list.add(Task.群雄逐鹿);
+		list.add(Task.幻境);
 		return list;
 	}
 	

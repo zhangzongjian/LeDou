@@ -1,6 +1,5 @@
 package util;
 
-import java.io.EOFException;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -58,9 +57,6 @@ public class UserUtil {
 	 */
 	public static Object getSettingByKey(String key) throws IOException {
 		setting = loadSetting();
-		if(setting.get(key) == null) {
-			setting.put(key, null);
-		}
 		return setting.get(key);
 	}
 	
@@ -71,9 +67,11 @@ public class UserUtil {
 	public static void saveSetting() throws IOException {
 		if(setting == null || setting.isEmpty()) return; //防止清空设置
 		File file = new File(settingFile);
+		FileOutputStream fout = new FileOutputStream(file);
 		try {
-			ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
+			ObjectOutputStream out = new ObjectOutputStream(fout);
 			out.writeObject(setting);
+			fout.close();
 			out.close();
 		} catch (FileNotFoundException e) {
 			e.printStackTrace();
@@ -87,16 +85,15 @@ public class UserUtil {
 	@SuppressWarnings("unchecked")
 	public static Map<String, Object> loadSetting() throws IOException {
 		File file = new File(settingFile);
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+		FileInputStream fin = new FileInputStream(file);
+		ObjectInputStream in = new ObjectInputStream(fin);
 		Map<String, Object> map = null;
 		try {
 			map = (Map<String, Object>) in.readObject();
+			fin.close();
 			in.close();
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-		} catch (EOFException e) {
-			//不知何原因导致的EOF异常，偶尔出现的，重试。。。
-			loadSetting();
 		}
 		return map;
 	}
@@ -176,12 +173,6 @@ public class UserUtil {
 	}
 	
 	public static void main(String[] args) throws IOException {
-//		Map<String, String> m = new HashMap<String, String>();
-////		m.put("skey", "sdf");m.put("uin", "o2099221914");m.put("QQ", "2099221914");m.put("password", "zzjian");
-//		m.put("skey", "sdf");m.put("uin", "o1105451491");m.put("QQ", "1105451491");m.put("password", "akk258..");
-////		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("small", m);
-//		((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put("二零一伍·", m);
-//		UserUtil.saveSetting();
 		System.out.println(UserUtil.getSetting());
 		Map<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSetting().get("小号");
 		for(Object o : map.values()) {

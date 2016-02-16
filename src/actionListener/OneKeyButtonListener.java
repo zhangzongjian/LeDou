@@ -25,6 +25,7 @@ import model.impl.回流好友召回;
 import model.impl.好友乐斗;
 import model.impl.巅峰之战;
 import model.impl.帮战奖励;
+import model.impl.幻境;
 import model.impl.抢地盘;
 import model.impl.掠夺;
 import model.impl.探险;
@@ -36,6 +37,7 @@ import model.impl.矿洞;
 import model.impl.竞技场;
 import model.impl.答题;
 import model.impl.结拜赛;
+import model.impl.群雄逐鹿;
 import model.impl.许愿;
 import model.impl.踢馆;
 import model.impl.锦标赛;
@@ -211,6 +213,12 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.群雄逐鹿)) {
+				群雄逐鹿 m = new 群雄逐鹿(userKey, mainDoc);
+				m.报名和领奖();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.助阵)) {
 				助阵 m = new 助阵(userKey, mainDoc);
 				m.doit();
@@ -243,6 +251,12 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.历练)) {
 				历练 m = new 历练(userKey, mainDoc);
+				m.挑战();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.幻境)) {
+				幻境 m = new 幻境(userKey, mainDoc);
 				m.挑战();
 				PrintUtil.printAllMessages(m, username);
 			}
@@ -310,6 +324,12 @@ public class OneKeyButtonListener implements ActionListener {
 					public void run() {
 						m.报名(); // 每天13点开始
 						PrintUtil.printAllMessages(m, username);
+						
+						任务 m = new 任务(userKey, mainDoc);
+						m.finish();
+						
+						活跃度 m1 = new 活跃度(userKey, mainDoc);
+						m1.领取();
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}// //////////////////////////////////////////////////////////

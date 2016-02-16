@@ -46,10 +46,6 @@ public class QQLogin {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-//		String uin = "1105451491";
-//		String password = "kk258..";
-//		String uin = "1102349546";
-//		String password = "qq3510534";
 		String uin = "2099221914";
 		String password = "zzjian";
 		String checkStatus = ""; //login接口参数pt_vcode_v1，对应check接口的0,1状态
