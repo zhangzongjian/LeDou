@@ -441,4 +441,27 @@ public class 活动集合 extends 乐斗项目 {
 			e.printStackTrace();
 		}
 	}
+	
+	// 做任务领斗币
+	public void 做任务领斗币() {
+		try {
+			if (!mainDoc.text().contains("做任务领斗币")) {
+				message.put("做任务领斗币", null); // 非活动时间
+				return;
+			}
+			message.put("活动13", "【做任务领斗币】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "做任务领斗币");
+			int i = 0;
+			while (doc.toString().contains("act_task")) {
+				doc = DocUtil.clickURL(userKey, doc.getElementsByAttributeValueMatching("href", "act_task").attr("href"));
+				message.put("领取奖励"+(i++), doc.text().substring(0, doc.text().indexOf("【勤劳能致富~做任务领斗币】")));
+			}
+			message.put("领取情况", "领取情况："+DocUtil.stringNumbers(doc.text(), "已完成")+"/10");
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -27,7 +27,7 @@ public class 幻境 extends 乐斗项目 {
 			while(true) {
 				if(doc.text().contains("领取奖励")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
-					message.put("领取奖励"+i, "额外奖励："+DocUtil.substring(doc.text(), "获得", 0, "特殊属性说明"));
+					message.put("领取奖励"+(i++), "额外奖励："+DocUtil.substring(doc.text(), "获得", 0, "特殊属性说明"));
 					continue;
 				}
 				if(doc.toString().contains("op=fight")) {
