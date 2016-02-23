@@ -27,7 +27,7 @@ public class 群雄逐鹿 extends 乐斗项目 {
 			doc = DocUtil.clickTextUrl(userKey, doc, "报名");
 			message.put("报名", DocUtil.substring1(doc.text(), "【群雄逐鹿】", 6, "！", 1));
 			doc = DocUtil.clickTextUrl(userKey, doc, "领奖");
-			message.put("领奖", DocUtil.substring1(doc.text(), "【群雄逐鹿】", 6, "！", 1));
+			message.put("领奖", DocUtil.substring(doc.text(), "【群雄逐鹿】", 6, "报名"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();

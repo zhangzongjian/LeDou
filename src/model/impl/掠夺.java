@@ -22,13 +22,21 @@ public class 掠夺 extends 乐斗项目 {
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "掠夺");
+			if(super.day == 2) {
+				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "掠夺");
+				if(!DocUtil.isHref(doc1, "领奖")) {
+					doc1 = DocUtil.clickTextUrl(userKey, doc1, "掠夺", -1);
+				}
+				doc1 = DocUtil.clickTextUrl(userKey, doc1, "领奖");
+				message.put("挑战奖励", "挑战奖励："+DocUtil.substring(doc1.text(), "返回", 2, "生命"));
+			}
 			Element element = doc.getElementsContainingOwnText("领取胜负奖励").get(0);
 			if (element.hasAttr("href")) {
 				doc = DocUtil.clickURL(userKey, element.attr("href"));
 				message.put("领奖情况",
-						DocUtil.substring(doc.text(), "规则", 2, "领取胜负奖励"));
+						"胜负奖励："+DocUtil.substring(doc.text(), "规则", 2, "领取胜负奖励"));
 			} else {
-				message.put("领奖情况", "已经领取过奖励了！");
+				message.put("领奖情况", "胜负奖励：已经领取过奖励了！");
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
