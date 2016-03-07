@@ -81,7 +81,7 @@ public class DocUtil {
 	
 	/**
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，默认点击第一个
-	 * @return
+	 * @return 不存在这样的链接返回null
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
@@ -95,7 +95,7 @@ public class DocUtil {
 	
 	/**
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个。-1表示倒数第一个
-	 * @return
+	 * @return	不存在这样的链接返回null
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
@@ -109,6 +109,9 @@ public class DocUtil {
 			if(elements.get(i).hasAttr("href") && text.equals(elements.get(i).html())) {//去掉非超链接元素
 				list.add(elements.get(i));
 			}
+		}
+		if(list.size() == 0) {
+			return null;
 		}
 		try {
 			if(index < 0) { 

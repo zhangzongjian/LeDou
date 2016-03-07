@@ -428,6 +428,8 @@ public class OneKeyButtonListener implements ActionListener {
 				m.登录商店();
 				m.摇摇乐();
 				m.做任务领斗币();
+				m.好礼步步升();
+				m.登录有礼();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

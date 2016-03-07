@@ -230,6 +230,10 @@ public class 活动集合 extends 乐斗项目 {
 			}
 			Document 浇水 = DocUtil.clickTextUrl(userKey, doc, "浇水");
 			message.put("浇水", DocUtil.substring(浇水.text(), "【乐斗大宝树】", 7, "1.选择一个你喜爱的种子"));
+			if(浇水.text().contains("7颗果实")) {
+				Document 收获 = DocUtil.clickTextUrl(userKey, doc, "收获");
+				message.put("收获", DocUtil.substring(收获.text(), "【乐斗大宝树】", 7, "1.选择一个你喜爱的种子"));
+			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
@@ -457,6 +461,51 @@ public class 活动集合 extends 乐斗项目 {
 				message.put("领取奖励"+(i++), doc.text().substring(0, doc.text().indexOf("【勤劳能致富~做任务领斗币】")));
 			}
 			message.put("领取情况", "领取情况："+DocUtil.stringNumbers(doc.text(), "已完成")+"/10");
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 好礼步步升
+	public void 好礼步步升() {
+		try {
+			if (!mainDoc.text().contains("好礼步步升")) {
+				message.put("好礼步步升", null); // 非活动时间
+				return;
+			}
+			message.put("活动14", "【好礼步步升】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "好礼步步升");
+			doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+			if(doc != null)
+				message.put("好礼领取", DocUtil.substring(doc.text(), "【好礼步步升】", 7, "1、活动期间"));
+			else 
+				message.put("好礼领取", "今日奖励已领取过了！");
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 登录有礼
+	public void 登录有礼() {
+		try {
+			if (!mainDoc.text().contains("登录有礼")) {
+				message.put("登录有礼", null); // 非活动时间
+				return;
+			}
+			message.put("活动15", "【登录有礼】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "登录有礼");
+			doc = DocUtil.clickTextUrl(userKey, doc, "领取",-1);
+			if(doc != null)
+				message.put("登录有礼领取",
+						DocUtil.substring(doc.text(), "【登录有礼，小花费，大收获~】", 15, "1.活动时间"));
+		    else
+				message.put("登录有礼领取", "今日奖励已领取过了！");
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();

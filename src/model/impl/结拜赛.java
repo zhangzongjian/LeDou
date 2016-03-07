@@ -81,16 +81,9 @@ public class 结拜赛 extends 乐斗项目 {
 				return;
 			} else {
 				doc = DocUtil.clickTextUrl(userKey, doc, "助威");
-				if(doc.toString().contains("5999466")) {
-					Element element = doc.getElementsByAttributeValueMatching("href", "5999466").get(1);
-					doc = DocUtil.clickTextUrl(userKey, DocUtil.clickURL(userKey, element.attr("href")), "确定");
-					message.put("助威情况", "助威成功！");
-					return;
-				}
-				else {
-					message.put("助威情况", "助威失败，默认助威队伍不存在！");
-					return;
-				}
+				doc = DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, doc, "助威"), "确定");
+				message.put("助威情况", "助威成功！");
+				return;
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
