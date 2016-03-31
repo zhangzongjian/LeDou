@@ -95,7 +95,6 @@ public class 设置面板 {
 		list.add(Task.任务);
 		list.add(Task.传功);
 		list.add(Task.历练);
-		list.add(Task.副本);
 		list.add(Task.许愿);
 		list.add(Task.踢馆);
 		list.add(Task.掠夺);
@@ -107,7 +106,6 @@ public class 设置面板 {
 		list.add(Task.十二宫);
 		list.add(Task.锦标赛);
 		list.add(Task.斗神塔);
-		list.add(Task.抢地盘);
 		list.add(Task.竞技场);
 		list.add(Task.结拜赛);
 		list.add(Task.活跃度);
@@ -123,6 +121,7 @@ public class 设置面板 {
 		list.add(Task.帮战奖励);
 		list.add(Task.活动集合);
 		list.add(Task.群雄逐鹿);
+		list.add(Task.画卷迷踪);
 		list.add(Task.幻境);
 		return list;
 	}

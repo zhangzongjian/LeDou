@@ -5,7 +5,7 @@ public class Task {
 	public static final String 任务 = "任务"; 
 	public static final String 历练 = "历练"; 
 	public static final String 炼丹 = "炼丹"; 
-	public static final String 副本 = "副本"; 
+	public static final String 画卷迷踪 = "画卷迷踪"; 
 	public static final String 许愿 = "许愿"; 
 	public static final String 巅峰之战 = "巅峰之战"; 
 	public static final String 踢馆 = "踢馆"; 

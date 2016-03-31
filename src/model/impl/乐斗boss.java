@@ -25,12 +25,15 @@ public class 乐斗boss extends 乐斗项目 {
 				doc = DocUtil.clickTextUrl(userKey, doc, "首页");
 			}
 			// 挑战前先吞贡献药水
-			if (doc.text().contains("贡献药水 速购 使用 剩0次"))
-				for (int i = 0; i < 4; i++) {
-					DocUtil.clickTextUrl(userKey, doc, "使用", 5);
-					message.put("使用贡献药水", "自动使用贡献药水4瓶！");
-				}
-			
+			System.out.println(doc.text());
+			// 贡献药水效果剩余次数
+			int num = Integer.parseInt(DocUtil.substring(doc.text(), "贡献药水 速购 使用 剩", "贡献药水 速购 使用 剩".length(), "次 大力丸 速购 使用"));
+			double drinkNum = Math.ceil((20 - num) / 5.0);
+			for (int i = 0; i < drinkNum; i++) {
+				DocUtil.clickTextUrl(userKey, doc, "使用", 5);
+				message.put("使用贡献药水", "自动使用贡献药水"+ (int)drinkNum +"瓶！");
+			}
+
 			Document temp = Jsoup.parse(DocUtil.substring(doc.toString(), "侠：",
 					2, "1："));
 			Elements boss = temp.getElementsContainingOwnText("乐斗");

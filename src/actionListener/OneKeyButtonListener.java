@@ -17,7 +17,7 @@ import model.impl.任务;
 import model.impl.传功;
 import model.impl.供奉;
 import model.impl.分享;
-import model.impl.副本;
+import model.impl.画卷迷踪;
 import model.impl.助阵;
 import model.impl.十二宫;
 import model.impl.历练;
@@ -207,8 +207,8 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.副本)) {
-				副本 m = new 副本(userKey, mainDoc);
+			if (tasks.contains(Task.画卷迷踪)) {
+				画卷迷踪 m = new 画卷迷踪(userKey, mainDoc);
 				m.挑战();
 				PrintUtil.printAllMessages(m, username);
 			}
@@ -258,12 +258,6 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.幻境)) {
 				幻境 m = new 幻境(userKey, mainDoc);
 				m.挑战();
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.抢地盘)) {
-				抢地盘 m = new 抢地盘(userKey, mainDoc);
-				m.doit();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
