@@ -64,7 +64,7 @@ public class UserUtil {
 	 * 保存设置到文件
 	 * @throws IOException
 	 */
-	public static void saveSetting() throws IOException {
+	public synchronized static void saveSetting() throws IOException {
 		if(setting == null || setting.isEmpty()) return; //防止清空设置
 		File file = new File(settingFile);
 		FileOutputStream fout = new FileOutputStream(file);
@@ -83,7 +83,7 @@ public class UserUtil {
 	 * @throws IOException
 	 */
 	@SuppressWarnings("unchecked")
-	public static Map<String, Object> loadSetting() throws IOException {
+	public synchronized static Map<String, Object> loadSetting() throws IOException {
 		File file = new File(settingFile);
 		FileInputStream fin = new FileInputStream(file);
 		ObjectInputStream in = new ObjectInputStream(fin);
@@ -105,6 +105,7 @@ public class UserUtil {
 	 */
 	@SuppressWarnings("unchecked")
 	public static String getUsername(Map<String, String> userKey) throws IOException {
+	    String oldUsername = null;
 		try {
 			String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
 			Document doc = Jsoup.connect(mainURL).cookies(userKey)
@@ -120,13 +121,15 @@ public class UserUtil {
 				String QQ = userKey.get("QQ");
 				String password = userKey.get("password");
 				int loginStatus = LoginUtil.login(QQ, password, "");
+                LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) UserUtil
+                        .getSettingByKey("小号");
+                for (String u : map.keySet()) {
+                    if (getUserKeyByUsrname(u).get("QQ").equals(QQ)) {
+                        username = u;
+                        oldUsername = username;
+                    }
+                }
 				if (0 != loginStatus) {
-					LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) UserUtil
-							.getSettingByKey("小号");
-					for (String u : map.keySet()) {
-						if (getUserKeyByUsrname(u).get("QQ").equals(QQ))
-							username = u;
-					}
 					if (2 == loginStatus) {
 						PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！",
 								username);
@@ -144,8 +147,12 @@ public class UserUtil {
 				userKey.put("uin", QQLogin.cookies.get("uin"));
 				userKey.put("skey", QQLogin.cookies.get("skey"));
 				username = getUsername(userKey);
-				((LinkedHashMap<String, Object>) UserUtil.getSettingByKey("小号"))
-						.put(username, userKey);
+				Map<String, Object> users = (LinkedHashMap<String, Object>) UserUtil.getSettingByKey("小号");
+                Object object = users.put(username, userKey);
+                if(object == null) {  //若object为null，说明有小号昵称改变，需要去重处理
+                    users.remove(oldUsername);
+                    System.out.println("something is doing+++++++++++++++");
+                }
 				UserUtil.saveSetting();
 				return username;
 			}
