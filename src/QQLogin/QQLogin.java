@@ -46,13 +46,13 @@ public class QQLogin {
 	 * @throws IOException 
 	 */
 	public static void main(String[] args) throws IOException {
-		String uin = "2099221914";
-		String password = "zzjian";
+		String uin = "1105451491";
+		String password = "kk258..";
 		String checkStatus = ""; //login接口参数pt_vcode_v1，对应check接口的0,1状态
 		String verifycode = ""; //login接口参数
 		String verifysession = ""; //login接口参数
 		String p = ""; //login接口参数
-		String checkResult = check(uin);
+		String checkResult = checkNew(uin);
 		System.out.println(checkResult);
 		if("0".equals(checkResult.charAt(14)+"")) {
 			System.out.println("无需验证码登录！");
@@ -85,11 +85,11 @@ public class QQLogin {
 			}
 		}
 		p = encryptPassword(uin, password, verifycode);
-		String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
+		String login_result = loginNew(uin, p, checkStatus, verifycode, verifysession);
 		System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
 	}
 
-	public static Map<String, String> cookies;
+	public static Map<String, String> cookiesAndSid;
 	
 	////////////////////////////////////////////////////////////////////////////////////////////
 	/* 不需验证码 begin */
@@ -117,12 +117,12 @@ public class QQLogin {
 								"&r=0.6051186741306294")
 				  				.ignoreContentType(true)
 				  				.execute();
-		cookies = response.cookies();
+		cookiesAndSid = response.cookies();
 		return response.body();
 	}
 	
 	/**
-	 * 登录(第一次？)
+	 * 登录1(web2 QQ登录入口)
 	 * @return 登录成功时返回字符串：ptuiCB('0','0','http://web.qq.com/loginproxy.html?login2qq=1&webqq_type=10','0','登录成功','你的名字');
 	 * @throws IOException 
 	 */
@@ -150,7 +150,7 @@ public class QQLogin {
 								"&daid=5&")
 								.ignoreContentType(true)
 				  				.execute();
-		cookies.putAll(response.cookies());
+		cookiesAndSid.putAll(response.cookies());
 		return response.body();
 	}
 	/* 不需验证码 end */
@@ -263,15 +263,51 @@ public class QQLogin {
 		return p_result;
 	}
 
+/////////////////////////////////////////////////////////////////////////////////	
+	//以下为登录方式更换部分，以获取sid代替原来的skey，前者有效期更长
+	
+	public static String checkNew(String uin) throws IOException {
+		Response response = Jsoup.connect("http://check.ptlogin2.qq.com/check?" +
+								"&pt_tea=1" +
+								"&uin=" + uin +
+								"&appid=15403" +
+								"&ptlang=2052" +
+								"&r=0.6051186741306294")
+				  				.ignoreContentType(true)
+				  				.execute();
+		cookiesAndSid = response.cookies();
+		return response.body();
+	}
+	
 	/**
-	 * 第二次登录
+	 * 登录2 （手机腾讯网登录入口，去登录1区别主要在于u1参数）
 	 * @return
 	 * @throws IOException
 	 */
-	public static String login2() throws IOException {
-		Response response = Jsoup.connect("")
-								 .ignoreContentType(true)
-								 .execute();
+	public static String loginNew(String uin, String p, String checkStatus, String verifycode, String verifysession) throws IOException {
+		Response response = Jsoup.connect("http://ptlogin2.qq.com/login?" +
+								"pt_vcode_v1=" + checkStatus +
+								"&pt_verifysession_v1=" + verifysession +
+								"&verifycode=" + verifycode +
+								"&u=" + uin +
+								"&p="+p+
+								"&pt_randsalt=0" +
+								"&ptlang=2052" +
+								"&low_login_enable=0" +
+								"&u1=http%3A%2F%2Fq16.3g.qq.com%2Fg%2Fs%3Faid%3DnqqchatMain" +
+								"&from_ui=1" +
+								"&fp=loginerroralert" +
+								"&device=2" +
+								"&aid=15403" +
+								"&pt_ttype=1" +
+								"&pt_3rd_aid=0" +
+								"&ptredirect=1" +
+								"&h=1" +
+								"&g=1" +
+								"&pt_uistyle=9&")
+								.ignoreContentType(true)
+				  				.execute();
+		cookiesAndSid.putAll(response.cookies());
 		return response.body();
 	}
 	

@@ -17,12 +17,12 @@ public class 门派大战 extends 乐斗项目 {
 
 	public void 报名() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "门派大战");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "门派大战");
 			if (!doc.text().contains("未参战")) {
 				message.put("报名情况", "已经报过名了！");
 				return;
 			}
-			doc = DocUtil.clickTextUrl(userKey, doc, "参战");
+			doc = DocUtil.clickTextUrl(doc, "参战");
 			if (doc.text().contains("不在战斗时间内")) {
 				message.put("报名情况", "不在战斗时间内！");
 			} else {
@@ -39,12 +39,12 @@ public class 门派大战 extends 乐斗项目 {
 
 	public void 领奖() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "门派大战");
-			doc = DocUtil.clickTextUrl(userKey, doc, "领奖");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "门派大战");
+			doc = DocUtil.clickTextUrl(doc, "领奖");
 			doc = Jsoup.parse(DocUtil.substring(doc.toString(), "第一名", 0,
 					"返回战场"));
 			if (doc.text().contains("领取")) {
-				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+				doc = DocUtil.clickTextUrl(doc, "领取");
 				message.put("领奖情况",
 						DocUtil.substring(doc.text(), "请及时领取", 6, "第一名"));
 			} else {

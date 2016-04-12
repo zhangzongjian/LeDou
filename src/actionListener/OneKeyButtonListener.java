@@ -103,7 +103,7 @@ public class OneKeyButtonListener implements ActionListener {
 			final String username = UserUtil.getUsername(userKey);
 			//若username获取不到，说明skey过期，且需要验证码，得重新手动录入。若不需验证码，则可自动重新录入
 			if(username == null) return;
-			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
+			final Document mainDoc = DocUtil.clickURL(DocUtil.getMainURL(userKey));
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(userKey, mainDoc);
 				 m.领奖和报名(); //周一6点钟之后执行
@@ -210,6 +210,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.画卷迷踪)) {
 				画卷迷踪 m = new 画卷迷踪(userKey, mainDoc);
 				m.挑战();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.抢地盘)) {
+				抢地盘 m = new 抢地盘(userKey, mainDoc);
+				m.doit();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

@@ -17,17 +17,16 @@ public class 帮战奖励 extends 乐斗项目 {
 
 	public void 领奖() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "帮战");
-			doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "帮战");
+			doc = DocUtil.clickTextUrl(doc, "领取奖励");
 			int j = 0;
 			while(doc.text().contains("系统繁忙，请稍后重试！")) { 
-				System.out.println(j+" 领取奖励 "+doc.text());////////////
 				try {
 					Thread.sleep(1500);
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
+				doc = DocUtil.clickTextUrl(doc, "领取奖励");
 				j++;
 			}
 			if (doc.text().contains("只能领取一次")) {

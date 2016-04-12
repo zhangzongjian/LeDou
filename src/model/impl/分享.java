@@ -17,9 +17,9 @@ public class 分享 extends 乐斗项目 {
 
 	public void 一键分享() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
-			doc = DocUtil.clickTextUrl(userKey, doc, "分享");
-			doc = DocUtil.clickTextUrl(userKey, doc, "一键分享");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
+			doc = DocUtil.clickTextUrl(doc, "分享");
+			doc = DocUtil.clickTextUrl(doc, "一键分享");
 			message.put("分享情况",
 					DocUtil.substring(doc.text(), "今日分享次数", 0, "开通达人"));
 		} catch (IOException e) {

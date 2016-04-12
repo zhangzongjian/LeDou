@@ -23,10 +23,10 @@ public class 群雄逐鹿 extends 乐斗项目 {
 	// 周一到周三，下午两点可以领奖
 	public void 报名和领奖() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "群雄逐鹿");
-			doc = DocUtil.clickTextUrl(userKey, doc, "报名");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "群雄逐鹿");
+			doc = DocUtil.clickTextUrl(doc, "报名");
 			message.put("报名", DocUtil.substring1(doc.text(), "【群雄逐鹿】", 6, "！", 1));
-			doc = DocUtil.clickTextUrl(userKey, doc, "领奖");
+			doc = DocUtil.clickTextUrl(doc, "领奖");
 			message.put("领奖", DocUtil.substring(doc.text(), "【群雄逐鹿】", 6, "报名"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

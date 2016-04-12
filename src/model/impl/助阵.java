@@ -28,12 +28,12 @@ public class 助阵 extends 乐斗项目 {
 		int index = Integer.parseInt(object.charAt(object.length()-1)+"");
 		String name = object.substring(0,object.length()-1);
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "今日活跃度");
 			if(doc.text().contains("16.[3/3]")) {
 				message.put("提升助阵情况", "今日已经提升助阵3次了！");
 				return;
 			}
-			doc = DocUtil.clickTextUrl(userKey, doc, "提升助阵属性");
+			doc = DocUtil.clickTextUrl(doc, "提升助阵属性");
 			//精选助阵活动时
 			if(doc.text().contains("精选助阵")) {
 				doc = Jsoup.parse(DocUtil.substring(doc.toString(), "助阵组合列表", 6, "【助阵属性】"));
@@ -42,7 +42,7 @@ public class 助阵 extends 乐斗项目 {
 				message.put("提升助阵情况", "暂未开启该助阵组合！");
 				return;
 			}
-			doc = DocUtil.clickTextUrl(userKey, doc, name);
+			doc = DocUtil.clickTextUrl(doc, name);
 			if(doc.getElementsByTag("anchor").size() < index) {
 				message.put("提升助阵情况", "暂未激活该助阵技能！");
 				return;

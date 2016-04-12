@@ -29,7 +29,7 @@ public class AddUserButtonListener implements ActionListener {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void doAdd() {
+	public synchronized void doAdd() {
 		try {
 			//qq登录，获取登录cookies
 			String qq = 设置面板.inputQQ.getText();
@@ -60,8 +60,9 @@ public class AddUserButtonListener implements ActionListener {
 
 			//uin, skey
 			userKey = new HashMap<String, String>();
-			userKey.put("uin", QQLogin.cookies.get("uin"));
-			userKey.put("skey", QQLogin.cookies.get("skey"));
+			userKey.put("uin", QQLogin.cookiesAndSid.get("uin"));
+			//userKey.put("skey", QQLogin.cookiesAndSid.get("skey"));  //废弃
+			userKey.put("sid", QQLogin.cookiesAndSid.get("sid"));
 			userKey.put("QQ", qq);
 			userKey.put("password", password);
 			

@@ -30,7 +30,7 @@ public class 巅峰之战 extends 乐斗项目 {
 				message.put("挑战结束", "挑战时间为每周三~周日！");
 				return;
 			}
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "巅峰之战进行中");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
 			if (doc.text().contains("未参加")) {
 				message.put("挑战结束", "本周未参战，报名时间为每周一~周二！");
 				return;
@@ -41,11 +41,11 @@ public class 巅峰之战 extends 乐斗项目 {
 			while (true) {
 				i++;
 				while(doc.text().contains("繁忙")) {  //出现繁忙情况，重试3次
-					doc = DocUtil.clickTextUrl(userKey, mainDoc, "巅峰之战进行中");
+					doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
 					j++;
 					if(j > 2) break;
 				}
-				doc = DocUtil.clickTextUrl(userKey, doc, "征战");
+				doc = DocUtil.clickTextUrl(doc, "征战");
 				if (doc.text().contains("已经用完复活次数")) {
 					message.put("挑战结束", "今日复活次数已用完！");
 					break;
@@ -80,9 +80,9 @@ public class 巅峰之战 extends 乐斗项目 {
 				message.put("报名情况", "不在报名时间内！");
 				return;
 			}
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "巅峰之战进行中");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
 			// 领奖
-			doc = DocUtil.clickTextUrl(userKey, doc, "领奖");
+			doc = DocUtil.clickTextUrl(doc, "领奖");
 			String result = DocUtil.substring(doc.text(), "【巅峰之战】", 6, "领奖");
 			message.put("领奖情况", "领奖：" + result);
 			// 报名
@@ -93,24 +93,24 @@ public class 巅峰之战 extends 乐斗项目 {
 			Document temp = Jsoup.parse(DocUtil.substring(doc.toString(),
 					"选择阵营加入", 0, "额外战功奖励"));
 			if (result.contains("上届所在的南派在巅峰之战中惜败") || result.contains("上届所在的北派在巅峰之战中取得胜利")) { // 上次南派跪了，则报名南派
-				temp = DocUtil.clickTextUrl(userKey, temp, "南派");
-				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
+				temp = DocUtil.clickTextUrl(temp, "南派");
+				temp = DocUtil.clickTextUrl(temp, "确定");
 				if (temp.text().contains("挑战书不足")) {
 					message.put("报名情况", "报名情况：挑战书不足！");
 					return;
 				}
 				message.put("报名情况", "报名情况：成功报名南派！");
 			} else if (result.contains("上届所在的北派在巅峰之战中惜败") || result.contains("上届所在的南派在巅峰之战中取得胜利")) {
-				temp = DocUtil.clickTextUrl(userKey, temp, "北派");
-				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
+				temp = DocUtil.clickTextUrl(temp, "北派");
+				temp = DocUtil.clickTextUrl(temp, "确定");
 				if (temp.text().contains("挑战书不足")) {
 					message.put("报名情况", "报名情况：挑战书不足！");
 					return;
 				}
 				message.put("报名情况", "报名情况：成功报名北派！");
 			} else {
-				temp = DocUtil.clickTextUrl(userKey, temp, "随机加入");
-				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
+				temp = DocUtil.clickTextUrl(temp, "随机加入");
+				temp = DocUtil.clickTextUrl(temp, "确定");
 				if (temp.text().contains("挑战书不足")) {
 					message.put("报名情况", "报名情况：挑战书不足！");
 					return;
@@ -137,7 +137,7 @@ public class 巅峰之战 extends 乐斗项目 {
 		Document doc;
 		int lastTime = 0;
 		try {
-			doc = DocUtil.clickTextUrl(userKey, mainDoc, "巅峰之战进行中");
+			doc = DocUtil.clickTextUrl(mainDoc, "巅峰之战进行中");
 			if (!doc.text().contains("等待时间"))
 				return 0;
 			int minutes = Integer.valueOf(doc.text().charAt(
@@ -165,7 +165,7 @@ public class 巅峰之战 extends 乐斗项目 {
 			if (!mainDoc.text().contains("巅峰之战进行中")) {
 				return 0;
 			}
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc,
+			Document doc = DocUtil.clickTextUrl(mainDoc,
 					"巅峰之战进行中");
 			if (doc.text().contains("未参加")) {
 				return 0;

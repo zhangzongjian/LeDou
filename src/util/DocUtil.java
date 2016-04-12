@@ -17,14 +17,14 @@ public class DocUtil {
 	private static int time_out = 5000;
 	
 	/**
-	 * 全局cookie，当前选择的小号cookie
+	 * 全局当前用户基本信息
 	 */
 	public static Map<String, String> userKey;
 	
 	/**
-	 * 大乐斗首页链接
+	 * 当前选择的小号mainURL
 	 */
-	public static String mainURL = "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin=&sid=&channel=209&g_ut=1&cmd=index";
+	public static String mainURL;
 	
 	/**
 	 * get方式点击指定链接
@@ -32,14 +32,14 @@ public class DocUtil {
 	 * @return 
 	 * @throws IOException
 	 */
-	public static Document clickURL(Map<String, String> userKey, String URL)
+	public static Document clickURL(String URL)
 			throws IOException {
 		try {
-			Document result = Jsoup.connect(URL).cookies(userKey)
+			Document result = Jsoup.connect(URL)
 					.timeout(time_out).get();
 			// QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
 			if (result.text().contains("使用明文密码")) { // 奇葩滴冒出这种情况，重试一次
-				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
+				result = Jsoup.connect(URL).timeout(time_out)
 						.get();
 			}
 			int j = 0;
@@ -50,7 +50,7 @@ public class DocUtil {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
+				result = Jsoup.connect(URL).timeout(time_out)
 						.get();
 				j++;
 				if (j > 100)
@@ -61,7 +61,7 @@ public class DocUtil {
 			System.out.println((count1++) + " 链接超时！！！！！！");
 			if (count1 > 50)
 				throw e;
-			return clickURL(userKey, URL);
+			return clickURL(URL);
 		} finally {
 			count1 = 0;
 		}
@@ -74,7 +74,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 */
 	public static String getTextUrl(String URL, String text) throws IOException{
-		Document doc = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
+		Document doc = Jsoup.connect(URL).timeout(time_out).get();
 	    Elements elements = doc.getElementsContainingOwnText(text);
 		return elements.attr("href"); 
 	}
@@ -85,8 +85,8 @@ public class DocUtil {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text) throws IOException, InterruptedException{
-		Document result = clickTextUrl(userKey, doc, text, 0);
+	public static Document clickTextUrl(Document doc, String text) throws IOException, InterruptedException{
+		Document result = clickTextUrl(doc, text, 0);
 		return result;
 	}
 	
@@ -99,7 +99,7 @@ public class DocUtil {
 	 * @throws IOException 
 	 * @throws InterruptedException 
 	 */
-	public static Document clickTextUrl(Map<String, String> userKey, Document doc, String text, int index) throws IOException, InterruptedException{
+	public static Document clickTextUrl(Document doc, String text, int index) throws IOException, InterruptedException{
 		//获取含有指定文本的元素节点
 		Elements elements = doc.getElementsContainingOwnText(text);
 		List<Element> list = new ArrayList<Element>();
@@ -117,11 +117,11 @@ public class DocUtil {
 			if(index < 0) { 
 				index = list.size()+index;  // 负数，表示倒数
 			}
-			Document result = Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
+			Document result = Jsoup.connect(list.get(index).attr("href")).timeout(time_out).get();
 			
 			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
 			if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
-				result = clickTextUrl(userKey, doc, text, index);
+				result = clickTextUrl(doc, text, index);
 			}
 			int j = 0;
 			while(result.text().contains("系统繁忙，请稍后再试")) {  //出现繁忙情况，重试
@@ -131,7 +131,7 @@ public class DocUtil {
 				} catch (InterruptedException e) {
 					e.printStackTrace();
 				}
-				result = DocUtil.clickTextUrl(userKey, doc, text, 0);
+				result = DocUtil.clickTextUrl(doc, text, 0);
 				j++;
 				if(j > 100) break; //防止死循环
 			}
@@ -140,7 +140,7 @@ public class DocUtil {
 			System.out.println((count++) + " 链接超时！！！！！！");
 			Thread.sleep(1000);
 			if(count > 50) throw e;
-			return clickTextUrl(userKey, doc, text, index);
+			return clickTextUrl(doc, text, index);
 		} finally {
 			count = 0;
 		}
@@ -189,4 +189,15 @@ public class DocUtil {
 		}
 		return sum;
 	}
+	
+	public static String getMainURL(String qq, String sid) {
+		return "http://dld.qzapp.z.qq.com/qpet/cgi-bin/phonepk?zapp_uin="+qq+"&sid="+sid+"&channel=0&g_ut=1&cmd=index";
+	}
+	
+	public static String getMainURL(Map<String, String> userKey) {
+		String qq = userKey.get("QQ");
+		String sid = userKey.get("sid");
+		return getMainURL(qq, sid);
+	}
 }
+

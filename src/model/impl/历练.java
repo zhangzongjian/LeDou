@@ -21,16 +21,16 @@ public class 历练 extends 乐斗项目 {
 	public void 挑战() {
 		try {
 			String name = object.substring(0,object.indexOf("("));
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "历练");
 			// 活力值
 			if(!doc.text().contains(name)) {
 				message.put("历练情况", "未开启该历练场景，自动切换随机挑战！");
 				随机挑战();
 				return;
 			}
-			Document doc1 = DocUtil.clickTextUrl(userKey, doc, name);
+			Document doc1 = DocUtil.clickTextUrl(doc, name);
 			if(doc1.text().contains("下一页"))
-				doc1 = DocUtil.clickTextUrl(userKey, doc1, "下一页");
+				doc1 = DocUtil.clickTextUrl(doc1, "下一页");
 			int num = Integer.parseInt(doc1.text().substring(
 					doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
 			if (num < 10) {
@@ -39,11 +39,11 @@ public class 历练 extends 乐斗项目 {
 			}
 			while (num >= 10) {
 				//优先挑战有次数限制的boss
-				doc1 = DocUtil.clickTextUrl(userKey, doc1, "乐斗", -1);
+				doc1 = DocUtil.clickTextUrl(doc1, "乐斗", -1);
 				if(doc1.text().contains("上限")) {
-					doc1 = DocUtil.clickTextUrl(userKey, doc1, "乐斗", -2);
+					doc1 = DocUtil.clickTextUrl(doc1, "乐斗", -2);
 					if(doc1.text().contains("上限"))
-						doc1 = DocUtil.clickTextUrl(userKey, doc1, "乐斗", -3);
+						doc1 = DocUtil.clickTextUrl(doc1, "乐斗", -3);
 				}
 				if (doc1.text().contains("获得了")
 						&& doc1.text().contains("查看乐斗过程")) {
@@ -64,14 +64,13 @@ public class 历练 extends 乐斗项目 {
 	
 	// 随机挑战
 	private void 随机挑战() throws IOException, InterruptedException {
-		Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
+		Document doc = DocUtil.clickTextUrl(mainDoc, "历练");
 		// 活力值
 		Elements elements = doc.getElementsByAttributeValueMatching("href",
 				"mapid");
 		int size = elements.size();
 		Random random = new Random();
-		Document doc1 = DocUtil.clickURL(userKey,
-				elements.get(random.nextInt(size)).attr("href"));
+		Document doc1 = DocUtil.clickURL(elements.get(random.nextInt(size)).attr("href"));
 		int num = Integer.parseInt(doc1.text().substring(
 				doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
 		if (num < 10) {
@@ -79,12 +78,11 @@ public class 历练 extends 乐斗项目 {
 			return;
 		}
 		while (num >= 10) {
-			Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "乐斗");
+			Document doc2 = DocUtil.clickTextUrl(doc1, "乐斗");
 			if (doc2.text().contains("获得了") && doc2.text().contains("查看乐斗过程")) {
 				message.put("历练情况" + num,
 						DocUtil.substring(doc2.text(), "获得了", 0, "查看乐斗过程"));
 			} else {
-				System.out.println("历练未找到结果： "+doc2.text());
 				message.put("历练情况" + num, "未找到结果！");
 			}
 			num = Integer.parseInt(doc2.text().substring(

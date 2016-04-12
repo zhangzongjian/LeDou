@@ -36,7 +36,7 @@ public class 查看对话框 {
 		JPanel head = new JPanel(new GridLayout(1,5,10,10));
 		head.add(new JLabel("昵称"));
 		head.add(new JLabel("QQ"));
-		head.add(new JLabel());
+//		head.add(new JLabel());
 		head.add(new JLabel("密码"));
 		head.add(new JLabel());
 		
@@ -45,7 +45,7 @@ public class 查看对话框 {
 			JPanel p = new JPanel(new GridLayout(1,5,5,5));
 			List<JTextField> list = new ArrayList<JTextField>();
 			//昵称输入框
-			JTextField usernameInput = new JTextField(username, 3);
+			JTextField usernameInput = new JTextField(username, 2);
 			usernameInput.setCaretPosition(0);
 			list.add(usernameInput); //list.get(0)
         	p.add(usernameInput);
@@ -55,18 +55,22 @@ public class 查看对话框 {
         	list.add(qqInput); //list.get(1)
         	p.add(qqInput);
         	//按钮
-        	JButton jButton  = new JButton("复制");
-        	jButton.addActionListener(new CopyButtonListener(qqInput));
-        	p.add(jButton);
+//        	JButton jButton  = new JButton("复制");
+//        	jButton.addActionListener(new CopyButtonListener(qqInput));
+//        	p.add(jButton);
         	//密码输入框
         	JTextField passwordInput = new JTextField(((Map<String, String>)usersMap.get(username)).get("password"), 5);
         	passwordInput.setCaretPosition(0);
         	list.add(passwordInput); //list.get(2)
         	p.add(passwordInput);
         	//按钮
-        	JButton jButton1  = new JButton("复制");
-        	jButton1.addActionListener(new CopyButtonListener(passwordInput));
-        	p.add(jButton1);
+//        	JButton jButton1  = new JButton("复制");
+//        	jButton1.addActionListener(new CopyButtonListener(passwordInput));
+//        	p.add(jButton1);
+        	//按钮
+        	JButton jButton2  = new JButton("拷贝书签");
+        	jButton2.addActionListener(new CopyButtonListener(usernameInput, true));
+        	p.add(jButton2);
         	
         	userTextFieldsMap.put(username, list);
         	jpanel.add(p);

@@ -19,18 +19,17 @@ public class 乐斗boss extends 乐斗项目 {
 	public void 一键挑战() {
 		try {
 			// 好友boss
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "好友");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "好友");
 			// 若当前页面不是首页，则跳到首页
 			if (doc.text().contains("首页 末页")) {
-				doc = DocUtil.clickTextUrl(userKey, doc, "首页");
+				doc = DocUtil.clickTextUrl(doc, "首页");
 			}
 			// 挑战前先吞贡献药水
-			System.out.println(doc.text());
 			// 贡献药水效果剩余次数
 			int num = Integer.parseInt(DocUtil.substring(doc.text(), "贡献药水 速购 使用 剩", "贡献药水 速购 使用 剩".length(), "次 大力丸 速购 使用"));
 			double drinkNum = Math.ceil((20 - num) / 5.0);
 			for (int i = 0; i < drinkNum; i++) {
-				DocUtil.clickTextUrl(userKey, doc, "使用", 5);
+				DocUtil.clickTextUrl(doc, "使用", 5);
 				message.put("使用贡献药水", "自动使用贡献药水"+ (int)drinkNum +"瓶！");
 			}
 
@@ -46,7 +45,7 @@ public class 乐斗boss extends 乐斗项目 {
 			if (size == 0)
 				message.put("好友boss乐斗情况", "所有好友boss已斗！");
 			for (int i = 0; i < size; i++) {
-				Document d = DocUtil.clickURL(userKey, boss.get(i).attr("href"));
+				Document d = DocUtil.clickURL(boss.get(i).attr("href"));
 				if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 					message.put("乐斗结果" + i,
 							DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));
@@ -55,7 +54,7 @@ public class 乐斗boss extends 乐斗项目 {
 				}
 			}
 			// 帮派boss
-			Document doc1 = DocUtil.clickTextUrl(userKey, mainDoc, "帮友");
+			Document doc1 = DocUtil.clickTextUrl(mainDoc, "帮友");
 			if (doc1.text().contains("尚未加入任何帮派")) {
 				message.put("乐斗结果", "尚未加入任何帮派");
 			} else {
@@ -70,7 +69,7 @@ public class 乐斗boss extends 乐斗项目 {
 				if (size1 == 0)
 					message.put("帮派boss乐斗情况", "所有帮派boss已斗！");
 				for (int i = 0; i < size1; i++) {
-					Document d = DocUtil.clickURL(userKey, boss1.get(i).attr("href"));
+					Document d = DocUtil.clickURL(boss1.get(i).attr("href"));
 					if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 						message.put("乐斗结果_" + i,
 								DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));
@@ -80,7 +79,7 @@ public class 乐斗boss extends 乐斗项目 {
 				}
 			}
 			// 侠侣boss
-			Document doc2 = DocUtil.clickTextUrl(userKey, mainDoc, "侠侣");
+			Document doc2 = DocUtil.clickTextUrl(mainDoc, "侠侣");
 			String subStringResult = doc2.toString().substring(
 					doc2.toString().indexOf("侠：") + 2,
 					doc2.toString().indexOf("19级") + 231);
@@ -94,7 +93,7 @@ public class 乐斗boss extends 乐斗项目 {
 			if (size2 == 0)
 				message.put("侠侣boss乐斗情况", "所有侠侣boss已斗！");
 			for (int i = 0; i < size2; i++) {
-				Document d = DocUtil.clickURL(userKey, boss2.get(i).attr("href"));
+				Document d = DocUtil.clickURL(boss2.get(i).attr("href"));
 				if (d.text().contains("侠侣") && d.text().contains(" (恢复")) {
 					message.put("乐斗结果-" + i,
 							DocUtil.substring(d.text(), "侠侣", 2, " (恢复"));

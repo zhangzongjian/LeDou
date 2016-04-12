@@ -105,6 +105,7 @@ public class 设置面板 {
 		list.add(Task.探险);
 		list.add(Task.十二宫);
 		list.add(Task.锦标赛);
+		list.add(Task.抢地盘);
 		list.add(Task.斗神塔);
 		list.add(Task.竞技场);
 		list.add(Task.结拜赛);

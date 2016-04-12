@@ -27,7 +27,7 @@ public class LoginUtil extends QQLogin{
 		String verifysession = ""; //login接口参数
 		String p = ""; //login接口参数
 		if(vcode.length() == 0) {
-			checkResultMap.put(uin, check(uin));
+			checkResultMap.put(uin, checkNew(uin));
 		}
 		String checkResult = checkResultMap.get(uin);
 		if("0".equals(checkResult.charAt(14)+"")) {
@@ -36,8 +36,10 @@ public class LoginUtil extends QQLogin{
 			verifycode = checkResult.split(",")[1].replaceAll("\'", "");
 			verifysession = checkResult.split(",")[3].replaceAll("\'", "");
 			p = encryptPassword(uin, password, verifycode);
-			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
+			String login_result = loginNew(uin, p, checkStatus, verifycode, verifysession);
 			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
+			//登录成功，放入重要的sid参数，代替原来的skey
+			cookiesAndSid.put("sid", login_result.split("&sid=")[1].split("','")[0]);
 			if(login_result.contains("登录成功")) {
 				checkResultMap.put(uin, ""); //登录完成后，账号check状态清空掉
 				return 0;
@@ -68,8 +70,10 @@ public class LoginUtil extends QQLogin{
 				return -1;
 			}
 			p = encryptPassword(uin, password, verifycode);
-			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
+			String login_result = loginNew(uin, p, checkStatus, verifycode, verifysession);
 			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
+			//登录成功，放入重要的sid参数，代替原来的skey
+			cookiesAndSid.put("sid", login_result.split("&sid=")[1].split("','")[0]);
 			return 0;
 		}
 	}

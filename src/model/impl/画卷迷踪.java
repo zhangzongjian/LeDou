@@ -16,13 +16,13 @@ public class 画卷迷踪 extends 乐斗项目 {
 
 	public void 挑战() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "画卷迷踪");
+			Document doc = DocUtil.clickTextUrl(mainDoc, "画卷迷踪");
 			int i=0;
 			Document select;
 			String temp = null;
 			while(true) {
-				select = DocUtil.clickTextUrl(userKey, doc, "选择");
-				doc = DocUtil.clickTextUrl(userKey, select != null ? select: doc, "准备完成进入战斗");
+				select = DocUtil.clickTextUrl(doc, "选择");
+				doc = DocUtil.clickTextUrl(select != null ? select: doc, "准备完成进入战斗");
 				if(doc.text().contains("您获得了")) {
 					message.put("挑战结果"+(i++), DocUtil.substring(doc.text(), "您获得了", 0, "我的最高记录"));
 					temp = DocUtil.substring(doc.text(), "推荐战力", 0, "准备完成进入战斗").trim();
