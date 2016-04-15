@@ -98,6 +98,7 @@ public class UserUtil {
 		return map;
 	}
 	
+	private static Object object = new Object();
 	/**
 	 * 从大乐斗首页中，获取用户昵称
 	 * @return
@@ -117,45 +118,46 @@ public class UserUtil {
 				username = DocUtil.substring(doc.text(), "帮友|侠侣", 5,
 						"续费达人   等级");
 			} else {
-				// 若获取不到username，表示skey已失效，重新获取
-				String QQ = userKey.get("QQ");
-				String password = userKey.get("password");
-				int loginStatus = LoginUtil.login(QQ, password, "");
-                LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) UserUtil
-                        .getSettingByKey("小号");
-                for (String u : map.keySet()) {
-                    if (getUserKeyByUsrname(u).get("QQ").equals(QQ)) {
-                        username = u;
-                        oldUsername = username;
+                synchronized (object) {
+                    // 若获取不到username，表示skey已失效，重新获取
+                    String QQ = userKey.get("QQ");
+                    String password = userKey.get("password");
+                    int loginStatus = LoginUtil.login(QQ, password, "");
+                    LinkedHashMap<String, Object> map = (LinkedHashMap<String, Object>) UserUtil
+                            .getSettingByKey("小号");
+                    for (String u : map.keySet()) {
+                        if (getUserKeyByUsrname(u).get("QQ").equals(QQ)) {
+                            username = u;
+                            oldUsername = username;
+                        }
                     }
+                    if (0 != loginStatus) {
+                        if (2 == loginStatus) {
+                            PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！", username);
+                        } else {
+                            PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！", username);
+                        }
+                        设置面板.inputQQ.setText(QQ);
+                        设置面板.inputPassword.setText(password);
+                        if (1 == loginStatus || -1 == loginStatus) {
+                            设置面板.showVerifyCode(true);
+                        }
+                        return null;
+                    }
+                    userKey.put("uin", QQLogin.cookies.get("uin"));
+                    userKey.put("skey", QQLogin.cookies.get("skey"));
+                    username = getUsername(userKey);
+                    Map<String, Object> users = (LinkedHashMap<String, Object>) UserUtil
+                            .getSettingByKey("小号");
+                    Object object = users.put(username, userKey);
+                    if (object == null) { // 若object为null，说明有小号昵称改变，需要去重处理
+                        users.remove(oldUsername);
+                        System.out.println(oldUsername+" 昵称有变化： "+username);
+                    }
+                    UserUtil.saveSetting();
+                    return username;
                 }
-				if (0 != loginStatus) {
-					if (2 == loginStatus) {
-						PrintUtil.printTitleInfo("系统消息", "小号密码有变，请重新录入！",
-								username);
-					} else {
-						PrintUtil.printTitleInfo("系统消息", "skey失效，请输入验证码！",
-								username);
-					}
-					设置面板.inputQQ.setText(QQ);
-					设置面板.inputPassword.setText(password);
-					if (1 == loginStatus || -1 == loginStatus) {
-						设置面板.showVerifyCode(true);
-					}
-					return null;
-				}
-				userKey.put("uin", QQLogin.cookies.get("uin"));
-				userKey.put("skey", QQLogin.cookies.get("skey"));
-				username = getUsername(userKey);
-				Map<String, Object> users = (LinkedHashMap<String, Object>) UserUtil.getSettingByKey("小号");
-                Object object = users.put(username, userKey);
-                if(object == null) {  //若object为null，说明有小号昵称改变，需要去重处理
-                    users.remove(oldUsername);
-                    System.out.println("something is doing+++++++++++++++");
-                }
-				UserUtil.saveSetting();
-				return username;
-			}
+            }
 			// 获取到的昵称前后会带一个空格，去掉
 			return username.substring(1, username.length() - 1);
 		} catch (SocketTimeoutException e) {

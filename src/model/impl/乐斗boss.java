@@ -25,7 +25,6 @@ public class 乐斗boss extends 乐斗项目 {
 				doc = DocUtil.clickTextUrl(userKey, doc, "首页");
 			}
 			// 挑战前先吞贡献药水
-			System.out.println(doc.text());
 			// 贡献药水效果剩余次数
 			int num = Integer.parseInt(DocUtil.substring(doc.text(), "贡献药水 速购 使用 剩", "贡献药水 速购 使用 剩".length(), "次 大力丸 速购 使用"));
 			double drinkNum = Math.ceil((20 - num) / 5.0);
