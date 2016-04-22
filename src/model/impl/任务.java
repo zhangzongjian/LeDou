@@ -23,9 +23,6 @@ public class 任务 extends 乐斗项目 {
 		try {
 			// 普通任务
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "任务");
-			if(doc.text().contains("炼丹 替换任务")) {
-				DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "炼丹"),"炼制");
-			}
 			if(doc.text().contains("好友切磋 替换任务") || doc.text().contains("挑战陌生人 替换任务") || doc.text().contains("挑战好友 替换任务")) {
 				Document temp = DocUtil.clickTextUrl(userKey, mainDoc, "斗友");
 				if (doc.text().contains("好友切磋 替换任务"))

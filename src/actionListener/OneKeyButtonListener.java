@@ -50,6 +50,7 @@ import util.DocUtil;
 import util.PrintUtil;
 import util.TimeUtil;
 import util.UserUtil;
+import core.MainUI;
 import core.乐斗面板;
 import core.计时面板;
 import core.设置面板;
@@ -151,11 +152,15 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.镖行天下)) {
 				Thread thread1 = new Thread(new Runnable() {
 					public void run() {
-						镖行天下 m = new 镖行天下(userKey, mainDoc);
+						final 镖行天下 m = new 镖行天下(userKey, mainDoc);
 						JLabel showTime = new JLabel();
 						计时面板.timePanel.add(showTime);
-						m.劫镖();
-						PrintUtil.printAllMessages(m, username);
+						new Thread(new Runnable() {
+							public void run() {
+								m.劫镖();
+								PrintUtil.printAllMessages(m, username);
+							}
+						}).start();
 						// 计时多次送镖
 						int lastTime;
 						int num = m.getNum();
@@ -212,6 +217,12 @@ public class OneKeyButtonListener implements ActionListener {
 				m.挑战();
 				PrintUtil.printAllMessages(m, username);
 			}
+			// //////////////////////////////////////////////////////////
+            if (tasks.contains(Task.抢地盘)) {
+                                        抢地盘 m = new 抢地盘(userKey, mainDoc);
+                m.doit();
+                PrintUtil.printAllMessages(m, username);
+            }
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.群雄逐鹿)) {
 				群雄逐鹿 m = new 群雄逐鹿(userKey, mainDoc);
@@ -432,6 +443,7 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			PrintUtil.printInfo("\n");
+			MainUI.isRun = true;
 		} catch (StringIndexOutOfBoundsException e) {
 			PrintUtil.printTitleInfo("系统消息", "skey失效！");
 			e.printStackTrace();

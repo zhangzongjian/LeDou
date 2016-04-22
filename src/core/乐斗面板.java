@@ -20,6 +20,7 @@ import actionListener.OneKeyButtonListener;
 public class 乐斗面板 {
 	public static JTextArea textArea; //信息输出文本框
 	public static JCheckBox allUsersCheckBox = new JCheckBox("所有小号");
+	public static JCheckBox autoCloseCheckBox = new JCheckBox("任务执行完毕自动退出");
 	public static JProgressBar progressBar = new JProgressBar(); //进度条
 	private JPanel fight_jPanel = new JPanel(); //主界面
 	
@@ -34,6 +35,7 @@ public class 乐斗面板 {
 		fight_jPanel.add(getOneKeyButton());
 		fight_jPanel.add(getClearButton());
 		fight_jPanel.add(getAllUsersCheckBox());
+		fight_jPanel.add(getAutoCloseCheckBox());
 		fight_jPanel.add(getScrollTextArea());
 		//fight_jPanel.add(getProgressBar());
 	}
@@ -63,6 +65,12 @@ public class 乐斗面板 {
 	private JCheckBox getAllUsersCheckBox() {
 		allUsersCheckBox.setBounds(125, 5, 78, 23);
 		return allUsersCheckBox;
+	}
+	
+	private JCheckBox getAutoCloseCheckBox() {
+	    autoCloseCheckBox.setBounds(6, 27, 155, 18);
+	    autoCloseCheckBox.setSelected(true);
+	    return autoCloseCheckBox;
 	}
 	
 	private JProgressBar getProgressBar() {

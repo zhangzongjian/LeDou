@@ -5,13 +5,36 @@ import java.awt.Container;
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
 
+import util.PrintUtil;
+
 import actionListener.OneKeyButtonListener;
 
 public class MainUI {
 
+    public static boolean isRun = false; //表示，刚打开窗口，未运行过
+    
 	public static void main(String[] args) {
 		MainUI main = new MainUI();
 		main.createJFrame("一键乐斗小工具");
+		OK:
+		while(true) {
+		    if(Thread.currentThread().activeCount() == 4 && isRun == true && 乐斗面板.autoCloseCheckBox.isSelected()) {
+		        for(int i = 10; i >= -1; i--) {
+		            try {
+		                PrintUtil.printTitleInfo("系统消息", "任务结束，程序将在 "+i+" 秒后自动关闭！");
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+		            if(乐斗面板.autoCloseCheckBox.isSelected() == false) {
+		                PrintUtil.printTitleInfo("系统消息", "自动关闭已取消！");
+		                isRun = false;
+		                continue OK;
+		            }
+		        }
+		        System.exit(0);
+		    }
+		}
 	}
 
 	public static JFrame jFrame;
