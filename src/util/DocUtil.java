@@ -37,8 +37,9 @@ public class DocUtil {
 		try {
 			Document result = Jsoup.connect(URL).cookies(userKey)
 					.timeout(time_out).get();
-			// QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
-			if (result.text().contains("使用明文密码")) { // 奇葩滴冒出这种情况，重试一次
+			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
+            //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
+            if(result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) {  //奇葩滴冒出这种情况，重试一次
 				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
 						.get();
 			}
@@ -120,7 +121,8 @@ public class DocUtil {
 			Document result = Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
 			
 			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
-			if(result.text().contains("使用明文密码")) {  //奇葩滴冒出这种情况，重试一次
+            //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
+            if(result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) {  //奇葩滴冒出这种情况，重试一次
 				result = clickTextUrl(userKey, doc, text, index);
 			}
 			int j = 0;
