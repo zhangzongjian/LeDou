@@ -18,8 +18,13 @@ public class MainUI {
 		main.createJFrame("一键乐斗小工具");
 		OK:
 		while(true) {
+		    try {
+                Thread.sleep(1000);
+            } catch (InterruptedException e1) {
+                e1.printStackTrace();
+            }
 		    if(Thread.currentThread().activeCount() == 4 && isRun == true && 乐斗面板.autoCloseCheckBox.isSelected()) {
-		        for(int i = 10; i >= -1; i--) {
+		        for(int i = 10; i >= 0; i--) {
 		            try {
 		                PrintUtil.printTitleInfo("系统消息", "任务结束，程序将在 "+i+" 秒后自动关闭！");
                         Thread.sleep(1000);

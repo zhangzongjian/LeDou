@@ -87,6 +87,8 @@ public class PrintUtil {
 	public static void printTitleInfo(String title, String message) {
 		乐斗面板.textArea.append("【"+title+"】\n");
 		乐斗面板.textArea.append("    "+message+"\n");
+		乐斗面板.textArea.setCaretPosition(乐斗面板.textArea.getText()
+                .length());
 	}
 	
 	private static String get乐斗项目名(乐斗项目 model) {
