@@ -41,7 +41,6 @@ import model.impl.许愿;
 import model.impl.踢馆;
 import model.impl.锦标赛;
 import model.impl.镖行天下;
-import model.impl.门派大战;
 
 import org.jsoup.nodes.Document;
 
@@ -294,13 +293,6 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.许愿)) {
 				许愿 m = new 许愿(userKey, mainDoc);
 				m.xuYuan();
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.门派大战)) {
-				门派大战 m = new 门派大战(userKey, mainDoc);
-				m.报名(); // 周三6点开始
-				m.领奖(); // 周一6点开始
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

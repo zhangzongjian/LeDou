@@ -116,7 +116,6 @@ public class 设置面板 {
 		list.add(Task.回流好友召回);
 		list.add(Task.巅峰之战);
 		list.add(Task.武林大会);
-		list.add(Task.门派大战);
 		list.add(Task.每日领奖);
 		list.add(Task.好友乐斗);
 		list.add(Task.帮战奖励);

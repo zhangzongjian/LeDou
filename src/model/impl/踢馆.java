@@ -51,7 +51,7 @@ public class 踢馆 extends 乐斗项目 {
 					break;
 				}
 				message.put("试练情况" + i,
-						DocUtil.substring(doc.text(), "功勋商店", 4, "！"));
+						DocUtil.substring(doc.text(), "功勋商店", 4, "贵帮已报名参与！"));
 				生命 = Integer.parseInt(doc.text().charAt(
 						doc.text().indexOf("生命：") + 3)
 						+ "");

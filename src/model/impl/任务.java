@@ -31,7 +31,7 @@ public class 任务 extends 乐斗项目 {
 				if (doc.text().contains("挑战陌生人 替换任务"))
 					for (int i = 0; i < 3; i++)
 						DocUtil.clickTextUrl(userKey, temp, "乐斗", i);
-				if (doc.text().contains("挑战好友 替换任务"))
+				if (doc.text().contains("挑战好友 替换任务")) 
 					for (int i = 0; i < 4; i++)
 						DocUtil.clickTextUrl(userKey, temp, "乐斗", i);
 			}
@@ -40,9 +40,21 @@ public class 任务 extends 乐斗项目 {
 				for(int i=0; i<5; i++)
 					DocUtil.clickURL(userKey, temp.getElementsByAttributeValueMatching("href", "from_pf_list=1").get(i).attr("href"));
 			}
+			if(doc.text().contains("强化神装 替换任务")) {
+				if(doc.toString().contains("id=116"))
+					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "神装"), "升级");
+			}
+			if(doc.text().contains("武器专精 替换任务")) {
+				if(doc.toString().contains("id=114"))
+					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "升级");
+				if(doc.toString().contains("id=115"))
+					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "武器栏"), "升级");
+			}
 			Document doc1 = DocUtil.clickTextUrl(userKey, doc, "一键完成任务");
 			int num = 5 - doc1.getElementsContainingOwnText("替换任务").size();
 			message.put("任务完成情况", "任务完成情况：（" + num + "/5）");
+			
+			
 			
 			
 			// 帮派任务
@@ -67,6 +79,9 @@ public class 任务 extends 乐斗项目 {
 			if (doc2.text().contains("查看帮贡 未完成")) {
 				DocUtil.clickTextUrl(userKey, 帮派首页,"贡献度");
 			}
+			if (doc2.text().contains("查看要闻 未完成")) {
+				DocUtil.clickTextUrl(userKey, 帮派首页,"帮派要闻");
+			}
 			if (doc2.text().contains("帮派供奉 未完成")) {
 				供奉 m = new 供奉(userKey, mainDoc);
 				m.一键供奉();
@@ -78,7 +93,17 @@ public class 任务 extends 乐斗项目 {
 				for(Element e : button.getElementsByTag("postfield")) {
 					parameters.put(e.attr("name"), e.attr("value"));
 				}
-				Jsoup.connect(href).cookies(userKey).data(parameters).data("num", "1").post();
+				for(int i=0; i<3; i++) //任务要求，修炼三次
+					Jsoup.connect(href).cookies(userKey).data(parameters).data("num", "1").post();
+			}
+			if (doc2.text().contains("帮派留言 未完成") || doc2.text().contains("查看留言 未完成")) {
+				Element button = DocUtil.clickTextUrl(userKey, 帮派首页,"留言").getElementsByTag("anchor").get(0);
+				String href = button.getElementsByTag("go").attr("href");
+				Map<String, String> parameters = new HashMap<String, String>();
+				for(Element e : button.getElementsByTag("postfield")) {
+					parameters.put(e.attr("name"), e.attr("value"));
+				}
+				Jsoup.connect(href).cookies(userKey).data(parameters).data("word", "任务！").post();
 			}
 			doc2 = DocUtil.clickTextUrl(userKey, doc, "帮派任务");
 			while (doc2.toString().contains("sub=3")) {  //sub=3，仅领取奖励的链接有，如果不包含，说明不存在领取奖励的链接
