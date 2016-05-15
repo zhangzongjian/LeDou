@@ -123,6 +123,7 @@ public class 设置面板 {
 		list.add(Task.群雄逐鹿);
 		list.add(Task.画卷迷踪);
 		list.add(Task.幻境);
+		list.add(Task.门派);
 		return list;
 	}
 	
