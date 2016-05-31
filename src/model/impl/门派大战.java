@@ -1,10 +1,10 @@
 package model.impl;
 
 import java.io.IOException;
+import java.util.Map;
 
-import java.util.Map;import model.乐斗项目;
+import model.乐斗项目;
 
-import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
 import util.DocUtil;
@@ -40,7 +40,7 @@ public class 门派大战 extends 乐斗项目 {
 			
 			//职位挑战
 			Document 职位挑战 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "op=showcouncil"));
-			for(int i : new int[]{0,2,6}){
+			for(int i : new int[]{0,1,2,3,4,5,6}){
 				DocUtil.clickTextUrl(userKey, 职位挑战, "切磋", i);
 			}
 			

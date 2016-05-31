@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -30,8 +31,15 @@ public class 矿洞 extends 乐斗项目 {
 				doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
 			}
 
-			// ///矿洞未报名情况，未处理
-
+			//
+			if(doc.text().contains("开启副本") && DocUtil.isHref(doc, "开启副本")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "开启副本");
+				Elements es = doc.getElementsByAttributeValueMatching("href", "floor");
+				//开启最高级的副本
+				doc = DocUtil.clickURL(userKey, es.get(es.size()-1).attr("href"));
+				doc = DocUtil.clickTextUrl(userKey, doc, "确认开启");
+			}
+			
 			int num = Integer.parseInt(doc.text().charAt(
 					doc.text().indexOf("剩余次数") + 5)
 					+ "");

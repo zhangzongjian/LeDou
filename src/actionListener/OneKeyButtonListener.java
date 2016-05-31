@@ -236,12 +236,6 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.助阵)) {
-				助阵 m = new 助阵(userKey, mainDoc);
-				m.doit();
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(userKey, mainDoc);
 				m.挑战();
@@ -275,6 +269,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.幻境)) {
 				幻境 m = new 幻境(userKey, mainDoc);
 				m.挑战();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.助阵)) {
+				助阵 m = new 助阵(userKey, mainDoc);
+				m.doit();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
