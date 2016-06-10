@@ -513,4 +513,33 @@ public class 活动集合 extends 乐斗项目 {
 			e.printStackTrace();
 		}
 	}
+	
+	// 幸运转盘
+		public void 幸运转盘() {
+			try {
+				if (!mainDoc.text().contains("幸运转盘")) {
+					message.put("幸运转盘", null); // 非活动时间
+					return;
+				}
+				message.put("活动16", "【幸运转盘】");
+				
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "幸运转盘");
+				int count = 0;
+				while(!doc.text().contains("今日剩余转动次数：0")) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "转动转盘");
+					if(doc.text().contains("恭喜"))
+						message.put("幸运转盘转动"+count, DocUtil.substring(doc.text(), "恭喜", 0, "返回大乐斗首页"));
+					else
+						message.put("幸运转盘转动"+count, "未找到结果！");
+					count++;
+				}
+				message.put("幸运转盘转动"+count, "今日剩余转动次数：0");
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
 }

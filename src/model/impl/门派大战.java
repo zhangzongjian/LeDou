@@ -1,11 +1,16 @@
 package model.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 
 import model.乐斗项目;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -52,6 +57,23 @@ public class 门派大战 extends 乐斗项目 {
 			
 			//任务
 			Document 任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
+			while(任务.text().contains("同门成员的资料") && 任务.text().contains("去做任务") || 任务.text().contains("其他门派成员的资料") && 任务.text().contains("去做任务")) {
+				String 门派名称  = DocUtil.substring(门派首页.text(), "【", 1, "】");
+				if(任务.text().contains("其他门派成员的资料") && 任务.text().contains("去做任务")) {
+					List<String> list = new ArrayList<String>();
+					list.add("丐帮");list.add("峨眉");list.add("少林");list.add("华山");
+					list.remove(门派名称);
+					门派名称 = list.get(0);
+				}
+				Document 斗友;
+				do {
+					斗友 = DocUtil.clickTextUrl(userKey, mainDoc, "斗友");
+				} while(!斗友.text().contains(门派名称));
+				斗友 = Jsoup.parse(DocUtil.substring(斗友.toString(), "当前体力值", 5, 门派名称));
+				Elements es = 斗友.getElementsByAttributeValueMatching("href", "from_pf_list");
+				DocUtil.clickURL(userKey, es.get(es.size() - 1).attr("href"));
+				任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
+			}
 			Document temp = 任务;
 			do {
 				temp = DocUtil.clickTextUrl(userKey, temp, "完成");

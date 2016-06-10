@@ -48,6 +48,12 @@ public class 幻境菜单{
 		item = new JMenuItem("洞庭湖");
 		item.addActionListener(new MenuItemListener("幻境", item.getText()));
 		幻境Select.add(item);
+		item = new JMenuItem("苍莽山");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
+		item = new JMenuItem("玉龙湿地");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
 		幻境Bar.add(幻境Select);
 	}
 	

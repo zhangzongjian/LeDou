@@ -59,7 +59,7 @@ public class DocUtil {
 			}
 			return result;
 		} catch (SocketTimeoutException e) {
-			System.out.println((count1++) + " 链接超时！！！！！！");
+			System.out.println("链接超时-->第" +(++count1)+ "次重试！");
 			if (count1 > 50)
 				throw e;
 			return clickURL(userKey, URL);
@@ -93,6 +93,25 @@ public class DocUtil {
 	
 	private static int count = 0;
 	private static int count1 = 0;
+	
+	/**
+	 * 获取文字链接Element数组
+	 * @param doc
+	 * @param text
+	 * @return
+	 */
+	public static List<Element> getTextUrlElementList(Document doc, String text) {
+		Elements elements = doc.getElementsContainingOwnText(text);
+		List<Element> list = new ArrayList<Element>();
+		//去掉文本不完全匹配但包含该文本的元素
+		//去掉非超链接元素
+		for(int i=0; i<elements.size(); i++) {
+			if(elements.get(i).hasAttr("href") && text.equals(elements.get(i).html())) {//去掉非超链接元素
+				list.add(elements.get(i));
+			}
+		}
+		return list;
+	}
 	
 	/**
 	 * 点击指定文本的超链接，并返回点击之后的页面。若这样的超链接有多个，指定点击第index个。-1表示倒数第一个
@@ -139,7 +158,7 @@ public class DocUtil {
 			}
 			return result;
 		} catch(SocketTimeoutException e) {
-			System.out.println((count++) + " 链接超时！！！！！！");
+			System.out.println("链接超时-->第" +(++count)+ "次重试！");
 			Thread.sleep(1000);
 			if(count > 50) throw e;
 			return clickTextUrl(userKey, doc, text, index);

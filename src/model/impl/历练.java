@@ -1,8 +1,7 @@
 package model.impl;
 
 import java.io.IOException;
-
-import java.util.Map;import java.util.Random;
+import java.util.Map;
 
 import model.乐斗项目;
 
@@ -22,13 +21,15 @@ public class 历练 extends 乐斗项目 {
 		try {
 			String name = object.substring(0,object.indexOf("("));
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
-			// 活力值
+
+			Document doc1;
 			if(!doc.text().contains(name)) {
-				message.put("历练情况", "未开启该历练场景，自动切换随机挑战！");
-				随机挑战();
-				return;
+				message.put("历练情况", "未开启该历练场景，已切换为自动模式！");
+				doc1 = 自动选择场景();
 			}
-			Document doc1 = DocUtil.clickTextUrl(userKey, doc, name);
+			else { 
+				doc1 = DocUtil.clickTextUrl(userKey, doc, name);
+			}
 			if(doc1.text().contains("下一页"))
 				doc1 = DocUtil.clickTextUrl(userKey, doc1, "下一页");
 			int num = Integer.parseInt(doc1.text().substring(
@@ -63,32 +64,14 @@ public class 历练 extends 乐斗项目 {
 	}
 	
 	// 随机挑战
-	private void 随机挑战() throws IOException, InterruptedException {
+	private Document 自动选择场景() throws IOException, InterruptedException {
 		Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
 		// 活力值
 		Elements elements = doc.getElementsByAttributeValueMatching("href",
 				"mapid");
 		int size = elements.size();
-		Random random = new Random();
 		Document doc1 = DocUtil.clickURL(userKey,
-				elements.get(random.nextInt(size)).attr("href"));
-		int num = Integer.parseInt(doc1.text().substring(
-				doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
-		if (num < 10) {
-			message.put("历练情况", "活力值不足10点！");
-			return;
-		}
-		while (num >= 10) {
-			Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "乐斗");
-			if (doc2.text().contains("获得了") && doc2.text().contains("查看乐斗过程")) {
-				message.put("历练情况" + num,
-						DocUtil.substring(doc2.text(), "获得了", 0, "查看乐斗过程"));
-			} else {
-				System.out.println("历练未找到结果： "+doc2.text());
-				message.put("历练情况" + num, "未找到结果！");
-			}
-			num = Integer.parseInt(doc2.text().substring(
-					doc2.text().indexOf("活力值") + 4, doc2.text().indexOf("/")));
-		}
+				elements.get( size - 1 ).attr("href"));
+		return doc1;
 	}
 }

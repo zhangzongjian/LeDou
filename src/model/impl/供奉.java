@@ -17,6 +17,8 @@ public class 供奉 extends 乐斗项目 {
 		super(userKey, mainURL);
 	}
 
+	static int count = 0;
+	
 	public void 一键供奉() {
 		try {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
@@ -31,14 +33,21 @@ public class 供奉 extends 乐斗项目 {
 				if (doc.toString().contains(thing)) {
 					DocUtil.clickTextUrl(userKey, Jsoup.parse(docString
 							.substring(docString.indexOf(thing))), "供奉");
-					message.put("供奉情况", "供奉成功！");
+					message.put("供奉情况"+count, "供奉成功！");
 					return;
 				} else if (doc.text().contains("下页")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "下页");
 				}
 				if (!doc.text().contains("下页")) {
-					message.put("供奉情况", "供奉失败，背包里木有" + thing + "！");
-					return;
+					String[] 候选物品  = {"asdf","ccc","ddd","大力丸"};
+					message.put("供奉情况"+count, "背包里没有(" + thing + ")，自动选择候选供奉物品("+候选物品[count]+")！");
+					thing = 候选物品[count++];
+					System.out.println(thing);
+					if(count > 候选物品.length) {
+						message.put("供奉情况"+count, "供奉失败！");
+						return;
+					}
+					一键供奉();
 				}
 			} while (doc.text().contains("下页"));
 		} catch (IOException e) {

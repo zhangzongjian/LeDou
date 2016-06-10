@@ -3,9 +3,11 @@ package model.impl;
 import java.io.IOException;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import util.DocUtil;
 
@@ -22,6 +24,7 @@ public class 武林大会 extends 乐斗项目 {
 	// 每天13点开始
 	public void 报名() {
 		try {
+			侠侣报名();
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "武林");
 			if (doc.text().contains("已报名")) {
 				message.put("报名情况", "已报名，无需重复报名！");
@@ -48,5 +51,23 @@ public class 武林大会 extends 乐斗项目 {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void 侠侣报名() throws IOException, InterruptedException {
+		//侠侣报名
+		Document doc1 = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cfight").attr("href"));
+		if(doc1.text().contains("已参加")) {
+			return;
+		}
+		List<Element> list = DocUtil.getTextUrlElementList(doc1, "报名");
+		for(Element e : list) {
+			doc1 = DocUtil.clickURL(userKey, e.attr("href"));
+			System.out.println(doc1.text());
+			if(DocUtil.getTextUrlElementList(doc1, "报名").size() == 0) {
+				//message.put("tttt", DocUtil.substring(doc1.text(), "报名状态", 0, "查看上届"));
+				return;
+			}
+		}
+		//message.put("tttt", DocUtil.substring(doc1.text(), "报名状态", 0, "查看上届"));
 	}
 }

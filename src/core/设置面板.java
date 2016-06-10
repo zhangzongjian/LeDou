@@ -30,6 +30,7 @@ public class 设置面板 {
 	public static JTextField inputVerifyCode;
 	public static JTextField input1;  //供奉物品输入框
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();//任务复选框组
+	public static List<JCheckBox> otherTaskList = new ArrayList<JCheckBox>();//其他操作复选框
 	
 	private static JLabel codeTip;
 	public static JLabel codeImge;
@@ -50,17 +51,27 @@ public class 设置面板 {
 			initVerifyCode();
 			showVerifyCode(false);
 			
+			taskPanel.add(new JLabel("------------------------------------  乐斗选项  -------------------------------------------"));
+			taskPanel.add(getSelectAllCheckBox());
+			initTaskCheckBox();
+			taskPanel.add(new JLabel("------------------------------------  其他选项  -------------------------------------------"));
 			taskPanel.add(十二宫菜单.create());
 			taskPanel.add(助阵菜单.create());
 			taskPanel.add(历练菜单.create());
 			taskPanel.add(幻境菜单.create());
-			taskPanel.add(getSelectAllCheckBox());
-			initTaskCheckBox();
+			
+			JCheckBox 开锦囊宝箱 = new JCheckBox("开锦囊宝箱"); 
+			JCheckBox 吃药10 = new JCheckBox("吃药10"); 
+			taskPanel.add(开锦囊宝箱);
+			taskPanel.add(吃药10);
+			otherTaskList.add(开锦囊宝箱);
+			otherTaskList.add(吃药10);
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static JPanel create() {
 		return new 设置面板().taskPanel;
 	}
@@ -71,8 +82,8 @@ public class 设置面板 {
 			JCheckBox task = new JCheckBox(taskName);
 			if (getTaskData().contains(taskName))
 				task.setSelected(true);
-			taskPanel.add(task); // 放到面板上。
 			taskList.add(task); // 加入到数组中。
+			taskPanel.add(task); // 放到面板上。
 			if (taskName.equals(Task.供奉)) {
 				taskPanel.add(getInput1());
 			}
@@ -138,6 +149,10 @@ public class 设置面板 {
 		try {
 			List<String> tasks = new ArrayList<String>();
 			for (JCheckBox j : 设置面板.taskList) {
+				if (j.isSelected())
+					tasks.add(j.getText());
+			}
+			for (JCheckBox j : 设置面板.otherTaskList) {
 				if (j.isSelected())
 					tasks.add(j.getText());
 			}

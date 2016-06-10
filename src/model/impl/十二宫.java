@@ -24,8 +24,8 @@ public class 十二宫 extends 乐斗项目 {
 			}
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "十二宫");
 			if(!doc.text().contains(name)) {
-				message.put("挑战情况", "未开启该十二宫，请换一个试试！");
-				return;
+				message.put("挑战情况", "未开启该十二宫，已自动挑战双子宫！");
+				name = "双子宫";
 			}
 			Document doc1 = DocUtil.clickTextUrl(userKey, doc, name);
 			int i = 0;

@@ -16,8 +16,8 @@ public class 主面板 {
 	private JTabbedPane createMainTabs() {
 		main_tabs.setBounds(0,0,400,450);
 		main_tabs.addTab("每日必斗",乐斗面板.create());
-		main_tabs.addTab("乐斗设置", 设置面板.create());
-		main_tabs.addTab("押镖、巅峰倒计时", 计时面板.timePanel);
+		main_tabs.addTab("乐斗选项", 设置面板.create());
+		main_tabs.addTab("计时窗口", 计时面板.timePanel);
 		return main_tabs;
 	}
 	

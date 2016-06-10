@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.JLabel;
 
 import model.Task;
+import model.其他操作集合;
 import model.活动集合;
 import model.impl.乐斗boss;
 import model.impl.任务;
@@ -165,6 +166,7 @@ public class OneKeyButtonListener implements ActionListener {
 						int lastTime;
 						int num = m.getNum();
 						if (num == 0) {
+							m.护送押镖();
 							PrintUtil.printMessage(m, "护送次数已用完！", username);
 							users.remove(username); // 结束了就从线程列表中移除
 							return;
@@ -239,6 +241,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.竞技场)) {
 				竞技场 m = new 竞技场(userKey, mainDoc);
 				m.挑战();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.吃药10)) {
+				其他操作集合 m = new 其他操作集合(userKey, mainDoc);
+				m.吃药10();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
@@ -369,6 +377,12 @@ public class OneKeyButtonListener implements ActionListener {
 					public void run() {
 						m.赞助(); // 每天12点开始
 						PrintUtil.printAllMessages(m, username);
+						
+						任务 m = new 任务(userKey, mainDoc);
+						m.finish();
+						
+						活跃度 m1 = new 活跃度(userKey, mainDoc);
+						m1.领取();
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}
@@ -417,6 +431,12 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.开锦囊宝箱)) {
+				其他操作集合 m = new 其他操作集合(userKey, mainDoc);
+				m.开锦囊宝箱();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.活动集合)) {
 				活动集合 m = new 活动集合(userKey, mainDoc);
 				m.打豆豆();
@@ -434,6 +454,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.做任务领斗币();
 				m.好礼步步升();
 				m.登录有礼();
+				m.幸运转盘();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
