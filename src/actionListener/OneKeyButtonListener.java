@@ -437,6 +437,12 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.微信礼包)) {
+				其他操作集合 m = new 其他操作集合(userKey, mainDoc);
+				m.微信礼包();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.活动集合)) {
 				活动集合 m = new 活动集合(userKey, mainDoc);
 				m.打豆豆();

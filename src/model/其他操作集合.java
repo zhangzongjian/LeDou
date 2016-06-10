@@ -1,9 +1,12 @@
 package model;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 
+import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 
 import util.DocUtil;
 
@@ -124,6 +127,29 @@ public class 其他操作集合 extends 乐斗项目 {
 													.get(1).attr("href"));
 			}
 			message.put("吃药10", "大力丸("+大力丸+"次)--迅捷珠("+迅捷珠+"次)--风之息("+风之息+"次)--活血散("+活血散+"次)");
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static String 微信兑换码 = "";
+	public void 微信礼包() {
+		try {
+			message.put("微信礼包", "【微信礼包】");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "微信礼包");
+			System.out.println(微信兑换码);
+			Element button = doc.getElementsByTag("anchor").get(0);
+			String href = button.getElementsByTag("go").attr("href");
+			Map<String, String> parameters = new HashMap<String, String>();
+			for(Element e : button.getElementsByTag("postfield")) {
+				parameters.put(e.attr("name"), e.attr("value"));
+			}
+			doc = Jsoup.connect(href).cookies(userKey).data(parameters)
+					.data("cdkey", 微信兑换码).post();
+			message.put("微信礼包兑换", DocUtil.substring(doc.text(), "【关注微信领礼包】", 9, "当前关注量"));
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();

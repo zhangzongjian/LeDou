@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import model.Task;
+import model.其他操作集合;
 import model.impl.供奉;
 import util.UserUtil;
 import actionListener.AddUserButtonListener;
@@ -29,6 +30,7 @@ public class 设置面板 {
 	public static JTextField inputPassword; 
 	public static JTextField inputVerifyCode;
 	public static JTextField input1;  //供奉物品输入框
+	public static JTextField input2 = new JTextField("输入微信兑换码", 8);  //微信兑换码输入框
 	public static List<JCheckBox> taskList = new ArrayList<JCheckBox>();//任务复选框组
 	public static List<JCheckBox> otherTaskList = new ArrayList<JCheckBox>();//其他操作复选框
 	
@@ -62,10 +64,14 @@ public class 设置面板 {
 			
 			JCheckBox 开锦囊宝箱 = new JCheckBox("开锦囊宝箱"); 
 			JCheckBox 吃药10 = new JCheckBox("吃药10"); 
+			JCheckBox 微信礼包 = new JCheckBox("微信礼包"); 
 			taskPanel.add(开锦囊宝箱);
 			taskPanel.add(吃药10);
+			taskPanel.add(微信礼包);
+			taskPanel.add(input2);
 			otherTaskList.add(开锦囊宝箱);
 			otherTaskList.add(吃药10);
+			otherTaskList.add(微信礼包);
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -159,6 +165,7 @@ public class 设置面板 {
 			UserUtil.addSetting("任务列表", tasks);
 			UserUtil.saveSetting();
 			供奉.thing = 设置面板.input1.getText();
+			其他操作集合.微信兑换码 = 设置面板.input2.getText();
 			UserUtil.addSetting("供奉", 设置面板.input1.getText());
 			UserUtil.saveSetting();
 			return tasks;
