@@ -64,13 +64,16 @@ public class 设置面板 {
 			
 			JCheckBox 开锦囊宝箱 = new JCheckBox("开锦囊宝箱"); 
 			JCheckBox 吃药10 = new JCheckBox("吃药10"); 
+			JCheckBox 开通达人 = new JCheckBox("开通达人"); 
 			JCheckBox 微信礼包 = new JCheckBox("微信礼包"); 
 			taskPanel.add(开锦囊宝箱);
 			taskPanel.add(吃药10);
+			taskPanel.add(开通达人);
 			taskPanel.add(微信礼包);
 			taskPanel.add(input2);
 			otherTaskList.add(开锦囊宝箱);
 			otherTaskList.add(吃药10);
+			otherTaskList.add(开通达人);
 			otherTaskList.add(微信礼包);
 			
 		} catch (IOException e) {

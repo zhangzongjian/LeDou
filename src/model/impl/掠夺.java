@@ -23,6 +23,7 @@ public class 掠夺 extends 乐斗项目 {
 		}
 		try {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "掠夺");
+			DocUtil.clickTextUrl(userKey, doc, "报名"); //默默地报名
 			if(super.day == 2) {
 				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "掠夺");
 				if(!DocUtil.isHref(doc1, "领奖")) {

@@ -443,6 +443,12 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.开通达人)) {
+				其他操作集合 m = new 其他操作集合(userKey, mainDoc);
+				m.开通达人();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.活动集合)) {
 				活动集合 m = new 活动集合(userKey, mainDoc);
 				m.打豆豆();

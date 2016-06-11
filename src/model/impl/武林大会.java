@@ -62,7 +62,6 @@ public class 武林大会 extends 乐斗项目 {
 		List<Element> list = DocUtil.getTextUrlElementList(doc1, "报名");
 		for(Element e : list) {
 			doc1 = DocUtil.clickURL(userKey, e.attr("href"));
-			System.out.println(doc1.text());
 			if(DocUtil.getTextUrlElementList(doc1, "报名").size() == 0) {
 				//message.put("tttt", DocUtil.substring(doc1.text(), "报名状态", 0, "查看上届"));
 				return;

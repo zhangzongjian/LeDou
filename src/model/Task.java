@@ -39,5 +39,6 @@ public class Task {
 	
 	public static final String 开锦囊宝箱 = "开锦囊宝箱";
 	public static final String 吃药10 = "吃药10";
+	public static final String 开通达人 = "开通达人";
 	public static final String 微信礼包 = "微信礼包";
 }

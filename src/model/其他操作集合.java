@@ -1,7 +1,9 @@
 package model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.jsoup.Jsoup;
@@ -40,50 +42,68 @@ public class 其他操作集合 extends 乐斗项目 {
 								"魂珠碎片宝箱", "一等武林宝箱", "贡献叉烧包",
 								"阅历羊皮卷", "贡献小笼包", "二等武林宝箱"};
 			for (String thing : things) {
-				doc = DocUtil.clickTextUrl(userKey, mainDoc, "背包");
-				do {
-					if (doc.toString().contains(thing)) {
-						doc = DocUtil.clickTextUrl(userKey, doc, thing);
-						if (doc != null) {
-							if (doc.toString().contains("cmd=use")) {
-								href = doc.getElementsByAttributeValueMatching(
-										"href", "cmd=use").attr("href");
-								while (true) {
-									doc = DocUtil.clickURL(userKey, href);
-									if (doc.text().contains("斗豆：")) {
-										message.put(
-												"使用物品" + count,
-												doc.text().substring(
-														0,
-														doc.text().indexOf(
-																"斗豆：")));
-										System.out.println(thing+":"+doc.text().substring(0, doc.text().indexOf("斗豆：")));
-									} else {
-										break;
-									}
-									count++;
-								}
-							} else {
-								// 该物品不能被使用
-								break;
-							}
-						}
-					} else if (doc.text().contains("下页")) {
-						doc = DocUtil.clickTextUrl(userKey, doc, "下页");
-						continue;
-					} else {
-						// 背包里没有该物品
-						message.put("使用物品"+count, "操作完成！");
-						break;
-					}
-				} while (true);
+				List<String> data = 使用背包物品(thing, -1);
+				for(String s : data) {
+					message.put("使用物品"+(count++), s);
+				}
 			}
+			message.put("使用物品"+count, "操作完成！");
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * 使用背包某物品 N 次，已有物品个数 n < N 时将使用 n 次。N <0表示用光
+	 * @param thing
+	 * @param useNum
+	 * @return
+	 * @throws IOException
+	 * @throws InterruptedException
+	 */
+	private List<String> 使用背包物品(String thing, int useNum) throws IOException, InterruptedException {
+		String href = null;
+		List<String> useResult = new ArrayList<String>();
+		Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "背包");
+		int count = useNum;
+		boolean flag = false; //是否无视使用次数，用光
+		if(count < 0) {
+			flag = true; 
+		}
+		do {
+			if (doc.toString().contains(thing)) {
+				doc = DocUtil.clickTextUrl(userKey, doc, thing);
+				if (doc != null) {
+					if (doc.toString().contains("cmd=use")) {
+						href = doc.getElementsByAttributeValueMatching(
+								"href", "cmd=use").attr("href");
+						while (flag || count-- > 0) {  //使用count次
+							doc = DocUtil.clickURL(userKey, href);
+							if (doc.text().contains("斗豆：") && doc.text().indexOf("斗豆：")!=0) {
+								useResult.add(doc.text().substring(0, doc.text().indexOf("斗豆：")));
+								System.out.println(thing+":"+doc.text().substring(0, doc.text().indexOf("斗豆：")));
+							} else {
+								break;
+							}
+						}
+					} else {
+						// 该物品不能被使用
+						break;
+					}
+				} else {
+					break;
+				}
+			} else if (doc.text().contains("下页")) {
+				doc = DocUtil.clickTextUrl(userKey, doc, "下页");
+				continue;
+			} else {
+				break;
+			}
+		} while (true);
+		return useResult;
 	}
 	
 	public void 吃药10() {
@@ -140,7 +160,6 @@ public class 其他操作集合 extends 乐斗项目 {
 		try {
 			message.put("微信礼包", "【微信礼包】");
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "微信礼包");
-			System.out.println(微信兑换码);
 			Element button = doc.getElementsByTag("anchor").get(0);
 			String href = button.getElementsByTag("go").attr("href");
 			Map<String, String> parameters = new HashMap<String, String>();
@@ -150,6 +169,40 @@ public class 其他操作集合 extends 乐斗项目 {
 			doc = Jsoup.connect(href).cookies(userKey).data(parameters)
 					.data("cdkey", 微信兑换码).post();
 			message.put("微信礼包兑换", DocUtil.substring(doc.text(), "【关注微信领礼包】", 9, "当前关注量"));
+		} catch (IOException e) {
+			message.put("消息", "连接超时，请重试！");
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	//默认开通周卡达人
+	public void 开通达人() {
+		try {
+			message.put("开通达人", "【开通达人】");
+			if(DocUtil.getTextUrlElementList(mainDoc, "开通达人").size() == 0) {
+				message.put("开通情况", "已是达人，无须重复开通！");
+				return;
+			}
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "开通达人");
+			doc = DocUtil.clickTextUrl(userKey, doc, "周卡达人");
+			doc = DocUtil.clickTextUrl(userKey, doc, "斗币");
+			
+			Element button = doc.getElementsByTag("anchor").get(0);
+			String href = button.getElementsByTag("go").attr("href");
+			Map<String, String> parameters = new HashMap<String, String>();
+			for(Element e : button.getElementsByTag("postfield")) {
+				parameters.put(e.attr("name"), e.attr("value"));
+			}
+			doc = Jsoup.connect(href).cookies(userKey).data(parameters)
+					.data("num", "1").post();
+			if(使用背包物品("周卡达人", 1).size() != 0) {
+				message.put("开通情况", "开通成功！");
+			}
+			else {
+				message.put("开通情况", "开通失败，未知错误！");
+			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
