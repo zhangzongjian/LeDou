@@ -106,6 +106,13 @@ public class 其他操作集合 extends 乐斗项目 {
 		return useResult;
 	}
 	
+	private boolean check吃药(Document document) {
+		if(document.text().contains("请先购买")) 
+			return false;
+		else
+			return true;
+	}
+	
 	public void 吃药10() {
 		try {
 			message.put("吃药10", "【吃药10】");
@@ -118,6 +125,7 @@ public class 其他操作集合 extends 乐斗项目 {
 				if(大力丸 >= 10) break;
 				doc = DocUtil.clickURL(userKey, doc.getElementsByAttributeValueMatching("href", "id=3016")
 													.get(1).attr("href"));
+				if(check吃药(doc) == false) break;
 			}
 			start = "迅捷珠 速购 使用 剩";
 			end = "次 活血散";
@@ -127,6 +135,7 @@ public class 其他操作集合 extends 乐斗项目 {
 				if(迅捷珠 >= 10) break;
 				doc = DocUtil.clickURL(userKey, doc.getElementsByAttributeValueMatching("href", "id=3017")
 													.get(1).attr("href"));
+				if(check吃药(doc) == false) break;
 			}
 			start = "风之息 速购 使用 剩";
 			end = "次 迅捷珠";
@@ -136,6 +145,7 @@ public class 其他操作集合 extends 乐斗项目 {
 				if(风之息 >= 10) break;
 				doc = DocUtil.clickURL(userKey, doc.getElementsByAttributeValueMatching("href", "id=3018")
 													.get(1).attr("href"));
+				if(check吃药(doc) == false) break;
 			}
 			start = "活血散 速购 使用 剩";
 			end = "次 心魔";
@@ -145,6 +155,7 @@ public class 其他操作集合 extends 乐斗项目 {
 				if(活血散 >= 10) break;
 				doc = DocUtil.clickURL(userKey, doc.getElementsByAttributeValueMatching("href", "id=3004")
 													.get(1).attr("href"));
+				if(check吃药(doc) == false) break;
 			}
 			message.put("吃药10", "大力丸("+大力丸+"次)--迅捷珠("+迅捷珠+"次)--风之息("+风之息+"次)--活血散("+活血散+"次)");
 		} catch (IOException e) {
