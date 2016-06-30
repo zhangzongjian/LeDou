@@ -57,9 +57,9 @@ public class 门派大战 extends 乐斗项目 {
 			
 			//任务
 			Document 任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
-			while(任务.text().contains("同门成员的资料") && 任务.text().contains("去做任务") || 任务.text().contains("其他门派成员的资料") && 任务.text().contains("去做任务")) {
+			while(任务.text().contains("查看一名同门成员的资料  奖励：门贡12 去做任务") || 任务.text().contains("其他门派成员的资料  奖励：门贡12 去做任务")) {
 				String 门派名称  = DocUtil.substring(门派首页.text(), "【", 1, "】");
-				if(任务.text().contains("其他门派成员的资料") && 任务.text().contains("去做任务")) {
+				if(任务.text().contains("其他门派成员的资料  奖励：门贡12 去做任务")) {
 					List<String> list = new ArrayList<String>();
 					list.add("丐帮");list.add("峨眉");list.add("少林");list.add("华山");
 					list.remove(门派名称);

@@ -7,6 +7,7 @@ import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -59,9 +60,9 @@ public class 掠夺 extends 乐斗项目 {
 //			if(super.day == 2) {
 //				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "掠夺");
 //				int i = 0;
-//				int index = 0;
+//				int[] indexs = new int[]{/*1,2,3,4,5,6,7,8,9,10,11,12*/5};
 //				H:
-//				while (index++ <= 12) {
+//				for(int index : indexs) {
 //					while (!doc1.text().contains("已占领 " + (index + 1))) {
 //						Elements e = doc1.getElementsByAttributeValueMatching(
 //								"href", "subtype=4&gra_id=[0123]+" + index);

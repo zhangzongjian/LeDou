@@ -165,19 +165,18 @@ public class OneKeyButtonListener implements ActionListener {
 						// 计时多次送镖
 						int lastTime;
 						int num = m.getNum();
-						if (num == 0) {
-							m.护送押镖();
-							PrintUtil.printMessage(m, "护送次数已用完！", username);
-							users.remove(username); // 结束了就从线程列表中移除
-							return;
-						}
-						while (num > 0) {
+//						if (num == 0) {
+//							PrintUtil.printMessage(m, "护送次数已用完！", username);
+//							users.remove(username); // 结束了就从线程列表中移除
+//							return;
+//						}
+						while (num >= 0) {
 							m.护送押镖();
 							// 若正在护送，次数不减
 							if (!m.getMessage().get("护送状态")
 									.equals("您正在护送押镖中哦！"))
 								num--;
-							PrintUtil.printMessageByKey(m, "护送状态", username);
+							PrintUtil.printAllMessages(m, username);
 							lastTime = m.getLastTime();
 							while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
@@ -349,18 +348,19 @@ public class OneKeyButtonListener implements ActionListener {
 				final 结拜赛 m = new 结拜赛(userKey, mainDoc);
 				//12:00:05执行报名，预留5秒防止延迟
 				long lastTime = TimeUtil.getSecond("12:00:05");
-				if (m.getDay() == 1) {
-					if(lastTime > 0) {
-						PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
-					}
-					TimeUtil.timer.schedule(new TimerTask() {
-						@Override
-						public void run() {
-							m.报名(); // 周一12点开始
-							PrintUtil.printAllMessages(m, username);
-						}
-					}, lastTime < 0 ? 0 : lastTime*1000 );
+				if (m.getDay() != 1) {
+					lastTime = -1; //不是周一时，lastTime置负数，表示马上执行
 				}
+				if(lastTime > 0) {
+					PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
+				}
+				TimeUtil.timer.schedule(new TimerTask() {
+					@Override
+					public void run() {
+						m.报名(); // 周一12点开始
+						PrintUtil.printAllMessages(m, username);
+					}
+				}, lastTime < 0 ? 0 : lastTime*1000 );
 				m.助威(); // 助威周四0点开始，
 				m.助威领奖(); // 领奖周六0点开始
 				PrintUtil.printAllMessages(m, username);
