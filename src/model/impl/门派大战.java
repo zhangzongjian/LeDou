@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import model.乐斗项目;
 
@@ -57,9 +59,11 @@ public class 门派大战 extends 乐斗项目 {
 			
 			//任务
 			Document 任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
-			while(任务.text().contains("查看一名同门成员的资料  奖励：门贡12 去做任务") || 任务.text().contains("其他门派成员的资料  奖励：门贡12 去做任务")) {
+			Pattern p1 = Pattern.compile("查看一名同门成员的资料  奖励：门贡[0-9]{1,} 去做任务");
+			Pattern p2 = Pattern.compile("查看一名其他门派成员的资料  奖励：门贡[0-9]{1,} 去做任务");
+			while(p1.matcher(任务.text()).find() || p2.matcher(任务.text()).find()) {
 				String 门派名称  = DocUtil.substring(门派首页.text(), "【", 1, "】");
-				if(任务.text().contains("其他门派成员的资料  奖励：门贡12 去做任务")) {
+				if(p2.matcher(任务.text()).find()) {
 					List<String> list = new ArrayList<String>();
 					list.add("丐帮");list.add("峨眉");list.add("少林");list.add("华山");
 					list.remove(门派名称);
@@ -71,10 +75,17 @@ public class 门派大战 extends 乐斗项目 {
 				} while(!斗友.text().contains(门派名称));
 				斗友 = Jsoup.parse(DocUtil.substring(斗友.toString(), "当前体力值", 5, 门派名称));
 				Elements es = 斗友.getElementsByAttributeValueMatching("href", "from_pf_list");
-				DocUtil.clickURL(userKey, es.get(es.size() - 1).attr("href"));
+				//查看资料
+				Document 成员个人主页 = DocUtil.clickURL(userKey, es.get(es.size() - 1).attr("href"));
+				//战斗
+				DocUtil.clickTextUrl(userKey, 成员个人主页, "乐斗");
 				任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
 			}
-			Document temp = 任务;
+			Pattern p3 = Pattern.compile("进行一次心法修炼  奖励：门贡[0-9]{1,} 去做任务");
+			if(p3.matcher(任务.text()).find()) {
+				DocUtil.clickTextUrl(userKey, 心法, "修炼");
+			}
+			Document temp = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
 			do {
 				temp = DocUtil.clickTextUrl(userKey, temp, "完成");
 				if(temp != null) 任务  = temp;

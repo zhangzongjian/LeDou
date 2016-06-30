@@ -35,7 +35,6 @@ import model.impl.活跃度;
 import model.impl.画卷迷踪;
 import model.impl.矿洞;
 import model.impl.竞技场;
-import model.impl.答题;
 import model.impl.结拜赛;
 import model.impl.群雄逐鹿;
 import model.impl.许愿;
@@ -198,12 +197,6 @@ public class OneKeyButtonListener implements ActionListener {
 					users.add(username); // 启动username账号的线程
 					thread1.start();
 				}
-			}
-			// /////////////////////////////////////////////////////////////////////
-			if (tasks.contains(Task.答题)) {
-				答题 m = new 答题(userKey, mainDoc);
-				m.answer();
-				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.斗神塔)) {

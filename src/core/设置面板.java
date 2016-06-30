@@ -121,7 +121,6 @@ public class 设置面板 {
 		list.add(Task.分享);
 		list.add(Task.矿洞);
 		list.add(Task.助阵);
-		list.add(Task.答题);
 		list.add(Task.探险);
 		list.add(Task.十二宫);
 		list.add(Task.锦标赛);

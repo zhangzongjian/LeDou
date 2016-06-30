@@ -59,7 +59,7 @@ public class 任务 extends 乐斗项目 {
 			
 			// 帮派任务
 			Document 帮派首页 = DocUtil.clickTextUrl(userKey, mainDoc, "我的帮派");
-			if (帮派首页.text().contains("尚未加入任何帮派")) {
+			if (帮派首页.text().contains("尚未加入任何帮派")|| 帮派首页.text().contains("你还没有申请加入任何帮派")) {
 				message.put("帮派任务完成情况", "尚未加入任何帮派");
 				return;
 			}
@@ -86,15 +86,28 @@ public class 任务 extends 乐斗项目 {
 				供奉 m = new 供奉(userKey, mainDoc);
 				m.一键供奉();
 			}
-			if (doc2.text().contains("帮派修炼 未完成")) {
-				Element button = DocUtil.clickTextUrl(userKey, 帮派首页,"帮修").getElementsByTag("anchor").get(0);
-				String href = button.getElementsByTag("go").attr("href");
-				Map<String, String> parameters = new HashMap<String, String>();
-				for(Element e : button.getElementsByTag("postfield")) {
-					parameters.put(e.attr("name"), e.attr("value"));
+			if (!doc2.text().contains("帮派修炼 未完成")) {
+				//修炼帮修技能的优先次序。
+				int [] 技能列表 = new int[]{0,1,5,4,8}; //分别为 命中、闪避、减伤、加伤、生命
+				int index = 0;
+				for(int i=0; i<3; i++) {//任务要求，修炼三次
+					Element button = DocUtil.clickTextUrl(userKey, 帮派首页,"帮修").getElementsByTag("anchor").get(技能列表[index]);
+					String href = button.getElementsByTag("go").attr("href");
+					Map<String, String> parameters = new HashMap<String, String>();
+					for(Element e : button.getElementsByTag("postfield")) {
+						parameters.put(e.attr("name"), e.attr("value"));
+					}
+					Document document = Jsoup.connect(href).cookies(userKey).data(parameters).data("num", "1").post();
+					if(document.text().contains("你需要提升帮派等级来让你进行下一步的修炼")) {
+						if(index < 技能列表.length-1) {
+							index++;
+							i--;
+						}
+						else {
+							index = 技能列表.length-1;
+						}
+					}
 				}
-				for(int i=0; i<3; i++) //任务要求，修炼三次
-					Jsoup.connect(href).cookies(userKey).data(parameters).data("num", "1").post();
 			}
 			if (doc2.text().contains("帮派留言 未完成") || doc2.text().contains("查看留言 未完成")) {
 				Element button = DocUtil.clickTextUrl(userKey, 帮派首页,"留言").getElementsByTag("anchor").get(0);
