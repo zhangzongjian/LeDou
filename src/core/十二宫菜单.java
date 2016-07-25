@@ -61,6 +61,9 @@ public class 十二宫菜单 {
 		item = new JMenuItem("水瓶宫(101-110)");
 		item.addActionListener(new MenuItemListener("十二宫", item.getText()));
 		十二宫Select.add(item);
+		item = new JMenuItem("双鱼宫(111-120)");
+		item.addActionListener(new MenuItemListener("十二宫", item.getText()));
+		十二宫Select.add(item);
 		十二宫Bar.add(十二宫Select);
 	}
 	

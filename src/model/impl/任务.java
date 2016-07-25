@@ -86,7 +86,7 @@ public class 任务 extends 乐斗项目 {
 				供奉 m = new 供奉(userKey, mainDoc);
 				m.一键供奉();
 			}
-			if (!doc2.text().contains("帮派修炼 未完成")) {
+			if (doc2.text().contains("帮派修炼 未完成")) {
 				//修炼帮修技能的优先次序。
 				int [] 技能列表 = new int[]{0,1,5,4,8}; //分别为 命中、闪避、减伤、加伤、生命
 				int index = 0;

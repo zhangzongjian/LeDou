@@ -42,6 +42,7 @@ import model.impl.踢馆;
 import model.impl.锦标赛;
 import model.impl.镖行天下;
 import model.impl.门派大战;
+import model.impl.门派邀请赛;
 
 import org.jsoup.nodes.Document;
 
@@ -169,7 +170,7 @@ public class OneKeyButtonListener implements ActionListener {
 //							users.remove(username); // 结束了就从线程列表中移除
 //							return;
 //						}
-						while (num >= 0) {
+						if (num >= 0) {
 							m.护送押镖();
 							// 若正在护送，次数不减
 							if (!m.getMessage().get("护送状态")
@@ -177,7 +178,7 @@ public class OneKeyButtonListener implements ActionListener {
 								num--;
 							PrintUtil.printAllMessages(m, username);
 							lastTime = m.getLastTime();
-							while (lastTime > 0) {
+							/*while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
 								try {
 									showTime.setText("  【"+username+"】护送押镖(" + num + "/3)："
@@ -186,7 +187,7 @@ public class OneKeyButtonListener implements ActionListener {
 								} catch (InterruptedException e) {
 									e.printStackTrace();
 								}
-							}
+							}*/
 						}
 						users.remove(username); // 结束了就从线程列表中移除
 						计时面板.timePanel.remove(showTime);
@@ -383,6 +384,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.掠夺)) {
 				掠夺 m = new 掠夺(userKey, mainDoc);
 				m.领奖(); // 周三6点开始
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.门派邀请赛)) {
+				门派邀请赛 m = new 门派邀请赛(userKey, mainDoc);
+				m.doit(); // 周三6点开始
 				PrintUtil.printAllMessages(m, username);
 			}
 			// /////////////////////////////////////////////////////////

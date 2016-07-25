@@ -17,6 +17,7 @@ public class Task {
 	public static final String 矿洞 = "矿洞"; 
 	public static final String 锦标赛 = "锦标赛"; 
 	public static final String 门派 = "门派"; 
+	public static final String 门派邀请赛 = "门派邀请赛"; 
 	public static final String 斗神塔 = "斗神塔"; 
 	public static final String 抢地盘 = "抢地盘"; 
 	public static final String 十二宫 = "十二宫"; 
