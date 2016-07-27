@@ -28,17 +28,17 @@ public class 其他操作集合 extends 乐斗项目 {
 			do {
 				href = 锦囊.getElementsByAttributeValueMatching("href", "cmd=use").attr("href");
 				if("".equals(href)) {
-					//message.put("开锦囊"+count, "操作完成！");
 					break;
 				}
 				锦囊 = DocUtil.clickURL(userKey, href);
 				message.put("开锦囊"+count, 锦囊.text().substring(0, 锦囊.text().indexOf("斗豆：")));
 				System.out.println( 锦囊.text().substring(0, 锦囊.text().indexOf("斗豆：")));///////
 				count ++;
+				if(count >= 100) break;
 			} while (true);
 			
 			//其他使用物品
-			String[] things = {"巅峰之战一等勋章", "巅峰之战二等勋章", "资源补给箱",
+			/*String[] things = {"巅峰之战一等勋章", "巅峰之战二等勋章", "资源补给箱",
 								"魂珠碎片宝箱", "一等武林宝箱", "贡献叉烧包",
 								"阅历羊皮卷", "贡献小笼包", "二等武林宝箱"};
 			for (String thing : things) {
@@ -46,7 +46,7 @@ public class 其他操作集合 extends 乐斗项目 {
 				for(String s : data) {
 					message.put("使用物品"+(count++), s);
 				}
-			}
+			}*/
 			message.put("使用物品"+count, "操作完成！");
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

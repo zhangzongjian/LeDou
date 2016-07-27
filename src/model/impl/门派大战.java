@@ -61,9 +61,10 @@ public class 门派大战 extends 乐斗项目 {
 			Document 任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
 			Pattern p1 = Pattern.compile("查看一名同门成员的资料  奖励：门贡[0-9]{1,} 去做任务");
 			Pattern p2 = Pattern.compile("查看一名其他门派成员的资料  奖励：门贡[0-9]{1,} 去做任务");
-			while(p1.matcher(任务.text()).find() || p2.matcher(任务.text()).find()) {
+			Pattern p3 = Pattern.compile("与其他门派成员进行一次武艺切磋  奖励：门贡[0-9]{1,} 去做任务");
+			while(p1.matcher(任务.text()).find() || p2.matcher(任务.text()).find() || p3.matcher(任务.text()).find()) {
 				String 门派名称  = DocUtil.substring(门派首页.text(), "【", 1, "】");
-				if(p2.matcher(任务.text()).find()) {
+				if(p2.matcher(任务.text()).find() || p3.matcher(任务.text()).find()) {
 					List<String> list = new ArrayList<String>();
 					list.add("丐帮");list.add("峨眉");list.add("少林");list.add("华山");
 					list.remove(门派名称);
@@ -81,8 +82,8 @@ public class 门派大战 extends 乐斗项目 {
 				DocUtil.clickTextUrl(userKey, 成员个人主页, "乐斗");
 				任务 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
 			}
-			Pattern p3 = Pattern.compile("进行一次心法修炼  奖励：门贡[0-9]{1,} 去做任务");
-			if(p3.matcher(任务.text()).find()) {
+			Pattern p4 = Pattern.compile("进行一次心法修炼  奖励：门贡[0-9]{1,} 去做任务");
+			if(p4.matcher(任务.text()).find()) {
 				DocUtil.clickTextUrl(userKey, 心法, "修炼");
 			}
 			Document temp = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "cmd=sect_task"));
