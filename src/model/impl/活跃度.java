@@ -45,6 +45,7 @@ public class 活跃度 extends 乐斗项目 {
 							DocUtil.substring(temp1.text(), "】", 1, "1."));
 				}
 			}
+			message.put("活跃度总分", "（"+DocUtil.substring(temp1.text(), "【", 1, "】")+"）");
 			//佣兵签到
 			佣兵位签到();
 		} catch (IOException e) {

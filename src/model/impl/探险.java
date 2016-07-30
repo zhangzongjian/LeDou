@@ -20,8 +20,13 @@ public class 探险 extends 乐斗项目 {
 	public void doit() {
 		try {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "探险");
+			int 挑战前积分 = -1; //初始状态，表示未查询
+			if(doc.toString().contains("exchange")) {
+				挑战前积分 = Integer.valueOf(DocUtil.substring(DocUtil.clickTextUrl(userKey, doc, "兑换").text(), "我的探险积分：", 7, "--1级翡翠石--").trim());
+			}
 			if(doc.text().contains("探险次数：0/1")) {
 				message.put("探险情况", "探险次数：0/1");
+				积分统计(doc, 挑战前积分);
 				return;
 			}
 			if(doc.text().contains("探险次数：1/1")) {
@@ -64,22 +69,35 @@ public class 探险 extends 乐斗项目 {
 				}
 				else if(doc.text().contains("还魂丹不足，无法复活")) {
 					message.put("探险情况"+(i++), " 还魂丹不足，无法复活。");
-					return;
+					doc = DocUtil.clickTextUrl(userKey, doc, "结束");
+					message.put("探险结束", " 挑战结束！");
+					break;
 				}
 				// 结束领奖
 				else if(doc.text().contains("抵达终点")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "领奖");
 					message.put("探险情况"+(i++), DocUtil.substring(doc.text(), "【斗神遗宝】", 6, "开始探险"));
-					return;
+					message.put("探险结束", "挑战结束！");
+					break;
 				}
 				if(i > 70) break; //防止死循环
 			}
-			
+			积分统计(doc, 挑战前积分);
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	private void 积分统计(Document doc, int 挑战前积分) throws NumberFormatException, IOException, InterruptedException {
+		int 挑战后积分 = Integer.valueOf(DocUtil.substring(DocUtil.clickTextUrl(userKey, doc, "兑换").text(), "我的探险积分：", 7, "--1级翡翠石--").trim());
+		if(挑战前积分 == -1) {
+			message.put("挑战前后积分", "（挑战前后积分："+挑战后积分+"(后) - 未找到结果(前) = 未找到结果）");
+		}
+		else {
+			message.put("挑战前后积分", "（挑战前后积分："+挑战后积分+"(后) - "+挑战前积分+"(前) = "+(挑战后积分 - 挑战前积分)+"分");
 		}
 	}
 }
