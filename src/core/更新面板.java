@@ -35,6 +35,7 @@ public class 更新面板 {
 		init();
 		updatePanel.add(getContent());
 		if(!isHeadVersion()) {
+			JOptionPane.showMessageDialog(null, "有新版本，详情请看<版本>界面！", "更新",JOptionPane.WARNING_MESSAGE);
 			updatePanel.add(getUpdateButton());
 		}
 	}
@@ -72,7 +73,6 @@ public class 更新面板 {
 	
 	private boolean isHeadVersion() {
 		if(thisVersion == null || thisVersion.getVersion() == null) {
-			JOptionPane.showMessageDialog(null, "有新版本，详情请看<版本>界面！", "更新",JOptionPane.WARNING_MESSAGE);
 			return false;
 		}
 		if(thisVersion.getVersion().equals(headVersion.getVersion())) {
