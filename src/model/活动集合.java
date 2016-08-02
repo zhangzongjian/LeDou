@@ -542,4 +542,36 @@ public class 活动集合 extends 乐斗项目 {
 			}
 		}
 		
+		
+		// 猜单双
+		public void 猜单双() {
+			try {
+				if (!mainDoc.text().contains("猜单双")) {
+					message.put("猜单双", null); // 非活动时间
+					return;
+				}
+				message.put("活动17", "【猜单双】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "猜单双");
+				Random random = new Random();
+				for(int i = 1; i<=5; i++) {
+					if(DocUtil.getTextUrlElementList(doc, "双数").size() != 0) {
+						if(random.nextInt(10) % 2 == 0) {
+							doc = DocUtil.clickTextUrl(userKey, doc, "双数");
+						}
+						else {
+							doc = DocUtil.clickTextUrl(userKey, doc, "单数");
+						}
+						message.put("猜单双"+i, i+"、"+DocUtil.substring(doc.text(), "】", 1, "点击数字板"));
+					} else {
+						message.put("猜单双"+i, "明天再来！");
+						break;
+					}
+				}
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 }

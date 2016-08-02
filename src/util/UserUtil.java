@@ -183,11 +183,11 @@ public class UserUtil {
 	
 	public static void main(String[] args) throws IOException {
 		System.out.println(UserUtil.getSetting());
-		Map<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSetting().get("小号");
-		for(Object o : map.values()) {
-			((Map<String, Object>)o).put("skey", "ee");
-		}
-		UserUtil.saveSetting();
-		System.out.println(UserUtil.getSetting());
+//		Map<String, Object> map = (LinkedHashMap<String, Object>)UserUtil.getSetting().get("小号");
+//		for(Object o : map.values()) {
+//			((Map<String, Object>)o).put("skey", "ee");
+//		}
+//		UserUtil.saveSetting();
+		System.out.println(UserUtil.getSetting().get("content"));
 	}
 }

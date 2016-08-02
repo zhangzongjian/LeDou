@@ -18,6 +18,7 @@ public class 主面板 {
 		main_tabs.addTab("每日必斗",乐斗面板.create());
 		main_tabs.addTab("乐斗选项", 设置面板.create());
 		main_tabs.addTab("计时窗口", 计时面板.timePanel);
+		main_tabs.addTab("版本", 更新面板.create());
 		return main_tabs;
 	}
 	
