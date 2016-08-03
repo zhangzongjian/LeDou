@@ -18,7 +18,13 @@ public class 主面板 {
 		main_tabs.addTab("每日必斗",乐斗面板.create());
 		main_tabs.addTab("乐斗选项", 设置面板.create());
 		main_tabs.addTab("计时窗口", 计时面板.timePanel);
-		main_tabs.addTab("版本", 更新面板.create());
+		
+		JPanel updatePanel = 更新面板.create();
+		if(更新面板.versionStatus == 0) {
+			main_tabs.addTab("版本(有新版本)", updatePanel);
+		} else {
+			main_tabs.addTab("版本", updatePanel);
+		}
 		return main_tabs;
 	}
 	

@@ -18,6 +18,7 @@ import actionListener.UpdateButtonListener;
 public class 更新面板 {
 	
 	public static JPanel updatePanel = new JPanel();
+	public static int versionStatus = 0;
 	private Version thisVersion = new Version();
 	private Version headVersion = new Version();
 	private Document updateMessage = null;
@@ -34,8 +35,8 @@ public class 更新面板 {
 	private 更新面板() throws IOException {
 		init();
 		updatePanel.add(getContent());
-		if(!isHeadVersion()) {
-			JOptionPane.showMessageDialog(null, "有新版本，详情请看<版本>界面！", "更新",JOptionPane.WARNING_MESSAGE);
+		if(getVersionStatus() == 0) {
+//			JOptionPane.showMessageDialog(null, "有新版本，详情请看<版本>界面！", "更新",JOptionPane.WARNING_MESSAGE);
 			updatePanel.add(getUpdateButton());
 		}
 	}
@@ -46,8 +47,11 @@ public class 更新面板 {
 		sb.append("更新内容："+thisVersion.getContent()+"<br>");
 		sb.append("备注："+thisVersion.getRemark()+"<br>");
 		sb.append("<br>");
-		if(isHeadVersion()) {
+		if(getVersionStatus() == 1) {
 			sb.append("最新版本：(当前版本已是最新)<br>");
+		}
+		else if(getVersionStatus() == -1) {
+			sb.append("最新版本：(获取版本信息失败)<br>");
 		}
 		else {
 			sb.append("最新版本："+headVersion.getVersion()+"<br>");
@@ -65,21 +69,38 @@ public class 更新面板 {
 		return updateButton;
 	}
 	
-	private Document getUpdateMessage() throws IOException {
+	private Document getUpdateMessage() {
 		String url = "http://7xwzdp.com1.z0.glb.clouddn.com/UpdateMessage.txt?v="+System.currentTimeMillis();
-		Document updateMessage = Jsoup.connect(url).ignoreContentType(true).get();
-		return updateMessage;
+		Document updateMessage;
+		try {
+			updateMessage = Jsoup.connect(url).ignoreContentType(true).get();
+			return updateMessage;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
-	private boolean isHeadVersion() {
-		if(thisVersion == null || thisVersion.getVersion() == null) {
-			return false;
+	/**
+	 * 返回0表示：当前不是最新版；返回1表示：当前版本是最新版；返回-1表示：获取版本信息失败；
+	 * @return
+	 */
+	private int getVersionStatus() {
+		if(thisVersion.getVersion() == null && headVersion.getVersion() != null) {
+			versionStatus = 0;
+			return 0;
+		}
+		if(headVersion.getVersion() == null) {
+			versionStatus = -1;
+			return -1;
 		}
 		if(thisVersion.getVersion().equals(headVersion.getVersion())) {
-			return true;
+			versionStatus = 1;
+			return 1;
 		}
 		else {
-			return false;
+			versionStatus = 0;
+			return 0;
 		}
 	}
 	
@@ -93,8 +114,10 @@ public class 更新面板 {
 		thisVersion.setRemark(remark != null ? remark.toString() : null);
 		//headVersion
 		updateMessage = getUpdateMessage();
-		headVersion.setVersion(updateMessage.getElementsByTag("version").html()); 
-		headVersion.setContent(updateMessage.getElementsByTag("content").html()); 
-		headVersion.setRemark(updateMessage.getElementsByTag("remark").html()); 
+		if(updateMessage != null) {
+			headVersion.setVersion(updateMessage.getElementsByTag("version").html()); 
+			headVersion.setContent(updateMessage.getElementsByTag("content").html()); 
+			headVersion.setRemark(updateMessage.getElementsByTag("remark").html());
+		}
 	}
 }
