@@ -115,9 +115,9 @@ public class 更新面板 {
 		//headVersion
 		updateMessage = getUpdateMessage();
 		if(updateMessage != null) {
-			headVersion.setVersion(updateMessage.getElementsByTag("version").html()); 
-			headVersion.setContent(updateMessage.getElementsByTag("content").html()); 
-			headVersion.setRemark(updateMessage.getElementsByTag("remark").html());
+			headVersion.setVersion(updateMessage.getElementsByTag("version").get(0).html()); 
+			headVersion.setContent(updateMessage.getElementsByTag("content").get(0).html()); 
+			headVersion.setRemark(updateMessage.getElementsByTag("remark").get(0).html());
 		}
 	}
 }

@@ -31,6 +31,9 @@ public class 门派大战 extends 乐斗项目 {
 				门派首页 = DocUtil.clickTextUrl(userKey, 门派首页, "开启全新门派征程");
 				message.put("所属门派", "恭喜您成功加入了华山！");
 			}
+			else if(门派首页.text().contains("领取门派引荐书*1")) {
+				门派首页 = DocUtil.clickTextUrl(userKey, 门派首页, "领取门派引荐书*1");
+			}
 			//香炉
 			Document 香炉 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "op=showfumigate"));
 			if(!香炉.text().contains("可获门贡：20  已点燃")) {
@@ -40,10 +43,41 @@ public class 门派大战 extends 乐斗项目 {
 			else {
 				message.put("香炉", "香炉：每日点燃一次！");
 			}
+			//高级香炉
+			if(!香炉.text().contains("可获门贡：40  已点燃")) {
+				香炉 = DocUtil.clickTextUrl(userKey, 香炉, "点燃");
+				if(香炉.text().contains("数量不足")) {
+					boolean b = new 门派邀请赛(userKey, mainDoc).兑换门派材料x1("门派高香");
+					if(b == true) {
+						香炉 = DocUtil.clickTextUrl(userKey, 香炉, "点燃");
+						message.put("高级香炉", "高级香炉："+DocUtil.substring(香炉.text(), "提升自身的修行。", 8, "普通香炉"));
+					}
+					else {
+						message.put("高级香炉", "高级香炉：门派高香不足且兑换失败！");
+					}
+				}
+			}
+			else {
+				message.put("高级香炉", "高级香炉：每日点燃一次！");
+			}
+			
 			//训练切磋
 			Document 训练切磋 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "op=showtraining"));
 			message.put("木桩训练", "木桩训练："+DocUtil.substring(DocUtil.clickTextUrl(userKey, 训练切磋, "进入木桩训练").text(), "】", 1, "进入木桩训练"));
-			message.put("同门切磋", "同门切磋："+DocUtil.substring(DocUtil.clickTextUrl(userKey, 训练切磋, "进入同门切磋").text(), "】", 1, "进入木桩训练"));
+			message.put("同门切磋1", "同门切磋1："+DocUtil.substring(DocUtil.clickTextUrl(userKey, 训练切磋, "进入同门切磋").text(), "】", 1, "进入木桩训练"));
+			Document 同门切磋2 = DocUtil.clickTextUrl(userKey, 训练切磋, "进入同门切磋");
+			if(同门切磋2.text().contains("门派战书数量不足")) {
+				boolean b = new 门派邀请赛(userKey, mainDoc).兑换门派材料x1("门派战书");
+				if(b == true) {
+					message.put("同门切磋2", "同门切磋2："+DocUtil.substring(DocUtil.clickTextUrl(userKey, 训练切磋, "进入同门切磋").text(), "】", 1, "进入木桩训练"));
+				}
+				else {
+					message.put("同门切磋2", "同门切磋2：门派战书不足且兑换失败！");
+				}
+			}
+			else {
+				message.put("同门切磋2", "同门切磋2："+DocUtil.substring(同门切磋2.text(), "】", 1, "进入木桩训练"));
+			}
 			
 			//职位挑战
 			Document 职位挑战 = DocUtil.clickURL(userKey, getHrefMatching(门派首页, "op=showcouncil"));
