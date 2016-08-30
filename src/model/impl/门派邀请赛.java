@@ -73,7 +73,12 @@ public class 门派邀请赛 extends 乐斗项目 {
 		Document 排行榜 = DocUtil.clickTextUrl(userKey, doc, "排行榜");
 		if(DocUtil.getTextUrlElementList(排行榜, "领取奖励").size() != 0) {
 			排行榜 = DocUtil.clickTextUrl(userKey, 排行榜, "领取奖励");
-			message.put("领取奖励", "上届比赛奖励："+DocUtil.substring(排行榜.text(), "恭喜您获得", 0, "剩余挑战次数"));
+			if(排行榜.text().contains("剩余挑战次数")) {
+				message.put("领取奖励", "上届比赛奖励："+DocUtil.substring(排行榜.text(), "恭喜您获得", 0, "剩余挑战次数"));
+			}
+			else if(排行榜.text().contains("周一6点至周三5点")){
+				message.put("领取奖励", "上届比赛奖励："+DocUtil.substring(排行榜.text(), "恭喜您获得", 0, "周一6点至周三5点"));
+			}
 		}
 	}
 	

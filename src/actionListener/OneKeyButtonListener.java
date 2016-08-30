@@ -389,24 +389,8 @@ public class OneKeyButtonListener implements ActionListener {
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.门派邀请赛)) {
 				final 门派邀请赛 m = new 门派邀请赛(userKey, mainDoc);
-				if(m.getDay() != 3) {
-					m.doit();
-					PrintUtil.printAllMessages(m, username);
-				}
-				else {
-					//周三12:00:05执行定时执行，其他星期任意
-					long lastTime = TimeUtil.getSecond("12:00:05");
-					if (lastTime > 0) {
-						PrintUtil.printMessage(m, "门派邀请赛将在12:00:05自动挑战！（退出工具则不能定时挑战）", username);
-					}
-					TimeUtil.timer.schedule(new TimerTask() {
-						@Override
-						public void run() {
-							m.doit();
-							PrintUtil.printAllMessages(m, username);
-						}
-					}, lastTime < 0 ? 0 : lastTime*1000 );
-				}
+				m.doit();
+				PrintUtil.printAllMessages(m, username);
 			}
 			// /////////////////////////////////////////////////////////
 			if (tasks.contains(Task.供奉)) {
