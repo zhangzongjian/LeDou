@@ -39,8 +39,11 @@ public class 镖行天下 extends 乐斗项目 {
 			int flushNum = Integer.parseInt(doc1.text().charAt(
 					doc1.text().indexOf("免费刷新次数：") + 7)
 					+ "");
-			if (flushNum > 0) {
-				DocUtil.clickTextUrl(userKey, doc1, "刷新押镖");
+			while (flushNum-- > 0) {
+				Document flushResult = DocUtil.clickTextUrl(userKey, doc1, "刷新押镖");
+				if(flushResult.text().contains("温良恭") || flushResult.text().contains("吕青橙")) {
+					break;
+				}
 			}
 			if (DocUtil.clickTextUrl(userKey, doc1, "启程护送").text()
 					.contains("今天没有护送次数了"))

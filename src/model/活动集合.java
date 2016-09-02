@@ -574,4 +574,50 @@ public class 活动集合 extends 乐斗项目 {
 				e.printStackTrace();
 			}
 		}
+		
+		// 斗币领取
+		public void 斗币领取() {
+			try {
+				if (!mainDoc.text().contains("斗币领取")) {
+					message.put("斗币领取", null); // 非活动时间
+					return;
+				}
+				message.put("活动18", "【斗币领取】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "斗币领取");
+				if(DocUtil.getTextUrlElementList(doc, "领取").size() > 0) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+					message.put("领斗币", DocUtil.substring(doc.text(), "等你拿】", 4, "！"));
+				}
+				message.put("斗币领取进度", DocUtil.substring(doc.text(), "达10000斗币！", 9, "返回大乐斗首页").trim());
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		
+		// 暑期大礼包
+		public void 暑期大礼包() {
+			try {
+				if (!mainDoc.text().contains("暑期大礼包")) {
+					message.put("暑期大礼包", null); // 非活动时间
+					return;
+				}
+				message.put("活动19", "【暑期大礼包】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "暑期大礼包");
+				if(DocUtil.getTextUrlElementList(doc, "领取").size() > 0) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+					message.put("领取暑假礼包", DocUtil.substring(doc.text(), "领取规则", 4, "专属礼包"));
+				}
+				doc = Jsoup.parse(doc.toString().substring(doc.toString().indexOf("==登录礼包==")));
+				message.put("暑假礼包领取进度", DocUtil.substring(doc.text(), "暑期登录礼包1", 0, "返回大乐斗首页").trim());
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 }

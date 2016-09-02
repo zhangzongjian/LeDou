@@ -468,6 +468,8 @@ public class OneKeyButtonListener implements ActionListener {
 				m.登录有礼();
 				m.幸运转盘();
 				m.猜单双();
+				m.斗币领取();
+				m.暑期大礼包();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
