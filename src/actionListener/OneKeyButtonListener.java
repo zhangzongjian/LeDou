@@ -470,6 +470,8 @@ public class OneKeyButtonListener implements ActionListener {
 				m.猜单双();
 				m.斗币领取();
 				m.暑期大礼包();
+				m.帮派祈福();
+				m.晃动的天平();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

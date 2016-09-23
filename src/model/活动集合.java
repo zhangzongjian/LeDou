@@ -55,47 +55,27 @@ public class 活动集合 extends 乐斗项目 {
 			}
 			message.put("活动2", "【我要许愿】");
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "我要许愿");
-			//传功符奖励
-			if(! doc.text().contains("虔诚度：7/7   许愿   传功符")) {
-				Document 传功符 = Jsoup.parse(DocUtil.substring(doc.toString(), "剑君", 2, "传功符"));
-				doc = DocUtil.clickTextUrl(userKey, 传功符, "许愿");
-				if(doc.text().contains("已经许愿过了"))
-					message.put("我要许愿", "您今天已经许愿过了！");
-				else
-					message.put("我要许愿", "许愿成功！");
-				//许愿之后验证一下是否满7次了
-				if(doc.text().contains("虔诚度：7/7   许愿   传功符")) {
-					Document result = DocUtil.clickURL(userKey, doc.getElementsContainingOwnText("传功符").attr("href"));
-					if(! result.text().contains("已经领取过"))
-						message.put("许愿领奖", DocUtil.substring(result.text(), "【我要许愿】", 6, "规则说明"));
+			String [] 奖励列表 = {"传功符", "剑君魂珠", "神兵原石", "真体力"};
+			int i = 0;
+			for(String 奖励 : 奖励列表) {
+				if(doc.text().contains(奖励)) {
+					//许愿前领一下奖励
+					String 领奖链接 = doc.getElementsContainingOwnText(奖励).attr("href");
+					int 奖励id = Integer.valueOf(""+领奖链接.charAt(领奖链接.indexOf("npc_id=")+7));
+					doc = DocUtil.clickURL(userKey, 领奖链接);
+					if(doc.text().contains("已经领取过")) {
+						message.put("许愿领奖"+(i++), 奖励+"愿望领奖：已领取");
+						continue;
+					}
+					else {
+						message.put("许愿领奖"+(i++), 奖励+"愿望领奖："+DocUtil.substring(doc.text(), "【我要许愿】", 6, "规则说明"));
+						doc = DocUtil.clickTextUrl(userKey, doc, "许愿", 奖励id);
+						message.put("许愿领奖"+(i++), "许愿结果："+DocUtil.substring(doc.text(), "【我要许愿】", 6, "规则说明"));
+						break;
+					}
 				}
-			}
-			//魂珠奖励
-			else if(! doc.text().contains("虔诚度：7/7   许愿   剑君魂珠")) {
-				Document 魂珠 = Jsoup.parse(DocUtil.substring(doc.toString(), "月璇", 2, "剑君魂珠"));
-				doc = DocUtil.clickTextUrl(userKey, 魂珠, "许愿");
-				if(doc.text().contains("已经许愿过了"))
-					message.put("我要许愿", "您今天已经许愿过了！");
-				else
-					message.put("我要许愿", "许愿成功！");
-				if(doc.text().contains("虔诚度：7/7   许愿   剑君魂珠")) {
-					Document result = DocUtil.clickURL(userKey, doc.getElementsContainingOwnText("剑君魂珠").attr("href"));
-					if(! result.text().contains("已经领取过"))
-						message.put("许愿领奖", DocUtil.substring(result.text(), "【我要许愿】", 6, "规则说明"));
-				}
-			}
-			//体力药水奖励
-			else if(! doc.text().contains("虔诚度：7/7   许愿   真体力")) {
-				Document 体力药水 = Jsoup.parse(DocUtil.substring(doc.toString(), "小王子", 2, "真体力"));
-				doc = DocUtil.clickTextUrl(userKey, 体力药水, "许愿");
-				if(doc.text().contains("已经许愿过了"))
-					message.put("我要许愿", "您今天已经许愿过了！");
-				else
-					message.put("我要许愿", "许愿成功！");
-				if(doc.text().contains("虔诚度：7/7   许愿   真体力")) {
-					Document result = DocUtil.clickURL(userKey, doc.getElementsContainingOwnText("真体力").attr("href"));
-					if(! result.text().contains("已经领取过"))
-							message.put("许愿领奖", DocUtil.substring(result.text(), "【我要许愿】", 6, "规则说明"));
+				else {
+					continue;
 				}
 			}
 			//许愿进度
@@ -285,6 +265,9 @@ public class 活动集合 extends 乐斗项目 {
 			}
 			message.put("活动9", "【大笨钟】");
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "大笨钟");
+			if(doc == null) {
+				doc = DocUtil.clickTextUrl(userKey, mainDoc, "乐斗大笨钟");
+			}
 			if(doc.text().contains("9点至12点前：   领取")) {
 				doc = DocUtil.clickTextUrl(userKey, doc, "领取");
 				message.put("大笨钟领奖", "9点至12点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
@@ -302,7 +285,7 @@ public class 活动集合 extends 乐斗项目 {
 				message.put("大笨钟领奖", "18点至21点前："+DocUtil.substring(doc.text(), "大笨钟送出的礼品。 ", 9, " 9点至12点前"));
 			}
 			else {
-				message.put("大笨钟领奖", "今天大笨钟未开始或已结束！");
+				message.put("大笨钟领奖", "不在领取时间段或者奖励已领完！");
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
@@ -613,6 +596,81 @@ public class 活动集合 extends 乐斗项目 {
 				}
 				doc = Jsoup.parse(doc.toString().substring(doc.toString().indexOf("==登录礼包==")));
 				message.put("暑假礼包领取进度", DocUtil.substring(doc.text(), "暑期登录礼包1", 0, "返回大乐斗首页").trim());
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 帮派祈福
+		public void 帮派祈福() {
+			try {
+				if (!mainDoc.text().contains("帮派祈福")) {
+					message.put("帮派祈福", null); // 非活动时间
+					return;
+				}
+				message.put("活动20", "【帮派祈福】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "帮派祈福");
+				int i = 0;
+				while(true) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "祈福");
+					if(doc.text().contains("您的祈福令不足")) {
+						message.put("祈福"+(i++), "抱歉，您的祈福令不足！");
+						break;
+					}
+					else {
+						message.put("祈福"+(i++), doc.text().substring(0, doc.text().indexOf("无兄弟")).trim());
+					}
+				}
+				message.put("祈福进度", DocUtil.substring(doc.text(), "个人成长值", 0, "领取成长值礼包"));
+				Document 领奖 = DocUtil.clickTextUrl(userKey, doc, "领取成长值礼包");
+				i = 0;
+				while(DocUtil.getTextUrlElementList(领奖, "领取").size() > 0) {
+					领奖 = DocUtil.clickTextUrl(userKey, 领奖, "领取");
+					message.put("祈福领奖"+(i++), DocUtil.substring(领奖.text(), "【成长值礼包】", 7, "个人成长值"));
+				}
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 晃动的天平
+		public void 晃动的天平() {
+			try {
+				if (!mainDoc.text().contains("晃动的天平")) {
+					message.put("晃动的天平", null); // 非活动时间
+					return;
+				}
+				message.put("活动21", "【晃动的天平】");
+				float 左右重量差;
+				String temp;
+				int i = 0;
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "晃动的天平");
+				doc = DocUtil.clickTextUrl(userKey, doc, "开始游戏");
+				if(doc.text().contains("未达到20点")) {
+					message.put("天平晃动"+(i++), "您的活跃度还未达到20点，请继续努力");
+					return;
+				}
+				while (true) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "增加道具");
+					temp = doc.text();
+					左右重量差 = Float.valueOf(temp.substring(temp.indexOf("重量=") + 3, temp.lastIndexOf("Kg")));
+					if(左右重量差 >= 2) {
+						continue;
+					}
+					else {
+						doc = DocUtil.clickTextUrl(userKey, doc, "领取物品");
+						message.put("天平晃动" + (i++), DocUtil.substring(doc.text(), "活动规则", 4, "开始游戏").trim());
+						message.put("天平晃动" + (i++), "左侧重量-右侧重量="+左右重量差+"Kg");
+						break;
+					}
+				}
+				
 			} catch (IOException e) {
 				message.put("消息", "连接超时，请重试！");
 				e.printStackTrace();
