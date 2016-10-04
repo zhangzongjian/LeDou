@@ -64,6 +64,7 @@ public class 乐斗面板 {
 	
 	private JCheckBox getAllUsersCheckBox() {
 		allUsersCheckBox.setBounds(125, 5, 78, 23);
+		allUsersCheckBox.setSelected(true);
 		return allUsersCheckBox;
 	}
 	

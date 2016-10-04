@@ -1,6 +1,9 @@
 package core;
 
 import java.awt.Container;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
 
 import javax.swing.JFrame;
 import javax.swing.WindowConstants;
@@ -13,7 +16,8 @@ public class MainUI {
 
     public static boolean isRun = false; //表示，刚打开窗口，未运行过
     
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
+		System.setErr(new PrintStream("resources/err.log"));
 		MainUI main = new MainUI();
 		main.createJFrame("一键乐斗小工具");
 		OK:

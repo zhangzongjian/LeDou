@@ -2,8 +2,12 @@ package actionListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,9 +72,9 @@ public class OneKeyButtonListener implements ActionListener {
 	private List<String> tasks;
 
 	@SuppressWarnings("unchecked")
-	public void actionPerformed(ActionEvent paramActionEvent) {
+	public void actionPerformed(final ActionEvent paramActionEvent) {
 		tasks = 设置面板.saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
-		乐斗面板.initProgressBar(); //初始化进度条
+		//乐斗面板.initProgressBar(); //初始化进度条
 		if (乐斗面板.allUsersCheckBox.isSelected()) {
 			try {
 				for (final Object s : ((Map<String, Object>) UserUtil.getSetting().get("小号")).values()) {
@@ -94,7 +98,32 @@ public class OneKeyButtonListener implements ActionListener {
 			});
 			t.start();
 		}
-
+		
+		//如果不勾选执行完毕自动退出，则每天06:00:10点自动执行
+		if( !乐斗面板.autoCloseCheckBox.isSelected() ) {
+			long lastTime = TimeUtil.getSecond("06:00:10");
+			TimeUtil.timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					System.out.println(乐斗面板.textArea.getText());
+					try {
+						File log = new File("resources/LeDou.log");
+						if(!log.exists() || log.length()>20*1024*1024) {
+							log.delete();
+							log.createNewFile();
+						}
+						FileOutputStream out = new FileOutputStream(log, true);
+						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())+"--------------------------\n\n").getBytes());
+						out.write(乐斗面板.textArea.getText().getBytes());
+						out.write(new String("\n").getBytes());
+						out.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					actionPerformed(paramActionEvent);
+				}
+			}, lastTime <= 0 ? (3600*24+lastTime)*1000 : lastTime*1000 );
+		}
 	}
 
 	public void oneKeyLeDou(final Map<String, String> userKey) {

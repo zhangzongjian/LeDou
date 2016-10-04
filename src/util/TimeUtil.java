@@ -23,6 +23,16 @@ public class TimeUtil {
 		return lastSeconds;
 	}
 	
+	//模拟一天只有60秒
+	public static long getSecondtest(String time) {
+		String[] t = time.split(":");
+		int hour = Integer.parseInt(t[0]);
+		int minute = Integer.parseInt(t[1]);
+		int second = Integer.parseInt(t[2]);
+		long lastSeconds = (second * 1)-(new Date().getSeconds());
+		return lastSeconds;
+	}
+	
 	/**
 	 * 指定时间调用对象的指定函数
 	 * @param object

@@ -184,7 +184,7 @@ public class 巅峰之战 extends 乐斗项目 {
 	}
 
 	public boolean is挑战时间() {
-		if (day == 1 || day == 2) {
+		if (day == 1 || day == 2 || hour < 6) {
 			return false;
 		}
 		return true;
