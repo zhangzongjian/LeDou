@@ -73,7 +73,12 @@ public class 其他操作集合 extends 乐斗项目 {
 		if(count < 0) {
 			flag = true; 
 		}
+		int i = 0;
 		do {
+			i++;
+			if(i > 100) {
+				break;
+			}
 			if (doc.toString().contains(thing)) {
 				doc = DocUtil.clickTextUrl(userKey, doc, thing);
 				if (doc != null) {

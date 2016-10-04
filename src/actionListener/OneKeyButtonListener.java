@@ -34,6 +34,7 @@ import model.impl.每日领奖;
 import model.impl.活跃度;
 import model.impl.画卷迷踪;
 import model.impl.矿洞;
+import model.impl.祭坛;
 import model.impl.竞技场;
 import model.impl.结拜赛;
 import model.impl.群雄逐鹿;
@@ -121,8 +122,13 @@ public class OneKeyButtonListener implements ActionListener {
 							return;
 						}
 						int lastTime;
+						int i = 0;
 						while (true) {
 							m.挑战();
+							i++;
+							if(i > 15) {
+								break;
+							}
 							if (null != m.getMessage().get("挑战结束")) {
 								PrintUtil.printMessageByKey(m, "挑战结束", username);
 								break;
@@ -138,6 +144,7 @@ public class OneKeyButtonListener implements ActionListener {
 									e.printStackTrace();
 								}
 							}
+							
 						}
 						users1.remove(username); // 结束了就从线程列表中移除
 						计时面板.timePanel.remove(showTime);
@@ -317,6 +324,12 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.祭坛)) {
+				祭坛 m = new 祭坛(userKey, mainDoc);
+				m.转动轮盘();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.武林大会)) {
 				final 武林大会 m = new 武林大会(userKey, mainDoc);
 				//13:00:05执行报名，预留5秒防止延迟
@@ -472,6 +485,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.暑期大礼包();
 				m.帮派祈福();
 				m.晃动的天平();
+				m.全民拼图();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

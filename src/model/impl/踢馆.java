@@ -55,7 +55,11 @@ public class 踢馆 extends 乐斗项目 {
 				生命 = Integer.parseInt(doc.text().charAt(
 						doc.text().indexOf("生命：") + 3)
 						+ "");
+				if(i > 10) {
+					break;
+				}
 			}
+			i = 0;
 			// 挑战
 			while (true) {
 				i++;
@@ -70,6 +74,9 @@ public class 踢馆 extends 乐斗项目 {
 				}
 				message.put("挑战情况" + i,
 						DocUtil.substring(doc.text(), "功勋商店", 4, "！"));
+				if(i > 80) {
+					break;
+				}
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

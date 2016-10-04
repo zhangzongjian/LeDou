@@ -10,6 +10,7 @@ import java.util.Map;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 
+import util.DocUtil;
 import util.LoginUtil;
 import util.PrintUtil;
 import util.UserUtil;
@@ -100,6 +101,7 @@ public class AddUserButtonListener implements ActionListener {
 			if(小号菜单.userSelect.getItem(i).getName().equals(username)) {
 				((LinkedHashMap<String, Object>)UserUtil.getSettingByKey("小号")).put(username, userKey);
 				UserUtil.saveSetting();
+				DocUtil.userKey = userKey;
 				PrintUtil.printTitleInfo("系统消息", "更新小号："+username+"");
 				return false;
 			}

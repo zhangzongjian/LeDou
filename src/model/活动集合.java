@@ -59,9 +59,14 @@ public class 活动集合 extends 乐斗项目 {
 			int i = 0;
 			for(String 奖励 : 奖励列表) {
 				if(doc.text().contains(奖励)) {
-					//许愿前领一下奖励
 					String 领奖链接 = doc.getElementsContainingOwnText(奖励).attr("href");
 					int 奖励id = Integer.valueOf(""+领奖链接.charAt(领奖链接.indexOf("npc_id=")+7));
+					//许愿
+					doc = DocUtil.clickTextUrl(userKey, doc, "许愿", 奖励id);
+					if(!doc.text().contains("不能再许愿了")) {
+						message.put("许愿领奖"+(i++), "许愿结果："+DocUtil.substring(doc.text(), "【我要许愿】", 6, "规则说明"));
+					}
+					//领奖
 					doc = DocUtil.clickURL(userKey, 领奖链接);
 					if(doc.text().contains("已经领取过")) {
 						message.put("许愿领奖"+(i++), 奖励+"愿望领奖：已领取");
@@ -69,8 +74,6 @@ public class 活动集合 extends 乐斗项目 {
 					}
 					else {
 						message.put("许愿领奖"+(i++), 奖励+"愿望领奖："+DocUtil.substring(doc.text(), "【我要许愿】", 6, "规则说明"));
-						doc = DocUtil.clickTextUrl(userKey, doc, "许愿", 奖励id);
-						message.put("许愿领奖"+(i++), "许愿结果："+DocUtil.substring(doc.text(), "【我要许愿】", 6, "规则说明"));
 						break;
 					}
 				}
@@ -620,6 +623,10 @@ public class 活动集合 extends 乐斗项目 {
 						message.put("祈福"+(i++), "抱歉，您的祈福令不足！");
 						break;
 					}
+					else if(doc.text().contains("不在祈福的时间范围内")) {
+						message.put("祈福"+(i++), "不在祈福的时间范围内！");
+						break;
+					}
 					else {
 						message.put("祈福"+(i++), doc.text().substring(0, doc.text().indexOf("无兄弟")).trim());
 					}
@@ -657,6 +664,9 @@ public class 活动集合 extends 乐斗项目 {
 					return;
 				}
 				while (true) {
+					if(i>30) {
+						break;
+					}
 					doc = DocUtil.clickTextUrl(userKey, doc, "增加道具");
 					temp = doc.text();
 					左右重量差 = Float.valueOf(temp.substring(temp.indexOf("重量=") + 3, temp.lastIndexOf("Kg")));
@@ -671,6 +681,42 @@ public class 活动集合 extends 乐斗项目 {
 					}
 				}
 				
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 全民拼图
+		public void 全民拼图() {
+			try {
+				if (!mainDoc.text().contains("全民拼图")) {
+					message.put("全民拼图", null); // 非活动时间
+					return;
+				}
+				message.put("活动22", "【全民拼图】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "全民拼图");
+				if(doc.text().contains("请选择您所在的区域")) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "广东");
+				}
+				if(doc.text().contains("您可以去完成拼图啦")) {
+					Elements es = doc.getElementsByAttributeValueMatching("href", "region=");
+					Document temp;
+					for(int i = 0; i<es.size(); i++) {
+						temp = DocUtil.clickURL(userKey, es.get(i).attr("href"));
+						DocUtil.clickTextUrl(userKey, temp, "乐斗");
+					}
+					doc = DocUtil.clickTextUrl(userKey, doc, "徽章奖励");
+					String s = "恭喜你获得了国旗徽章！";
+					if(doc.text().contains( s )) {
+						message.put("拼图领奖", "完成拼图：" + s );
+					}
+					else {
+						message.put("拼图领奖", "拼图已经完成了！");
+					}
+				}
 			} catch (IOException e) {
 				message.put("消息", "连接超时，请重试！");
 				e.printStackTrace();

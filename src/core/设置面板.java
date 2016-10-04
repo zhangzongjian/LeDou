@@ -144,6 +144,7 @@ public class 设置面板 {
 		list.add(Task.幻境);
 		list.add(Task.门派);
 		list.add(Task.门派邀请赛);
+		list.add(Task.祭坛);
 		return list;
 	}
 	

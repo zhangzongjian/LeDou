@@ -39,7 +39,7 @@ public class 供奉 extends 乐斗项目 {
 					doc = DocUtil.clickTextUrl(userKey, doc, "下页");
 				}
 				if (!doc.text().contains("下页")) {
-					String[] 候选物品  = {"asdf","ccc","ddd","大力丸"};
+					String[] 候选物品  = {"神来拳套","经验药水","孙子兵法","大力丸"};
 					message.put("供奉情况"+count, "背包里没有(" + thing + ")，自动选择候选供奉物品("+候选物品[count]+")！");
 					thing = 候选物品[count++];
 					System.out.println(thing);
