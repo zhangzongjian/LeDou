@@ -105,21 +105,21 @@ public class OneKeyButtonListener implements ActionListener {
 			TimeUtil.timer.schedule(new TimerTask() {
 				@Override
 				public void run() {
-					System.out.println(乐斗面板.textArea.getText());
 					try {
-						File log = new File("resources/LeDou.log");
+						File log = new File("resources/LeDou_log.txt");
 						if(!log.exists() || log.length()>20*1024*1024) {
 							log.delete();
 							log.createNewFile();
 						}
 						FileOutputStream out = new FileOutputStream(log, true);
-						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())+"--------------------------\n\n").getBytes());
+						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())+"--------------------------\n").getBytes());
 						out.write(乐斗面板.textArea.getText().getBytes());
 						out.write(new String("\n").getBytes());
 						out.close();
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
+					乐斗面板.textArea.setText("");
 					actionPerformed(paramActionEvent);
 				}
 			}, lastTime <= 0 ? (3600*24+lastTime)*1000 : lastTime*1000 );
@@ -234,6 +234,12 @@ public class OneKeyButtonListener implements ActionListener {
 					users.add(username); // 启动username账号的线程
 					thread1.start();
 				}
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.分享)) {
+				分享 m = new 分享(userKey, mainDoc);
+				m.一键分享();
+				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.斗神塔)) {

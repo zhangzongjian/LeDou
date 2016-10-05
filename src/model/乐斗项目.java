@@ -39,7 +39,7 @@ public class 乐斗项目 {
 	/**
 	 * 返回：0~23，表示当前时间（二十四小时制）
 	 */
-	protected int hour = Calendar.getInstance().get(Calendar.DAY_OF_WEEK);
+	protected int hour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY);
 	
 	/**
 	 * 返回：0~23，表示当前时间（二十四小时制）
