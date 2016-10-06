@@ -31,6 +31,12 @@ public class 十二宫 extends 乐斗项目 {
 			int i = 0;
 			while (true) {
 				doc1 = DocUtil.clickTextUrl(userKey, doc1, "挑战");
+				
+				if(doc1 == null) {
+					message.put("挑战情况", "未知错误");
+					return;   //未知bug？？？
+				}
+				
 				if (doc1.text().contains("挑战次数不足")) {
 					message.put("挑战情况", "挑战次数不足");
 					return;

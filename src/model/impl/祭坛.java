@@ -45,6 +45,14 @@ public class 祭坛 extends 乐斗项目 {
 						continue;
 					}
 				}
+				else if(doc.text().contains("【祭祀奖励】")) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
+					message.put("轮盘转动"+(i++), getResult(doc));
+				}
+				else {
+					message.put("轮盘奖励"+(i++), "未知错误！");
+				}
+				i++;
 			}
 			
 		} catch (IOException e) {
@@ -56,6 +64,11 @@ public class 祭坛 extends 乐斗项目 {
 	}
 	
 	private String getResult(Document doc) {
-		return DocUtil.substring(doc.text(), "积分兑换", 4, "【祭坛轮盘】");
+		if(!doc.text().contains("积分兑换") && !doc.text().contains("【祭坛轮盘】")) {
+			return "未知错误！";
+		}
+		else {
+			return DocUtil.substring(doc.text(), "积分兑换", 4, "【祭坛轮盘】");
+		}
 	}
 }

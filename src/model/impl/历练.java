@@ -19,8 +19,16 @@ public class 历练 extends 乐斗项目 {
 
 	public void 挑战() {
 		try {
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			if (doc.text().contains("3．[5/5]")) {
+				message.put("历练情况", "今日历练5次了！");
+				return;
+			}
+			
+			开启自动使用活力药水(mainDoc);
+			
 			String name = object.substring(0,object.indexOf("("));
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
+			doc = DocUtil.clickTextUrl(userKey, mainDoc, "历练");
 
 			Document doc1;
 			if(!doc.text().contains(name)) {
@@ -32,13 +40,8 @@ public class 历练 extends 乐斗项目 {
 			}
 			if(doc1.text().contains("下一页"))
 				doc1 = DocUtil.clickTextUrl(userKey, doc1, "下一页");
-			int num = Integer.parseInt(doc1.text().substring(
-					doc1.text().indexOf("活力值") + 4, doc1.text().indexOf("/")));
-			if (num < 10) {
-				message.put("历练情况", "活力值不足10点！");
-				return;
-			}
-			while (num >= 10) {
+			
+			for(int i = 0; i < 5; i++) {
 				//优先挑战有次数限制的boss
 				doc1 = DocUtil.clickTextUrl(userKey, doc1, "乐斗", -1);
 				if(doc1.text().contains("上限")) {
@@ -48,12 +51,11 @@ public class 历练 extends 乐斗项目 {
 				}
 				if (doc1.text().contains("获得了")
 						&& doc1.text().contains("查看乐斗过程")) {
-					message.put("历练情况" + num,
+					message.put("历练情况" + i,
 							DocUtil.substring(doc1.text(), "获得了", 0, "查看乐斗过程"));
 				} else {
-					message.put("历练情况" + num, "未找到结果！");
+					message.put("历练情况" + i, "未找到结果！");
 				}
-				num = Integer.parseInt(DocUtil.substring(doc1.text(), "活力值：", 4, "/"));
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
@@ -73,5 +75,13 @@ public class 历练 extends 乐斗项目 {
 		Document doc1 = DocUtil.clickURL(userKey,
 				elements.get( size - 1 ).attr("href"));
 		return doc1;
+	}
+	
+	private void 开启自动使用活力药水(Document mainDoc) throws IOException, InterruptedException {
+		Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "好友"); 
+		doc = DocUtil.clickTextUrl(userKey, doc, "助手");
+		if(doc.text().contains("开启自动使用活力药水")) {
+			DocUtil.clickTextUrl(userKey, doc, "开启自动使用活力药水");
+		}
 	}
 }

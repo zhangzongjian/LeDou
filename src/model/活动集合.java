@@ -724,4 +724,26 @@ public class 活动集合 extends 乐斗项目 {
 				e.printStackTrace();
 			}
 		}
+		
+		// 国庆全民大礼包
+		public void 国庆全民大礼包() {
+			try {
+				if (!mainDoc.text().contains("国庆全民大礼包")) {
+					message.put("国庆全民大礼包", null); // 非活动时间
+					return;
+				}
+				message.put("活动23", "【国庆全民大礼包】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "国庆全民大礼包");
+				int num = DocUtil.getTextUrlElementList(doc, "领取").size();
+				for(int i = 0; i<num; i++) {
+					doc = DocUtil.clickTextUrl(userKey, doc, "领取");
+					message.put("国庆礼包"+i, DocUtil.substring(doc.text(), "领取规则", 4, "专属礼包"));
+				}
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 }
