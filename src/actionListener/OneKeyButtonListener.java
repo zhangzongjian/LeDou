@@ -359,12 +359,6 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
-			if (tasks.contains(Task.祭坛)) {
-				祭坛 m = new 祭坛(userKey, mainDoc);
-				m.转动轮盘();
-				PrintUtil.printAllMessages(m, username);
-			}
-			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.武林大会)) {
 				final 武林大会 m = new 武林大会(userKey, mainDoc);
 				//13:00:05执行报名，预留5秒防止延迟
@@ -417,14 +411,20 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
+						///////
+						System.out.println("赞助前");
 						m.赞助(); // 每天12点开始
 						PrintUtil.printAllMessages(m, username);
-						
+						///////
+						System.out.println("赞助后");
 						任务 m = new 任务(userKey, mainDoc);
 						m.finish();
-						
+						////////
+						System.out.println("完成任务");
 						活跃度 m1 = new 活跃度(userKey, mainDoc);
 						m1.领取();
+						////////
+						System.out.println("领取活跃度");
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}
@@ -463,6 +463,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.任务)) {
 				任务 m = new 任务(userKey, mainDoc);
 				m.finish();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.祭坛)) {
+				祭坛 m = new 祭坛(userKey, mainDoc);
+				m.转动轮盘();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

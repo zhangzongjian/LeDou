@@ -1,0 +1,105 @@
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$2.run(OneKeyButtonListener.java:96)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
+java.lang.NullPointerException
+	at model.impl.矿洞.挑战(矿洞.java:25)
+	at actionListener.OneKeyButtonListener.oneKeyLeDou(OneKeyButtonListener.java:290)
+	at actionListener.OneKeyButtonListener$1.run(OneKeyButtonListener.java:83)
+	at java.lang.Thread.run(Unknown Source)
