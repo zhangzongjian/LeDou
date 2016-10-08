@@ -50,13 +50,13 @@ public class 斗神塔 extends 乐斗项目 {
 			DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching(
 					"href", "towerfight").attr("href"));
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "企鹅动态");
-			String result = DocUtil.substring(doc.text(), "1:", 2, "今天");
-//			String result = doc.text().substring(doc.text().indexOf("1:") + 2,
-//					doc.text().indexOf("今天"));
-			if (result.contains("斗神塔"))
-				message.put("掉落情况", "上一次挑战奖励：" + result);
+			if (doc.text().contains("斗神塔")) {
+				String result = doc.text();
+				result = result.substring(result.indexOf("斗神塔"), result.indexOf("。", result.indexOf("斗神塔")));
+				message.put("掉落情况", "最近挑战奖励：" + result);
+			}
 			else {
-				message.put("掉落情况", "掉落情况：找不到记录！");
+				message.put("掉落情况", "最近挑战奖励：找不到记录！");
 			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");

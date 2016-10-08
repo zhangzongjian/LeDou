@@ -1,6 +1,7 @@
 package core;
 
 import java.awt.Container;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -17,7 +18,7 @@ public class MainUI {
     public static boolean isRun = false; //表示，刚打开窗口，未运行过
     
 	public static void main(String[] args) throws FileNotFoundException {
-		System.setErr(new PrintStream(new FileOutputStream("resources/Err_log.txt", true)));
+		ErrLogInit();	//初始化错误日志
 		MainUI main = new MainUI();
 		main.createJFrame("一键乐斗小工具");
 		OK:
@@ -67,6 +68,18 @@ public class MainUI {
 		o.actionPerformed(null);
 	}
 	
+	//创建异常错误日志，以及超过指定大小时 重建文件
+	public static void ErrLogInit() throws FileNotFoundException {
+		File err_log = new File("resources/Err_log.txt");
+		PrintStream out = new PrintStream(new FileOutputStream(err_log, true));
+		//err_log大小超过20M时，创建新的文件。
+		if(err_log.length()>20*1024*1024) {
+			out.close();
+			err_log.delete();
+			out = new PrintStream(new FileOutputStream(err_log, true));
+		}
+		System.setErr(out);
+	}
 }
 
 

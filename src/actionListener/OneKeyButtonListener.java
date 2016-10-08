@@ -106,12 +106,15 @@ public class OneKeyButtonListener implements ActionListener {
 				@Override
 				public void run() {
 					try {
-						File log = new File("resources/LeDou_log.txt");
-						if(!log.exists() || log.length()>20*1024*1024) {
-							log.delete();
-							log.createNewFile();
+						/**
+						 * 乐斗日志大小检查。异常错误日志大小检查。。待定。。
+						 */
+						File LeDou_log = new File("resources/LeDou_log.txt");
+						if(!LeDou_log.exists() || LeDou_log.length()>20*1024*1024) {
+							LeDou_log.delete();
+							LeDou_log.createNewFile();
 						}
-						FileOutputStream out = new FileOutputStream(log, true);
+						FileOutputStream out = new FileOutputStream(LeDou_log, true);
 						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())+"--------------------------\n").getBytes());
 						out.write(乐斗面板.textArea.getText().getBytes());
 						out.write(new String("\n").getBytes());
@@ -369,14 +372,20 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						m.报名(); // 每天13点开始
-						PrintUtil.printAllMessages(m, username);
+						武林大会 m1 = m;
+						Map<String, String> tempUserKey = userKey;
+						if(m1.checkUserKeyValid() == false) {
+							tempUserKey = UserUtil.getNewUserKey(userKey, username);
+							m1 = new 武林大会(tempUserKey, mainDoc);
+						}
+						m1.报名(); // 每天13点开始
+						PrintUtil.printAllMessages(m1, username);
 						
-						任务 m = new 任务(userKey, mainDoc);
-						m.finish();
+						任务 m2 = new 任务(tempUserKey, mainDoc);
+						m2.finish();
 						
-						活跃度 m1 = new 活跃度(userKey, mainDoc);
-						m1.领取();
+						活跃度 m3 = new 活跃度(tempUserKey, mainDoc);
+						m3.领取();
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}// //////////////////////////////////////////////////////////
@@ -393,8 +402,14 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						m.报名(); // 周一12点开始
-						PrintUtil.printAllMessages(m, username);
+						结拜赛 m1 = m;
+						Map<String, String> tempUserKey = userKey;
+						if(m1.checkUserKeyValid() == false) {
+							tempUserKey = UserUtil.getNewUserKey(userKey, username);
+							m1 = new 结拜赛(tempUserKey, mainDoc);
+						}
+						m1.报名(); // 周一12点开始
+						PrintUtil.printAllMessages(m1, username);
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 				m.助威(); // 助威周四0点开始，
@@ -411,20 +426,18 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						///////
-						System.out.println("赞助前");
-						m.赞助(); // 每天12点开始
-						PrintUtil.printAllMessages(m, username);
-						///////
-						System.out.println("赞助后");
-						任务 m = new 任务(userKey, mainDoc);
-						m.finish();
-						////////
-						System.out.println("完成任务");
-						活跃度 m1 = new 活跃度(userKey, mainDoc);
-						m1.领取();
-						////////
-						System.out.println("领取活跃度");
+						锦标赛 m1 = m;
+						Map<String, String> tempUserKey = userKey;
+						if(m1.checkUserKeyValid() == false) {
+							tempUserKey = UserUtil.getNewUserKey(userKey, username);
+							m1 = new 锦标赛(tempUserKey, mainDoc);
+						}
+						m1.赞助(); // 每天12点开始
+						PrintUtil.printAllMessages(m1, username);
+						任务 m2 = new 任务(tempUserKey, mainDoc);
+						m2.finish();
+						活跃度 m3 = new 活跃度(tempUserKey, mainDoc);
+						m3.领取();
 					}
 				}, lastTime < 0 ? 0 : lastTime*1000 );
 			}

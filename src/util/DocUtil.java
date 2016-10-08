@@ -35,13 +35,13 @@ public class DocUtil {
 	public static Document clickURL(Map<String, String> userKey, String URL)
 			throws IOException {
 		try {
-			Document result = Jsoup.connect(URL).cookies(userKey)
-					.timeout(time_out).get();
+			Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
+
 			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
             //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
 			int j = 1;
 			while (result.text().contains("系统繁忙，请稍后再试") || result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) { // 出现繁忙情况，重试
-				System.out.println("重试次数("+j+")-->详细("+result.text()+")");////////////
+				System.err.println("重试次数("+j+")-->详细("+result.text()+")");////////////
 				try {
 					Thread.sleep(1500);
 				} catch (InterruptedException e) {
@@ -63,18 +63,6 @@ public class DocUtil {
 		} finally {
 			count1 = 0;
 		}
-	}
-	
-	/**
-	 * 获取选中页面指定文本下的超链接
-	 * @param URL
-	 * @return
-	 * @throws IOException 
-	 */
-	public static String getTextUrl(String URL, String text) throws IOException{
-		Document doc = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
-	    Elements elements = doc.getElementsContainingOwnText(text);
-		return elements.attr("href"); 
 	}
 	
 	/**
@@ -134,24 +122,8 @@ public class DocUtil {
 			if(index < 0) { 
 				index = list.size()+index;  // 负数，表示倒数
 			}
-			Document result = Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
-			
-			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
-            //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
-			int j = 1;
-			while(result.text().contains("系统繁忙，请稍后再试") || result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) {  //出现繁忙情况，重试
-				System.out.println("重试次数("+j+")-->异常对象("+text+")-->详细("+result.text()+")");////////////
-				try {
-					Thread.sleep(1500);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				result = Jsoup.connect(list.get(index).attr("href")).cookies(userKey).timeout(time_out).get();
-				j++;
-				if(j > 9) {
-					return null; //防止死循环
-				}
-			}
+			//点击链接
+			Document result = clickURL(userKey, list.get(index).attr("href"));
 			return result;
 		} catch(SocketTimeoutException e) {
 			System.out.println("链接超时-->第" +(++count)+ "次重试！");

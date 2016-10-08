@@ -17,7 +17,7 @@ public class LoginUtil extends QQLogin{
 	 * @param uin
 	 * @param password
 	 * @param vcode
-	 * @return 
+	 * @return 登录成功返回 0， 密码错误返回 2， 需要验证码返回 1， 验证码错误返回 -1
 	 * @throws IOException
 	 */
 	public static int login(String uin, String password, String vcode) throws IOException {

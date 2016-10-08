@@ -735,6 +735,10 @@ public class 活动集合 extends 乐斗项目 {
 				message.put("活动23", "【国庆全民大礼包】");
 				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "国庆全民大礼包");
 				int num = DocUtil.getTextUrlElementList(doc, "领取").size();
+				if(num == 0) {
+					message.put("国庆礼包", "已领取过了！");
+					return;
+				}
 				for(int i = 0; i<num; i++) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "领取");
 					message.put("国庆礼包"+i, DocUtil.substring(doc.text(), "领取规则", 4, "专属礼包"));
