@@ -40,7 +40,7 @@ public class DocUtil {
 			//QQ密码:(使用明文密码) 登录 申请号码 反馈建议 手机腾讯网-导航- 搜索 小Q报时(10:43)
             //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
 			int j = 1;
-			while (result.text().contains("系统繁忙，请稍后再试") || result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) { // 出现繁忙情况，重试
+			while (result.text().contains("系统繁忙，请稍后再试") || result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) { 
 				System.err.println("重试次数("+j+")-->详细("+result.text()+")");////////////
 				try {
 					Thread.sleep(1500);
@@ -50,6 +50,11 @@ public class DocUtil {
 				result = Jsoup.connect(URL).cookies(userKey).timeout(time_out)
 						.get();
 				j++;
+				// 出现登录界面，重试1次
+				if(result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) {
+					return result;
+				}
+				// 出现繁忙情况，重试9次
 				if (j > 9) {
 					return null; // 防止死循环
 				}

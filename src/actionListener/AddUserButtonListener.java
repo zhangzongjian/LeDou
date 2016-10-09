@@ -37,6 +37,11 @@ public class AddUserButtonListener implements ActionListener {
 			String password = 设置面板.inputPassword.getText();
 			String vcode = 设置面板.inputVerifyCode.getText();
 			
+			if(qq.length() == 0 || password.length() == 0) {
+				PrintUtil.printTitleInfo("系统消息", "账号和密码均不能为空！");
+				return;
+			}
+			
 			int status = LoginUtil.login(qq, password, vcode);
 			switch (status) {
 			case 0:

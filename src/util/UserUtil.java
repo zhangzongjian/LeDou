@@ -103,7 +103,7 @@ public class UserUtil {
 	
 	/**
 	 * 从大乐斗首页中，获取用户昵称
-	 * @return
+	 * @return 获取失败时返回null
 	 * @throws IOException 
 	 */
 	@SuppressWarnings("unchecked")
@@ -141,19 +141,26 @@ public class UserUtil {
                     userKey = getNewUserKey(userKey, username);
                     username = getUsername(userKey);  //从乐斗里获取小号的最新昵称
                     
-                    Map<String, Object> users = (LinkedHashMap<String, Object>) UserUtil
-                            .getSettingByKey("小号");
-                    Object object = users.put(username, userKey);
-                    if (object == null) { // 若object为null，说明有小号昵称改变，需要去重处理
-                        users.remove(oldUsername);
-                        System.out.println(oldUsername+" 昵称有变化： "+username);
+                    if(username != null && userKey != null) {
+	                    Map<String, Object> users = (LinkedHashMap<String, Object>) UserUtil
+	                            .getSettingByKey("小号");
+	                    Object object = users.put(username, userKey);
+	                    if (object == null) { // 若object为null，说明有小号昵称改变，需要去重处理
+	                        users.remove(oldUsername);
+	                        System.out.println(oldUsername+" 昵称有变化： "+username);
+	                    }
+	                    UserUtil.saveSetting();
+	                    return username;
                     }
-                    UserUtil.saveSetting();
-                    return username;
                 }
             }
 			// 获取到的昵称前后会带一个空格，去掉
-			return username.substring(1, username.length() - 1);
+			if(username == null) {
+				return null;
+			}
+			else {
+				return username.substring(1, username.length() - 1);
+			}
 		} catch(SocketTimeoutException e) {
 			System.out.println("获取用户昵称超时-->第" +(++count)+ "次重试！");
 			try {
