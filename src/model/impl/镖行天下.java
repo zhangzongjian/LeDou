@@ -80,14 +80,14 @@ public class 镖行天下 extends 乐斗项目 {
 				Document doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 				int j = 0;
 				while(doc1.text().contains("过于频繁") || !doc1.text().contains("温良恭")) {  //出现繁忙 或者 没刷出温良恭
-					System.out.println(j+" 劫镖刷新");////////////
+					//System.out.println(j+" 劫镖刷新");////////////
 					Thread.sleep(1500);
 					doc1 = DocUtil.clickTextUrl(userKey, doc, "刷新");
 					j++;
 					if(j > 100) break;
 				}
 				if(doc1.text().contains("温良恭")) {
-					System.out.println(" 劫镖刷新  刷出温良恭！");
+					//System.out.println(" 劫镖刷新  刷出温良恭！");
 					doc1 = Jsoup.parse(DocUtil.substring(doc1.toString(), "温良恭", 3, "返回大乐斗首页"));
 				}
 				Document doc2 = DocUtil.clickTextUrl(userKey, doc1, "拦截");

@@ -70,6 +70,8 @@ public class OneKeyButtonListener implements ActionListener {
 	private List<String> users1 = new ArrayList<String>();
 	// 乐斗任务列表，只执行列表中的任务，为null时表示没有任务
 	private List<String> tasks;
+	// 全局的userKey（使用场景：遇到像定时锦标赛，还没到指定时间userkey失效的。更新后的userKey放这里）
+	private volatile static Map<String, String> newUserKey;
 
 	@SuppressWarnings("unchecked")
 	public void actionPerformed(final ActionEvent paramActionEvent) {
@@ -80,7 +82,8 @@ public class OneKeyButtonListener implements ActionListener {
 				for (final Object s : ((Map<String, Object>) UserUtil.getSetting().get("小号")).values()) {
 					Thread t = new Thread(new Runnable() {
 						public void run() {
-							oneKeyLeDou((Map<String, String>)s);
+							Map<String, String> userKey = (Map<String, String>)s;
+							oneKeyLeDou(userKey);
 						}
 					});
 					t.start();
@@ -139,6 +142,7 @@ public class OneKeyButtonListener implements ActionListener {
 			//若username获取不到，说明skey过期，且需要验证码，得重新手动录入。若不需验证码，则可自动重新录入
 			if(username == null) return;
 			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
+			newUserKey = userKey;
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(userKey, mainDoc);
 				 m.领奖和报名(); //周一6点钟之后执行
@@ -363,21 +367,17 @@ public class OneKeyButtonListener implements ActionListener {
 			}
 			// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.武林大会)) {
-				final 武林大会 m = new 武林大会(userKey, mainDoc);
 				//13:00:05执行报名，预留5秒防止延迟
 				long lastTime = TimeUtil.getSecond("13:00:05");
 				if (lastTime > 0) {
-					PrintUtil.printMessage(m, "武林大会将在13:00:05自动报名！（退出工具则不能自动报名）", username);
+					PrintUtil.printTitleInfo("武林大会", "武林大会将在13:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						武林大会 m1 = m;
-						Map<String, String> tempUserKey = userKey;
-						if(m1.checkUserKeyValid() == false) {
-							tempUserKey = UserUtil.getNewUserKey(userKey, username);
-							m1 = new 武林大会(tempUserKey, mainDoc);
-						}
+						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						
+						武林大会 m1 = new 武林大会(tempUserKey, mainDoc);
 						m1.报名(); // 每天13点开始
 						PrintUtil.printAllMessages(m1, username);
 						
@@ -397,17 +397,14 @@ public class OneKeyButtonListener implements ActionListener {
 					lastTime = -1; //不是周一时，lastTime置负数，表示马上执行
 				}
 				if(lastTime > 0) {
-					PrintUtil.printMessage(m, "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
+					PrintUtil.printTitleInfo("结拜赛", "结拜赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						结拜赛 m1 = m;
-						Map<String, String> tempUserKey = userKey;
-						if(m1.checkUserKeyValid() == false) {
-							tempUserKey = UserUtil.getNewUserKey(userKey, username);
-							m1 = new 结拜赛(tempUserKey, mainDoc);
-						}
+						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						
+						结拜赛 m1 = new 结拜赛(tempUserKey, mainDoc);
 						m1.报名(); // 周一12点开始
 						PrintUtil.printAllMessages(m1, username);
 					}
@@ -417,25 +414,23 @@ public class OneKeyButtonListener implements ActionListener {
 				PrintUtil.printAllMessages(m, username);
 			}// //////////////////////////////////////////////////////////
 			if (tasks.contains(Task.锦标赛)) {
-				final 锦标赛 m = new 锦标赛(userKey, mainDoc);
 				//12:00:05执行报名，预留5秒防止延迟
 				long lastTime = TimeUtil.getSecond("12:00:05");
 				if (lastTime > 0) {
-					PrintUtil.printMessage(m, "锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
+					PrintUtil.printTitleInfo("锦标赛", "锦标赛将在12:00:05自动报名！（退出工具则不能自动报名）", username);
 				}
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						锦标赛 m1 = m;
-						Map<String, String> tempUserKey = userKey;
-						if(m1.checkUserKeyValid() == false) {
-							tempUserKey = UserUtil.getNewUserKey(userKey, username);
-							m1 = new 锦标赛(tempUserKey, mainDoc);
-						}
+						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						
+						锦标赛 m1 = new 锦标赛(tempUserKey, mainDoc);
 						m1.赞助(); // 每天12点开始
 						PrintUtil.printAllMessages(m1, username);
+						
 						任务 m2 = new 任务(tempUserKey, mainDoc);
 						m2.finish();
+						
 						活跃度 m3 = new 活跃度(tempUserKey, mainDoc);
 						m3.领取();
 					}
@@ -560,5 +555,14 @@ public class OneKeyButtonListener implements ActionListener {
 			PrintUtil.printTitleInfo("系统消息", "连接超时，请重试！");
 			e.printStackTrace();
 		}
+	}
+	
+	
+	//更新userKey，与getNewUserKey()不同的是，有效则重用，无效则重新获取
+	private Map<String, String> updateUserKey(Map<String, String> newUserKey, Map<String, String> oldUserKey, String username) {
+		if(UserUtil.checkUserKeyValid(newUserKey) == false) {
+			newUserKey = UserUtil.getNewUserKey(oldUserKey, username);
+		}
+		return newUserKey;
 	}
 }

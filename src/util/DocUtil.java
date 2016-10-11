@@ -3,6 +3,7 @@ package util;
 import java.io.IOException;
 import java.net.SocketTimeoutException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +35,7 @@ public class DocUtil {
 	 */
 	public static Document clickURL(Map<String, String> userKey, String URL)
 			throws IOException {
+		if(userKey == null) userKey = new HashMap<String, String>();
 		try {
 			Document result = Jsoup.connect(URL).cookies(userKey).timeout(time_out).get();
 

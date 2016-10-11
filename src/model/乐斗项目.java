@@ -58,21 +58,4 @@ public class 乐斗项目 {
 	public void setUserKey(Map<String, String> userKey) {
 		this.userKey = userKey;
 	}
-
-	/**
-	 * 检查userKey是否有效
-	 * @return 有效返回true，无效返回false
-	 */
-	public boolean checkUserKeyValid() {
-		try {
-			mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
-			if(mainDoc.text().contains("手机统一登录")) {
-				return false;
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-			return false;
-		}
-		return true;
-	}
 }

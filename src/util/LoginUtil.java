@@ -1,6 +1,8 @@
 package util;
 
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,18 +28,19 @@ public class LoginUtil extends QQLogin{
 		String verifycode = ""; //login接口参数
 		String verifysession = ""; //login接口参数
 		String p = ""; //login接口参数
+		String time = new SimpleDateFormat("YYYY/MM/dd HH:mm").format(new Date());
 		if(vcode.length() == 0) {
 			checkResultMap.put(uin, check(uin));
 		}
 		String checkResult = checkResultMap.get(uin);
 		if("0".equals(checkResult.charAt(14)+"")) {
-			System.out.println("无需验证码登录！");
 			checkStatus = "0";
 			verifycode = checkResult.split(",")[1].replaceAll("\'", "");
 			verifysession = checkResult.split(",")[3].replaceAll("\'", "");
 			p = encryptPassword(uin, password, verifycode);
 			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
-			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
+			login_result = login_result.substring(0, login_result.lastIndexOf(")"));
+			System.out.println(login_result.split(",")[4]+" "+login_result.split(",")[5] +" "+ time);
 			if(login_result.contains("登录成功")) {
 				checkResultMap.put(uin, ""); //登录完成后，账号check状态清空掉
 				return 0;
@@ -47,7 +50,7 @@ public class LoginUtil extends QQLogin{
 			}
 		}
 		else {
-			System.out.println("需要输入验证码登录！");
+			System.out.println("需要输入验证码登录！（"+ uin + "）" + time);
 			checkStatus = "1";
 			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
 			if(vcode.length() == 0) {
@@ -69,7 +72,7 @@ public class LoginUtil extends QQLogin{
 			}
 			p = encryptPassword(uin, password, verifycode);
 			String login_result = login1(uin, p, checkStatus, verifycode, verifysession);
-			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5]);
+			System.out.println(login_result.split(",")[4]+","+login_result.split(",")[5] + time);
 			return 0;
 		}
 	}

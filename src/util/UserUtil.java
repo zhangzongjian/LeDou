@@ -183,7 +183,7 @@ public class UserUtil {
 	 * @return
 	 * @throws IOException 
 	 */
-	public static Map<String, String> getNewUserKey(Map<String, String> userKey, String username) {
+	public synchronized static Map<String, String> getNewUserKey(Map<String, String> userKey, String username) {
 		String QQ = userKey.get("QQ");
         String password = userKey.get("password");
 		try {
@@ -224,6 +224,23 @@ public class UserUtil {
 			e.printStackTrace();
 		}
 		return userInfo;
+	}
+	
+	/**
+	 * 检查userKey是否有效。（访问乐斗主页，得到登录页面，说明失效了）
+	 * @return 有效返回true，无效返回false
+	 */
+	public static boolean checkUserKeyValid(Map<String, String> userKey) {
+		try {
+			Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
+			if(mainDoc.text().contains("手机统一登录")) {
+				return false;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	public static void main(String[] args) throws IOException {
