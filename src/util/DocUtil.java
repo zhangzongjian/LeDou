@@ -43,7 +43,7 @@ public class DocUtil {
             //手机统一登录 您还没有输入密码！ 请选择登录帐号 登 录 一键登录 快速登录历史帐号 注册新帐号 忘了密码？
 			int j = 1;
 			while (result.text().contains("系统繁忙，请稍后再试") || result.text().contains("使用明文密码") || result.text().contains("手机统一登录")) { 
-				System.err.println("重试次数("+j+")-->详细("+result.text()+")");////////////
+//				System.err.println("重试次数("+j+")-->详细("+result.text()+")");////////////
 				try {
 					Thread.sleep(1500);
 				} catch (InterruptedException e) {

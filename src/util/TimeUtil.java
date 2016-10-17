@@ -1,5 +1,6 @@
 package util;
 
+import java.util.Calendar;
 import java.util.Date;
 
 public class TimeUtil {
@@ -31,6 +32,19 @@ public class TimeUtil {
 		int second = Integer.parseInt(t[2]);
 		long lastSeconds = (second * 1)-(new Date().getSeconds());
 		return lastSeconds;
+	}
+	
+	/**
+	 * 获取指定日期的上一天
+	 * @param date
+	 * @return
+	 */
+	public static Date getLastDay(Date date) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -1);
+		date = calendar.getTime();
+		return date;
 	}
 	
 	/**

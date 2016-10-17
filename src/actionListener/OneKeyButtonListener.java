@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -70,11 +71,41 @@ public class OneKeyButtonListener implements ActionListener {
 	private List<String> users1 = new ArrayList<String>();
 	// 乐斗任务列表，只执行列表中的任务，为null时表示没有任务
 	private List<String> tasks;
-	// 全局的userKey（使用场景：遇到像定时锦标赛，还没到指定时间userkey失效的。更新后的userKey放这里）
-	private volatile static Map<String, String> newUserKey;
+
+	public void actionPerformed(final ActionEvent paramActionEvent) {
+		oneKeyLeDou_all();
+		
+		//如果不勾选执行完毕自动退出，则每天06:00:10点自动执行
+		if( !乐斗面板.autoCloseCheckBox.isSelected() ) {
+			TimeUtil.timer.schedule(new TimerTask() {
+				@Override
+				public void run() {
+					try {
+						/**
+						 * 乐斗日志大小检查。异常错误日志大小检查。。待定。。
+						 */
+						File LeDou_log = new File("resources/LeDou_log.txt");
+						if(!LeDou_log.exists() || LeDou_log.length()>20*1024*1024) {
+							LeDou_log.delete();
+							LeDou_log.createNewFile();
+						}
+						FileOutputStream out = new FileOutputStream(LeDou_log, true);
+						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(TimeUtil.getLastDay(new Date()))+"--------------------------\n").getBytes());
+						out.write(乐斗面板.textArea.getText().getBytes());
+						out.write(new String("\n").getBytes());
+						out.close();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+					乐斗面板.textArea.setText("");
+					oneKeyLeDou_all();
+				}
+			}, "06:00:10");
+		}
+	}
 
 	@SuppressWarnings("unchecked")
-	public void actionPerformed(final ActionEvent paramActionEvent) {
+	private void oneKeyLeDou_all() {
 		tasks = 设置面板.saveTask(); // 一键乐斗前，把任务多选框面板的选项保存一下
 		//乐斗面板.initProgressBar(); //初始化进度条
 		if (乐斗面板.allUsersCheckBox.isSelected()) {
@@ -101,38 +132,10 @@ public class OneKeyButtonListener implements ActionListener {
 			});
 			t.start();
 		}
-		
-		//如果不勾选执行完毕自动退出，则每天06:00:10点自动执行
-		if( !乐斗面板.autoCloseCheckBox.isSelected() ) {
-			long lastTime = TimeUtil.getSecond("06:00:10");
-			TimeUtil.timer.schedule(new TimerTask() {
-				@Override
-				public void run() {
-					try {
-						/**
-						 * 乐斗日志大小检查。异常错误日志大小检查。。待定。。
-						 */
-						File LeDou_log = new File("resources/LeDou_log.txt");
-						if(!LeDou_log.exists() || LeDou_log.length()>20*1024*1024) {
-							LeDou_log.delete();
-							LeDou_log.createNewFile();
-						}
-						FileOutputStream out = new FileOutputStream(LeDou_log, true);
-						out.write(new String("--------------------------"+new SimpleDateFormat("YYYY/MM/dd HH:mm:ss").format(new Date())+"--------------------------\n").getBytes());
-						out.write(乐斗面板.textArea.getText().getBytes());
-						out.write(new String("\n").getBytes());
-						out.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-					乐斗面板.textArea.setText("");
-					actionPerformed(paramActionEvent);
-				}
-			}, lastTime <= 0 ? (3600*24+lastTime)*1000 : lastTime*1000 );
-		}
 	}
-
-	public void oneKeyLeDou(final Map<String, String> userKey) {
+	
+	
+	private void oneKeyLeDou(final Map<String, String> userKey) {
 		if (userKey == null) {
 			PrintUtil.printTitleInfo("系统消息", "未选择小号！");
 			return;
@@ -142,7 +145,10 @@ public class OneKeyButtonListener implements ActionListener {
 			//若username获取不到，说明skey过期，且需要验证码，得重新手动录入。若不需验证码，则可自动重新录入
 			if(username == null) return;
 			final Document mainDoc = DocUtil.clickURL(userKey, DocUtil.mainURL);
-			newUserKey = userKey;
+			// 单个小号线程内的全局userKey（使用场景：遇到像定时锦标赛，还没到指定时间userkey失效的。更新后的userKey放这里）
+			final Map<String, Object> timeUserKey = new HashMap<>();
+			timeUserKey.put(username, userKey);
+			
 			if (tasks.contains(Task.巅峰之战)) {
 				 巅峰之战 m = new 巅峰之战(userKey, mainDoc);
 				 m.领奖和报名(); //周一6点钟之后执行
@@ -206,7 +212,7 @@ public class OneKeyButtonListener implements ActionListener {
 							}
 						}).start();
 						// 计时多次送镖
-						int lastTime;
+//						int lastTime;
 						int num = m.getNum();
 //						if (num == 0) {
 //							PrintUtil.printMessage(m, "护送次数已用完！", username);
@@ -220,7 +226,7 @@ public class OneKeyButtonListener implements ActionListener {
 									.equals("您正在护送押镖中哦！"))
 								num--;
 							PrintUtil.printAllMessages(m, username);
-							lastTime = m.getLastTime();
+//							lastTime = m.getLastTime();
 							/*while (lastTime > 0) {
 								lastTime = lastTime - 1; // 每秒更新一次显示
 								try {
@@ -375,7 +381,7 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						Map<String, String> tempUserKey = updateUserKey(timeUserKey, userKey, username);
 						
 						武林大会 m1 = new 武林大会(tempUserKey, mainDoc);
 						m1.报名(); // 每天13点开始
@@ -402,7 +408,7 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						Map<String, String> tempUserKey = updateUserKey(timeUserKey, userKey, username);
 						
 						结拜赛 m1 = new 结拜赛(tempUserKey, mainDoc);
 						m1.报名(); // 周一12点开始
@@ -422,7 +428,7 @@ public class OneKeyButtonListener implements ActionListener {
 				TimeUtil.timer.schedule(new TimerTask() {
 					@Override
 					public void run() {
-						Map<String, String> tempUserKey = updateUserKey(newUserKey, userKey, username);
+						Map<String, String> tempUserKey = updateUserKey(timeUserKey, userKey, username);
 						
 						锦标赛 m1 = new 锦标赛(tempUserKey, mainDoc);
 						m1.赞助(); // 每天12点开始
@@ -559,9 +565,12 @@ public class OneKeyButtonListener implements ActionListener {
 	
 	
 	//更新userKey，与getNewUserKey()不同的是，有效则重用，无效则重新获取
-	private Map<String, String> updateUserKey(Map<String, String> newUserKey, Map<String, String> oldUserKey, String username) {
+	@SuppressWarnings("unchecked")
+	private Map<String, String> updateUserKey(Map<String, Object> timeUserKey, Map<String, String> oldUserKey, String username) {
+		Map<String, String> newUserKey = (Map<String, String>) timeUserKey.get(username);
 		if(UserUtil.checkUserKeyValid(newUserKey) == false) {
 			newUserKey = UserUtil.getNewUserKey(oldUserKey, username);
+			timeUserKey.put(username, newUserKey);
 		}
 		return newUserKey;
 	}

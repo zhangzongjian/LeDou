@@ -1,4 +1,4 @@
 package util;
-public class TimerTask extends Thread{
+public abstract class TimerTask implements Runnable{
     
 }
