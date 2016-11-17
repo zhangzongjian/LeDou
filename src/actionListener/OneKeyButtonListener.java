@@ -541,7 +541,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.帮派祈福();
 				m.晃动的天平();
 				m.全民拼图();
-				m.国庆全民大礼包();
+				m.全民大礼包();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

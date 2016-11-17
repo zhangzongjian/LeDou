@@ -92,23 +92,23 @@ public class 巅峰之战 extends 乐斗项目 {
 			}
 			Document temp = Jsoup.parse(DocUtil.substring(doc.toString(),
 					"选择阵营加入", 0, "额外战功奖励"));
-			if (result.contains("上届所在的南派在巅峰之战中惜败") || result.contains("上届所在的北派在巅峰之战中取得胜利")) { // 上次南派跪了，则报名南派
-				temp = DocUtil.clickTextUrl(userKey, temp, "南派");
-				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
-				if (temp.text().contains("挑战书不足")) {
-					message.put("报名情况", "报名情况：挑战书不足！");
-					return;
-				}
-				message.put("报名情况", "报名情况：成功报名南派！");
-			} else if (result.contains("上届所在的北派在巅峰之战中惜败") || result.contains("上届所在的南派在巅峰之战中取得胜利")) {
-				temp = DocUtil.clickTextUrl(userKey, temp, "北派");
-				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
-				if (temp.text().contains("挑战书不足")) {
-					message.put("报名情况", "报名情况：挑战书不足！");
-					return;
-				}
-				message.put("报名情况", "报名情况：成功报名北派！");
-			} else {
+//			if (result.contains("上届所在的南派在巅峰之战中惜败") || result.contains("上届所在的北派在巅峰之战中取得胜利")) { // 上次南派跪了，则报名南派
+//				temp = DocUtil.clickTextUrl(userKey, temp, "南派");
+//				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
+//				if (temp.text().contains("挑战书不足")) {
+//					message.put("报名情况", "报名情况：挑战书不足！");
+//					return;
+//				}
+//				message.put("报名情况", "报名情况：成功报名南派！");
+//			} else if (result.contains("上届所在的北派在巅峰之战中惜败") || result.contains("上届所在的南派在巅峰之战中取得胜利")) {
+//				temp = DocUtil.clickTextUrl(userKey, temp, "北派");
+//				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
+//				if (temp.text().contains("挑战书不足")) {
+//					message.put("报名情况", "报名情况：挑战书不足！");
+//					return;
+//				}
+//				message.put("报名情况", "报名情况：成功报名北派！");
+//			} else {
 				temp = DocUtil.clickTextUrl(userKey, temp, "随机加入");
 				temp = DocUtil.clickTextUrl(userKey, temp, "确定");
 				if (temp.text().contains("挑战书不足")) {
@@ -116,7 +116,7 @@ public class 巅峰之战 extends 乐斗项目 {
 					return;
 				}
 				message.put("报名情况", "报名情况：成功报名,随机加入！");
-			}
+//			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();
