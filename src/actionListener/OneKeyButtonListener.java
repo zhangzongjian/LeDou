@@ -542,6 +542,7 @@ public class OneKeyButtonListener implements ActionListener {
 				m.晃动的天平();
 				m.全民拼图();
 				m.全民大礼包();
+				m.极地冒险();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

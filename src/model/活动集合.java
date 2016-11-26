@@ -1,11 +1,13 @@
 package model;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
 import util.DocUtil;
@@ -743,6 +745,96 @@ public class 活动集合 extends 乐斗项目 {
 				for(int i = 0; i<num; i++) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "领取");
 					message.put("全民礼包"+i, DocUtil.substring(doc.text(), "领取规则", 4, "专属礼包"));
+				}
+			} catch (IOException e) {
+				message.put("消息", "连接超时，请重试！");
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+		// 极地冒险
+		public void 极地冒险() {
+			try {
+				if (!mainDoc.text().contains("极地冒险")) {
+					message.put("极地冒险", null); // 非活动时间
+					return;
+				}
+				message.put("活动24", "【极地冒险】");
+				Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "极地冒险");
+				List<Element> es = DocUtil.getTextUrlElementList(doc, "领铁铲");
+				for(Element e : es) {
+					DocUtil.clickURL(userKey, e.attr("href")).text();
+				}
+				int i = 0;
+				int x = 2;
+				int y = 3;
+				int lastY = -1;
+				String url = null;
+				Elements tmp1 = null;
+				Elements tmp2 = null;
+				while (true) {
+					i++;
+					//筛选包含r=2的元素
+					tmp1 = doc.getElementsByAttributeValueMatching("href", "r="+x); 
+					//筛选不包含c=3的元素
+					tmp2 = doc.getElementsByAttributeValueMatching("href", "^((?!c="+y+").)*$");
+					//筛选既包含r=2又包含c=3的元素
+					tmp1.removeAll(tmp2);
+					if(tmp1.size() == 0) { //如果初次进入（2,3）（2,4）都空了，则退出
+						if(y == 4 && x == 2 && lastY == -1) {
+							break;
+						}
+						else {
+							y = 4;
+							continue;
+						}
+					}
+					url = tmp1.attr("href");
+					doc = DocUtil.clickURL(userKey, url);
+					if(doc.text().contains("左边")) {
+						if(lastY == -1 || lastY > y) {
+							lastY = y; //标注边界值
+							y = y/2;
+						}
+						else {
+							y = (y+lastY)/2;
+						}
+						continue;
+					}
+					else if(doc.text().contains("右边")) {
+						if(lastY == -1 || lastY < y) {
+							lastY = y; //标注边界值
+							y = (y+7)/2;							
+						}
+						else {
+							y = (y+lastY)/2;
+						}
+						continue;
+					}
+					else if(doc.text().contains("上边或者下边")) {
+						if(x == 0) {
+							x = 4; continue;
+						}
+						x--; continue;
+					}
+					else if(doc.text().contains("没有足够的铁铲")) {
+						message.put("寻宝"+i, "游戏失败！没有足够的铁铲！");
+						break;
+					}
+					else if(doc.text().contains("挖到了宝箱")) {
+						message.put("寻宝"+i, DocUtil.substring(doc.text(), "活动规则", 4, "菜菜提示"));
+						break;
+					}
+					if(doc.text().contains("已经寻找到宝藏了")) {
+						message.put("寻宝"+i, "已经寻找到宝藏了");
+						break;
+					}
+					if( i > 10 ) {
+						message.put("寻宝"+i, "未知错误！");
+						break;
+					}
 				}
 			} catch (IOException e) {
 				message.put("消息", "连接超时，请重试！");
