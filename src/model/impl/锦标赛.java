@@ -1,6 +1,8 @@
 package model.impl;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import java.util.Map;import model.乐斗项目;
@@ -33,10 +35,21 @@ public class 锦标赛 extends 乐斗项目 {
 						DocUtil.substring(doc.text(), "【百米锦标赛】", 7, "领取奖励"));
 				doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
 			}
-			int size = 5;
 			Random random = new Random();
+			//按各个选手最近获得冠军次数赞助，次数越多，赞助该选手的概率越大。
+			List<Integer> tmp_list = new ArrayList<Integer>();
+			Document tmp_doc = null;
+			int num; //冠军次数+1，零次冠军则放一个进list
+			for(int i = 0; i<5; i++) {
+				tmp_doc = DocUtil.clickTextUrl(userKey, doc, "查看选手", i);
+				num = Integer.valueOf(DocUtil.substring(tmp_doc.text(), "冠军：", 3, "次 亚军"))+1;
+				while(num-- >0) {
+					tmp_list.add(i);
+				}
+			}
+			int size = tmp_list.size();
 			while(true) {
-				doc = DocUtil.clickTextUrl(userKey, doc, "赞助", random.nextInt(size));
+				doc = DocUtil.clickTextUrl(userKey, doc, "赞助", tmp_list.get(random.nextInt(size)));
 				if(doc.text().contains("没有足够的赞助券")) break;
 			}
 			message.put("赞助情况",

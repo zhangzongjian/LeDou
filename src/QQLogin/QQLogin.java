@@ -33,7 +33,7 @@ public class QQLogin {
 	     login(u,verifycode,pt_vcode_v1,pt_verifysession_v1,p) -> 登录成功cookie
 	  8、需要输入验证码时复杂很多，因为上面那个两个参数并没有在check接口的返回值中给出，其中有用的是返回值中的第二个参数名为cap_cd。
 	     check(u) -> cap_cd（返回字符串中的第二个参数）
-	     cap_union_show(cap_cd) -> sig（响应体 var g_click_cap_sig="SIG"）
+	     cap_union_getsig_new(cap_cd) -> sig（响应体{"vsig":"SIG","ques":""}）
 	     getimgbysig(sig) -> ans（手动输入的验证码）
 	     cap_union_verify（ans, sig） -> randstr（即login接口所需的verifycode参数）, sig（即login接口所需的pt_verifysession_v1参数）
 	     login(u,verifycode,pt_vcode_v1,pt_verifysession_v1,p) -> 登录成功cookie
@@ -165,17 +165,24 @@ public class QQLogin {
 	 * @throws IOException
 	 */
 	public static String getSig(String uin, String cap_cd) throws IOException {
-		Response sigResponse = Jsoup.connect("http://captcha.qq.com/cap_union_show?" +
+		Response sigResponse = Jsoup.connect("http://captcha.qq.com/cap_union_getsig_new?" +
 									"clientype=2" +
+									"&captype=" +
+									"&protocol=http" +
+									"&disturblevel=" +
+									"&apptype=2" +
+									"&noBorder=noborder" +
+									"&showtype=embed" +
+									"&rnd=181847" +
 									"&aid=549000912" +
 									"&uin=" + uin +
 									"&cap_cd=" + cap_cd +//由check接口响应获得
-				 					"&0.07040563155896962")
+				 					"&rand=0.5029603082194563")
 				 					.execute();
 		String body = sigResponse.body();
-		String temp = body.substring(body.indexOf("<script"));
-		String beginString = "var g_vsig = \"";
-		String sig = temp.substring(temp.indexOf(beginString)+beginString.length(), temp.indexOf("\";"));
+		String temp = body;
+		String beginString = "{\"vsig\":\"";
+		String sig = temp.substring(temp.indexOf(beginString)+beginString.length(), temp.indexOf("\",\""));
 		return sig;
 	}
 	
