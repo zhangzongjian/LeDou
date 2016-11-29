@@ -776,20 +776,20 @@ public class 活动集合 extends 乐斗项目 {
 				Elements tmp2 = null;
 				while (true) {
 					i++;
+					if( i > 10 ) {
+						message.put("寻宝"+i, "游戏失败！请手动完成！");
+						break;
+					}
 					//筛选包含r=2的元素
 					tmp1 = doc.getElementsByAttributeValueMatching("href", "r="+x); 
 					//筛选不包含c=3的元素
 					tmp2 = doc.getElementsByAttributeValueMatching("href", "^((?!c="+y+").)*$");
 					//筛选既包含r=2又包含c=3的元素
 					tmp1.removeAll(tmp2);
-					if(tmp1.size() == 0) { //如果初次进入（2,3）（2,4）都空了，则退出
-						if(y == 4 && x == 2 && lastY == -1) {
-							break;
-						}
-						else {
-							y = 4;
-							continue;
-						}
+					if(tmp1.size() == 0) {
+						if(y == 7) x = x+1;
+						else y = y+1;
+						continue;
 					}
 					url = tmp1.attr("href");
 					doc = DocUtil.clickURL(userKey, url);
@@ -829,10 +829,6 @@ public class 活动集合 extends 乐斗项目 {
 					}
 					if(doc.text().contains("已经寻找到宝藏了")) {
 						message.put("寻宝"+i, "已经寻找到宝藏了");
-						break;
-					}
-					if( i > 10 ) {
-						message.put("寻宝"+i, "未知错误！");
 						break;
 					}
 				}
