@@ -76,7 +76,8 @@ public class 巅峰之战 extends 乐斗项目 {
 				message.put("报名情况", "未开启巅峰之战功能！");
 				return;
 			}
-			if (day != 1 && day != 2) {
+//			if (day != 1 && day != 2) {
+			if (day != 2) {
 				message.put("报名情况", "不在报名时间内！");
 				return;
 			}
