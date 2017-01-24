@@ -63,6 +63,18 @@ public class 幻境菜单{
 		item = new JMenuItem("回声遗迹");
 		item.addActionListener(new MenuItemListener("幻境", item.getText()));
 		幻境Select.add(item);
+		item = new JMenuItem("悲叹山丘");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
+		item = new JMenuItem("黄沙漩涡");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
+		item = new JMenuItem("炎之洞窟");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
+		item = new JMenuItem("程管小镇");
+		item.addActionListener(new MenuItemListener("幻境", item.getText()));
+		幻境Select.add(item);
 		幻境Bar.add(幻境Select);
 	}
 	

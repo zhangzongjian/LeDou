@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.Map;import model.乐斗项目;
 
 import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
 import util.DocUtil;
 
@@ -25,6 +26,7 @@ public class 幻境 extends 乐斗项目 {
 			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "幻境");
 			int i = 0;
 			while(true) {
+				if(i > 50) break;
 				if(doc.text().contains("领取奖励")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "领取奖励");
 					message.put("领取奖励"+(i++), "额外奖励："+DocUtil.substring(doc.text(), "获得", 0, "特殊属性说明"));
@@ -53,8 +55,13 @@ public class 幻境 extends 乐斗项目 {
 						continue;
 					}
 					else {
-						doc = DocUtil.clickTextUrl(userKey, doc, "乐斗村");
-						message.put("挑战情况1", "未开启该场景，自动挑战第一个场景！");
+						Elements 幻境列表 = doc.getElementsByAttributeValueMatching("href", "op=start");
+						int num = 幻境列表.size();
+						//未开启该场景，自动挑战解锁幻境的倒数第二个。
+						if(num == 1) num = 2; //如果只解锁第一个场景，那么只能打第一个场景了。
+						doc = DocUtil.clickURL(userKey, 幻境列表.get(num-2).attr("href"));
+						System.out.println(幻境列表.get(num-2).attr("href"));
+						message.put("挑战情况1", "未开启该场景，自动挑战解锁幻境的倒数第二个！");
 						continue;
 					}
 				}

@@ -40,15 +40,19 @@ public class 任务 extends 乐斗项目 {
 				for(int i=0; i<5; i++)
 					DocUtil.clickURL(userKey, temp.getElementsByAttributeValueMatching("href", "from_pf_list=1").get(i).attr("href"));
 			}
-			if(doc.text().contains("强化神装 替换任务")) {
-				if(doc.toString().contains("id=116"))
-					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "神装"), "升级");
-			}
-			if(doc.text().contains("武器专精 替换任务")) {
-				if(doc.toString().contains("id=114"))
-					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "升级");
-				if(doc.toString().contains("id=115"))
-					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "武器栏"), "升级");
+//			if(doc.text().contains("强化神装 替换任务")) {
+//				if(doc.toString().contains("id=116"))
+//					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "神装"), "升级");
+//			}
+//			if(doc.text().contains("武器专精 替换任务")) {
+//				if(doc.toString().contains("id=114"))
+//					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "升级");
+//				if(doc.toString().contains("id=115"))
+//					DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, DocUtil.clickTextUrl(userKey, mainDoc, "专精"), "武器栏"), "升级");
+//			}
+			if(doc.text().contains("兵法研习 替换任务")) {
+				Document temp = DocUtil.clickTextUrl(userKey, mainDoc, "兵法");
+					DocUtil.clickTextUrl(userKey, temp, "研习");
 			}
 			Document doc1 = DocUtil.clickTextUrl(userKey, doc, "一键完成任务");
 			int num = 5 - doc1.getElementsContainingOwnText("替换任务").size();

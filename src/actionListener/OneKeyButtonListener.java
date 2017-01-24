@@ -19,6 +19,7 @@ import model.其他操作集合;
 import model.活动集合;
 import model.impl.乐斗boss;
 import model.impl.任务;
+import model.impl.会武;
 import model.impl.传功;
 import model.impl.供奉;
 import model.impl.分享;
@@ -483,6 +484,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.祭坛)) {
 				祭坛 m = new 祭坛(userKey, mainDoc);
 				m.转动轮盘();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.会武)) {
+				会武 m = new 会武(userKey, mainDoc);
+				m.doit();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////
