@@ -25,13 +25,14 @@ public class 祭坛 extends 乐斗项目 {
 				}
 				if(doc.text().contains("【偷取|选择帮派】") || doc.text().contains("【掠夺|选择帮派】")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "选择");
-					// 待测试，解散情况
-					if(doc.text().contains("解散")) {
-						doc = DocUtil.clickTextUrl(userKey, doc, "选择", -1);
-					}
-					if(doc.text().contains("选择路线")) {
+					while(doc.text().contains("选择路线")) {
 						//指定方向，，向前，向左
 						doc = DocUtil.clickTextUrl(userKey, doc, "向右");
+						// 待测试，解散情况
+						if(doc.text().contains("该帮派已解散")) {
+							doc = DocUtil.clickTextUrl(userKey, doc, "选择", -1);
+							continue;
+						}
 						message.put("轮盘转动"+(i++), getResult(doc));
 					}
 				}

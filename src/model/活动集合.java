@@ -18,15 +18,15 @@ public class 活动集合 extends 乐斗项目 {
 		super(userKey, mainURL);
 	}
 
-	//乐斗作战
+	//乐斗大作战
 	public void 打豆豆() {
 		try {
-			if(! mainDoc.text().contains("乐斗作战")) {
-				message.put("乐斗作战", null);
+			if(! mainDoc.text().contains("乐斗大作战")) {
+				message.put("乐斗大作战", null);
 				return;
 			}
 			message.put("活动1", "【打豆豆】");
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "乐斗作战");
+			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "乐斗大作战");
 			Document 领取 = DocUtil.clickTextUrl(userKey, doc, "领取");
 			Document 打豆豆 = DocUtil.clickTextUrl(userKey, 领取, "打豆豆", 0);
 			if(打豆豆.text().contains("小铜锤数量不够"))

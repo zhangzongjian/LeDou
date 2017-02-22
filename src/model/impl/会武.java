@@ -56,6 +56,18 @@ public class 会武 extends 乐斗项目 {
 					message.put("试炼助威", "冠军助威：助威成功！");
 				}
 			}
+			
+			//领奖
+			if(DocUtil.isHref(doc, "领奖") == true) {
+				Document 领奖 = DocUtil.clickTextUrl(userKey, 六门会武, "领奖");
+				if(领奖.text().contains("已领取")) {
+					message.put("试炼领奖", "领奖：已领取！");
+				}
+				else {
+					领奖 = DocUtil.clickTextUrl(userKey, 领奖, "领取");
+					message.put("试炼领奖", "领奖："+DocUtil.substring(领奖.text(), "【领奖】", 4, "已领取"));
+				}
+			}
 		} catch (IOException e) {
 			message.put("消息", "连接超时，请重试！");
 			e.printStackTrace();

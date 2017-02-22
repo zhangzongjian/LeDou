@@ -64,22 +64,23 @@ public class QQLogin {
 			System.out.println("需要输入验证码登录！。");
 			checkStatus = "1";
 			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
-			String sig = getSig(uin, cap_cd);
+			String sess = getSess(uin, cap_cd);
+			String sig = getSig(uin, sess, cap_cd);
 			//获取并输入验证码
-			getVerifyCode(uin, sig);
+			getVerifyCode(uin, sess, cap_cd, sig);
 			System.out.println("请输入验证码：");
 			Scanner scanf = new Scanner(System.in);
 			String vcode = scanf.next(); //输入验证码
-			String body = getVerifysession(uin, vcode, sig);
+			String body = getVerifysession(uin, vcode, sess, cap_cd, sig);
 			verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
 			verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
 			
 			while(!body.contains("rcode:0")) {
-				sig = refreshSig(uin, sig);
-				getVerifyCode(uin, sig);
+				sig = refreshSig(uin, sess, sig);
+				getVerifyCode(uin, sess, cap_cd, sig);
 				System.out.println("error,请重新输入验证码：");
 				vcode = scanf.next();
-				body = getVerifysession(uin, vcode, sig);
+				body = getVerifysession(uin, vcode, sess, cap_cd, sig);
 				verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
 				verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
 			}
@@ -164,20 +165,25 @@ public class QQLogin {
 	 * @return
 	 * @throws IOException
 	 */
-	public static String getSig(String uin, String cap_cd) throws IOException {
-		Response sigResponse = Jsoup.connect("http://captcha.qq.com/cap_union_getsig_new?" +
-									"clientype=2" +
+	public static String getSig(String uin, String sess, String cap_cd) throws IOException {
+		Response sigResponse = Jsoup.connect("http://captcha.qq.com/cap_union_new_getsig?" +
+									"aid=549000912" +
+									"&asig=" +
 									"&captype=" +
 									"&protocol=http" +
+									"&clientype=2" +
 									"&disturblevel=" +
 									"&apptype=2" +
+									"&curenv=inner" +
+									"&sess="+sess+
 									"&noBorder=noborder" +
 									"&showtype=embed" +
-									"&rnd=181847" +
-									"&aid=549000912" +
-									"&uin=" + uin +
+									"&uid=" + uin +
 									"&cap_cd=" + cap_cd +//由check接口响应获得
-				 					"&rand=0.5029603082194563")
+									"&lang=2052" +
+									"&rnd=697198" +
+									"&rand=0.7886836586737436" +
+									"&ischartype=1")
 				 					.execute();
 		String body = sigResponse.body();
 		String temp = body;
@@ -192,7 +198,8 @@ public class QQLogin {
 	 * @return 返回样例：cap_setQue("",0);cap_showOption(""); cap_getCapBySig("gOCP..m4-8CswYA**");
 	 * @throws IOException
 	 */
-	public static String refreshSig(String uin, String oldSig) throws IOException {
+	public static String refreshSig(String uin, String sess, String cap_cd) throws IOException {
+		/*
 		Response response = Jsoup.connect("http://captcha.qq.com/getQueSig?" +
 									"aid=549000912" +
 									"&uin=" + uin +
@@ -203,6 +210,8 @@ public class QQLogin {
 		//截取结果中cap_getCapBySig("gOCP..m4-8CswYA**")引号部分
 		String newSig = response.body().split(";")[2].split("\"")[1];
 		return newSig;
+		*/
+		return getSig(uin, sess, cap_cd);
 	}
 	
 	/**
@@ -210,11 +219,26 @@ public class QQLogin {
 	 * @param
 	 * @throws IOException 
 	 */
-	public static void getVerifyCode(String uin, String sig) throws IOException {
-		Response imgResponse = Jsoup.connect("http://captcha.qq.com/getimgbysig?" +
+	public static void getVerifyCode(String uin, String sess, String cap_cd, String vsig) throws IOException {
+		Response imgResponse = Jsoup.connect("http://captcha.qq.com/cap_union_new_getcapbysig?" +
 								"uin="+uin+
 								"&aid=549000912" +
-								"&sig="+sig)
+								"&asig=" +
+								"&captype=" +
+								"&protocol=http" +
+								"&clientype=2" +
+								"&disturblevel=" +
+								"&apptype=2" +
+								"&curenv=inner" +
+								"&sess="+sess+
+								"&noBorder=noborder" +
+								"&showtype=embed" +
+								"&cap_cd="+cap_cd+
+								"&lang=2052" +
+								"&rnd=697198" +
+								"&rand=0.28638808993698683" +
+								"&vsig="+vsig+
+								"&ischartype=1")
 								.ignoreContentType(true)
 								.execute();
 		File imge = new File("resources/VerifyCode.jpg");
@@ -233,14 +257,28 @@ public class QQLogin {
 	 *          验证码错误返回样例: cap_InnerCBVerify({rcode:5,randstr:"",sig:"",errmsg:"验证失败，请重试。"});
 	 * @throws IOException
 	 */
-	public static String getVerifysession(String uin, String verifycode, String sig) throws IOException {
-		Response response = Jsoup.connect("http://captcha.qq.com/cap_union_verify?" +
+	public static String getVerifysession(String uin, String verifycode, String sess, String cap_cd, String vsig) throws IOException {
+		Response response = Jsoup.connect("http://captcha.qq.com/cap_union_new_verify?" +
 								 "aid=549000912" +
-								 "&uin=" + uin +
-								 "&captype=50" +
-								 "&ans=" + verifycode +
-								 "&sig=" + sig +
-								 "&0.49537746398709714")
+								 "&asig=" +
+								 "&captype=" +
+								 "&protocol=http" +
+								 "&clientype=2" +
+								 "&disturblevel=" +
+								 "&apptype=2" +
+								 "&curenv=inner" +
+								 "&sess="+sess+
+								 "&noBorder=noborder" +
+								 "&showtype=embed" +
+								 "&uid="+uin+
+								 "&cap_cd="+cap_cd+
+								 "&lang=2052" +
+								 "&rnd=501179" +
+								 "&subcapclass=0" +
+								 "&vsig="+vsig+
+								 "&cdata=0" +
+								 "&collect=" +
+								 "&ans="+verifycode)
 								 .execute();
 		return response.body();
 	}
@@ -282,4 +320,27 @@ public class QQLogin {
 		return response.body();
 	}
 	
+	
+	public static String getSess(String uin, String cap_cd) throws IOException {
+		Response sessResponse = Jsoup.connect("http://captcha.qq.com/cap_union_new_gettype?" +
+									 "aid=549000912" +
+									 "&asig=" +
+									 "&captype=" +
+									 "&protocol=http" +
+									 "&clientype=2" +
+									 "&disturblevel=" +
+									 "&apptype=2" +
+									 "&curenv=inner" +
+									 "&uid="+uin+
+									 "&cap_cd="+cap_cd+
+									 "&lang=2052" +
+									 "&callback=")
+									 .ignoreContentType(true)
+									 .execute();
+		String body = sessResponse.body();
+		String temp = body;
+		String beginString = "\"sess\":\"";
+		String sess = temp.substring(temp.indexOf(beginString)+beginString.length(), temp.indexOf("\"}"));
+		return sess;
+	}
 }

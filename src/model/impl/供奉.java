@@ -17,7 +17,6 @@ public class 供奉 extends 乐斗项目 {
 		super(userKey, mainURL);
 	}
 
-	static int count = 0;
 	
 	public void 一键供奉() {
 		try {
@@ -42,7 +41,7 @@ public class 供奉 extends 乐斗项目 {
 								.substring(docString.indexOf(thing))), "供奉");
 						if(供奉结果.text().contains("每天最多供奉5次")) break;
 					}
-					message.put("供奉情况"+count, "供奉成功"+i+"次！");
+					message.put("供奉情况", "供奉成功"+i+"次！");
 					return;
 				} else if (doc.text().contains("下页")) {
 					doc = DocUtil.clickTextUrl(userKey, doc, "下页");
@@ -60,7 +59,7 @@ public class 供奉 extends 乐斗项目 {
 //					一键供奉();
 //				}
 				if (!doc.text().contains("下页")) {
-					message.put("供奉情况"+count, "供奉失败！");
+					message.put("供奉情况", "供奉失败！");
 					return;
 				}
 			} while (doc.text().contains("下页"));

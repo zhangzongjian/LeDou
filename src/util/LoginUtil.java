@@ -12,7 +12,7 @@ import core.设置面板;
 public class LoginUtil extends QQLogin{
 
 	public static Map<String, String> checkResultMap = new HashMap<String, String>();
-	public static Map<String, String> sigMap = new HashMap<String, String>();
+	public static Map<String, String[]> sigMap = new HashMap<String, String[]>();
 	
 	/**
 	 * 登录入口
@@ -53,20 +53,23 @@ public class LoginUtil extends QQLogin{
 			System.out.println("需要输入验证码登录！（"+ uin + "）" + time);
 			checkStatus = "1";
 			String cap_cd = checkResult.split(",")[1].replaceAll("'", "");
+			String sess = getSess(uin, cap_cd);
 			if(vcode.length() == 0) {
-				sigMap.put(uin, getSig(uin, cap_cd));
+				String[] sess_cap_sig = {sess, cap_cd, getSig(uin, sess, cap_cd)};
+				sigMap.put(uin, sess_cap_sig);
 				//获取并输入验证码
-				getVerifyCode(uin, sigMap.get(uin));
+				getVerifyCode(uin, sess_cap_sig[0], sess_cap_sig[1], sess_cap_sig[2]);
 				设置面板.showVerifyCode(true);
 				return 1;
 			}
-			String body = getVerifysession(uin, vcode, sigMap.get(uin));
-			verifysession = body.split(",")[2].replaceAll("sig:\"", "").replaceAll("\"", "");
-			verifycode = body.split(",")[1].replaceAll("randstr:\"", "").replaceAll("\"", "");
+			String body = getVerifysession(uin, vcode, sigMap.get(uin)[0], sigMap.get(uin)[1], sigMap.get(uin)[2]);
+			verifysession = body.split(",")[2].replaceAll("\"ticket\" : \"", "").replaceAll("\"", "").trim();
+			verifycode = body.split(",")[1].replaceAll("\"randstr\" : \"", "").replaceAll("\"", "").trim();
 			
-			if(!body.contains("rcode:0") && vcode.length() > 0) {
-				sigMap.put(uin, refreshSig(uin, sigMap.get(uin)));
-				getVerifyCode(uin, sigMap.get(uin));
+			if(!body.contains("OK") && vcode.length() > 0) {
+				String[] sess_cap_sig = {sess, cap_cd, getSig(uin, sess, cap_cd)};
+				sigMap.put(uin, sess_cap_sig);
+				getVerifyCode(uin, sess_cap_sig[0], sess_cap_sig[1], sess_cap_sig[2]);
 				设置面板.showVerifyCode(true);
 				return -1;
 			}
@@ -78,8 +81,10 @@ public class LoginUtil extends QQLogin{
 	}
 	
 	public static void refreshVerifycode(String uin) throws IOException {
-		sigMap.put(uin, refreshSig(uin, sigMap.get(uin)));
-		getVerifyCode(uin, sigMap.get(uin));
+		String[] sess_cap_sig = sigMap.get(uin);
+//		sess_cap_sig[2] = refreshSig(uin, sess_cap_sig[0], sess_cap_sig[1]);
+//		sigMap.put(uin, sess_cap_sig);
+		getVerifyCode(uin, sess_cap_sig[0], sess_cap_sig[1], sess_cap_sig[2]);
 		设置面板.showVerifyCode(true);
 	}
 }

@@ -92,7 +92,7 @@ public class 任务 extends 乐斗项目 {
 			}
 			if (doc2.text().contains("帮派修炼 未完成")) {
 				//修炼帮修技能的优先次序。
-				int [] 技能列表 = new int[]{0,1,5,4,8}; //分别为 命中、闪避、减伤、加伤、生命
+				int [] 技能列表 = new int[]{0,1,5,4,8,  2,3,6,7}; //分别为 命中、闪避、减伤、加伤、生命
 				int index = 0;
 				for(int i=0; i<3; i++) {//任务要求，修炼三次
 					Element button = DocUtil.clickTextUrl(userKey, 帮派首页,"帮修").getElementsByTag("anchor").get(技能列表[index]);
