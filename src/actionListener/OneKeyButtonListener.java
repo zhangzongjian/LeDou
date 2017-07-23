@@ -50,6 +50,7 @@ import model.impl.锦标赛;
 import model.impl.镖行天下;
 import model.impl.门派大战;
 import model.impl.门派邀请赛;
+import model.impl.问鼎天下;
 
 import org.jsoup.nodes.Document;
 
@@ -490,6 +491,12 @@ public class OneKeyButtonListener implements ActionListener {
 			if (tasks.contains(Task.会武)) {
 				会武 m = new 会武(userKey, mainDoc);
 				m.doit();
+				PrintUtil.printAllMessages(m, username);
+			}
+			// //////////////////////////////////////////////////////////
+			if (tasks.contains(Task.问鼎天下)) {
+				问鼎天下 m = new 问鼎天下(userKey, mainDoc);
+				m.攻占();
 				PrintUtil.printAllMessages(m, username);
 			}
 			// //////////////////////////////////////////////////////////

@@ -17,7 +17,7 @@ public class 传功 extends 乐斗项目 {
 
 	public void doit() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			if (doc.text().contains("15.[1/1]")) {
 				message.put("传功情况", "今日已完成传功12次！");
 				return;

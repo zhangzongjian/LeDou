@@ -16,7 +16,7 @@ public class 回流好友召回 extends 乐斗项目 {
 
 	public void doit() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			if (doc.text().contains("4．[3/3]")) {
 				message.put("召回情况", "今日已召回过好友了！");
 				return;

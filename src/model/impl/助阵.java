@@ -28,7 +28,7 @@ public class 助阵 extends 乐斗项目 {
 		int index = Integer.parseInt(object.charAt(object.length()-1)+"");
 		String name = object.substring(0,object.length()-1);
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			if(doc.text().contains("16.[3/3]")) {
 				message.put("提升助阵情况", "今日已经提升助阵3次了！");
 				return;

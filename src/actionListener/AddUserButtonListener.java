@@ -33,8 +33,8 @@ public class AddUserButtonListener implements ActionListener {
 	public void doAdd() {
 		try {
 			//qq登录，获取登录cookies
-			String qq = 设置面板.inputQQ.getText();
-			String password = 设置面板.inputPassword.getText();
+			String qq = 设置面板.inputQQ.getText().trim();
+			String password = 设置面板.inputPassword.getText().trim();
 			String vcode = 设置面板.inputVerifyCode.getText();
 			
 			if(qq.length() == 0 || password.length() == 0) {

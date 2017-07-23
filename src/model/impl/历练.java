@@ -19,7 +19,7 @@ public class 历练 extends 乐斗项目 {
 
 	public void 挑战() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			if (doc.text().contains("3．[5/5]")) {
 				message.put("历练情况", "今日历练5次了！");
 				return;

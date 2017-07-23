@@ -17,7 +17,7 @@ public class 活跃度 extends 乐斗项目 {
 
 	public void 领取() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			// 帮派活跃领奖
 			if (doc.text().contains("帮派总活跃")) {
 				Elements es = doc.getElementsContainingOwnText("领取");

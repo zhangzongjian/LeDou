@@ -20,7 +20,7 @@ public class 供奉 extends 乐斗项目 {
 	
 	public void 一键供奉() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 //			if (doc.text().contains("12.[1/1]")) {
 //				message.put("供奉情况", "今日已经供奉过了！");
 //				return;

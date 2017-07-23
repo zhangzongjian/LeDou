@@ -17,7 +17,7 @@ public class 分享 extends 乐斗项目 {
 
 	public void 一键分享() {
 		try {
-			Document doc = DocUtil.clickTextUrl(userKey, mainDoc, "今日活跃度");
+			Document doc = DocUtil.clickURL(userKey, mainDoc.getElementsByAttributeValueMatching("href", "cmd=liveness").attr("href"));
 			doc = DocUtil.clickTextUrl(userKey, doc, "分享");
 			doc = DocUtil.clickTextUrl(userKey, doc, "一键分享");
 			message.put("分享情况",

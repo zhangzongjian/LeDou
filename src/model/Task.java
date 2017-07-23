@@ -39,6 +39,7 @@ public class Task {
 	public static final String 幻境 = "幻境";
 	public static final String 祭坛 = "祭坛";
 	public static final String 会武 = "会武";
+	public static final String 问鼎天下 = "问鼎天下";
 	
 	public static final String 开锦囊宝箱 = "开锦囊宝箱";
 	public static final String 吃药10 = "吃药10";
